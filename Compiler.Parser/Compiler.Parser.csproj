@@ -50,6 +50,7 @@
     <Compile Include="Visitors\AutoVisitor.cs" />
     <Compile Include="Visitors\IVisitor.cs" />
     <Compile Include="Visitors\TACodeVisitor.cs" />
+    <Compile Include="Visitors\PrettyPrintVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Compiler.ThreeAddrCode\Compiler.ThreeAddrCode.csproj">
