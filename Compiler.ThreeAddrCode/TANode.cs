@@ -15,6 +15,42 @@ namespace Compiler.ThreeAddressCode
      * =========================================================
     */
 
+    public static class OpCodeExt
+    {
+        public static string GetSymbol(this OpCode op)
+        {
+            switch (op)
+            { 
+                case OpCode.TA_Plus: return "+";
+                case OpCode.TA_UnaryMinus: 
+                case OpCode.TA_Minus: return "-";
+                case OpCode.TA_Mul: return "*";
+                case OpCode.TA_Div: return "/";
+                case OpCode.TA_Copy: return "";
+
+                default: return "unknown";
+            }
+        }
+    }
+
+
+        public override string ToString()
+        {
+            return string.Format("{0} : nop", Label);
+        }
+
+        public override string ToString()
+        {
+            if (Left == null)
+                return string.Format("{0} : {0} = {1}{2}", Label, Result, Operation.GetSymbol(), Right);
+            else
+                return string.Format("{0} : {0} = {1} {2} {3}", Label, Result, Left, Operation.GetSymbol(), Right);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} : goto {1}", Label, TargetLabel);
+        }
     /// <summary>
     /// Базовый класс для трехадресного кода
     /// </summary>
@@ -24,6 +60,10 @@ namespace Compiler.ThreeAddressCode
         public abstract TAExpr Right { get; set; }
         public abstract TAExpr Result { get; set; }
         public abstract string Operation { get; set; }
+        public override string ToString()
+        {
+            return string.Format("{0} : if {1} goto {2}", Label, Condition, TargetLabel);
+        }
     }
 
     /*
@@ -47,6 +87,11 @@ namespace Compiler.ThreeAddressCode
     {
         public int Num { get; set; }
         public IntConst(int num) { Num = num; }
+
+        public override string ToString()
+        {
+            return Num.ToString();
+        }
     }
 
     /// <summary>
@@ -56,6 +101,11 @@ namespace Compiler.ThreeAddressCode
     {
         public string Name { get; set; }
         public GenName(string name) { Name = name; }
+
+        public override string ToString()
+        {
+            return ID.ToString();
+        }
     }
 
     /*
@@ -72,5 +122,10 @@ namespace Compiler.ThreeAddressCode
     public class TACode
     {
         List<TANode> table;
+
+        public override string ToString()
+        {
+            return m_code.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
+        }
     }
 }
