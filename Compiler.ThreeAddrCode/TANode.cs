@@ -61,7 +61,19 @@ namespace Compiler.ThreeAddressCode
         /// </summary>
         public bool IsLabeled { get; set; }
 
-        public TA_Node() { Label = Guid.NewGuid(); }        
+        public TA_Node() { Label = Guid.NewGuid(); }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is TA_Node)
+                return Label == (obj as TA_Node).Label;
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Label.GetHashCode();
+        }
     }
 
     /// <summary>
@@ -135,6 +147,7 @@ namespace Compiler.ThreeAddressCode
         /// Условие перехода
         /// </summary>
         public TA_Expr Condition { get; set; }
+
         public override string ToString()
         {
             return string.Format("{0} : if {1} goto {2}", Label, Condition, TargetLabel);
@@ -169,6 +182,18 @@ namespace Compiler.ThreeAddressCode
         {
             return Num.ToString();
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is IntConst)
+                return Num == (obj as IntConst).Num;
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Num.GetHashCode();
+        }
     }
 
     /// <summary>
@@ -183,6 +208,18 @@ namespace Compiler.ThreeAddressCode
         public override string ToString()
         {
             return ID.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is TA_Var)
+                return ID == (obj as TA_Var).ID;
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return ID.GetHashCode();
         }
     }
 
