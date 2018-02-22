@@ -54,7 +54,12 @@ namespace Compiler.ThreeAddressCode
         /// <summary>
         /// Уникальная метка-идентификатор
         /// </summary>
-        public Guid Label { get; } 
+        public Guid Label { get; }
+
+        /// <summary>
+        /// Флаг наличия перехода по goto на эту строку кода
+        /// </summary>
+        public bool IsLabeled { get; set; }
 
         public TA_Node() { Label = Guid.NewGuid(); }        
     }
