@@ -207,6 +207,11 @@ namespace Compiler.ThreeAddressCode
         Dictionary<Guid, TA_Node> m_labeledCode;
         Dictionary<string, TA_Var> m_varsInCode;
         
+        public IEnumerable<TA_Node> CodeList
+        {
+            get { return m_code; }                
+        }
+
         public TACode()
         {
             m_code = new List<TA_Node>();
@@ -260,6 +265,25 @@ namespace Compiler.ThreeAddressCode
             m_labeledCode.Add(curNode.Label, curNode);
 
             return curNode;
+        }
+
+        /// <summary>
+        /// Удалить оператор
+        /// </summary>
+        /// <param name="node">Оператор</param>
+        public bool RemoveNode(TA_Node node)
+        {
+            return m_code.Remove(node);
+        }
+
+        /// <summary>
+        /// Удалить набор операторов
+        /// </summary>
+        /// <param name="nodes">Список</param>
+        public void RemoveRange(IEnumerable<TA_Node> nodes)
+        {
+            foreach (var node in nodes)
+                m_code.Remove(node);
         }
 
         /// <summary>
