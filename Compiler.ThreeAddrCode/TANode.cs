@@ -177,7 +177,6 @@ namespace Compiler.ThreeAddressCode
     public class TA_Var : TA_Expr
     {
         public Guid ID { get; }
-        public string Name { get; set; }
 
         public TA_Var() { ID = Guid.NewGuid(); }
 
