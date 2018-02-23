@@ -172,11 +172,11 @@ namespace Compiler.ThreeAddressCode
     /// <summary>
     /// Операнд-константа (числа типа int)
     /// </summary>
-    public class IntConst : TA_Expr
+    public class TA_IntConst : TA_Expr
     {
         public int Num { get; }
 
-        public IntConst(int num) { Num = num; }
+        public TA_IntConst(int num) { Num = num; }
 
         public override string ToString()
         {
@@ -185,8 +185,8 @@ namespace Compiler.ThreeAddressCode
 
         public override bool Equals(object obj)
         {
-            if (obj is IntConst)
-                return Num == (obj as IntConst).Num;
+            if (obj is TA_IntConst)
+                return Num == (obj as TA_IntConst).Num;
             return false;
         }
 
@@ -341,6 +341,13 @@ namespace Compiler.ThreeAddressCode
             return new TA_Var();
         }
 
+        /// <summary>
+        /// Создать константу
+        /// </summary>
+        public TA_IntConst GetConst(int value)
+        {
+            return new TA_IntConst(value);
+        }
 
         public override string ToString()
         {
