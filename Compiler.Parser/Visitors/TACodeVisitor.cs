@@ -8,77 +8,6 @@ namespace Compiler.Parser.Visitors
     {
         private TACode code = new TACode();
 
-        public override void VisitBinaryNode(BinaryNode binop)
-        {
-            var assign = code.AddAssign();
-            
-            if (binop.Left.GetType() == typeof(IdNode))
-            {
-                var tmp = (IdNode) binop.Left;
-                assign.Left = code.GetVarByName(tmp.Name);
-            }
-            else if (binop.Left.GetType() == typeof(IntNumNode))
-            {
-                var tmp = (IntNumNode) binop.Left;
-                assign.Left = code.GetConst(tmp.Num);
-            }
-            else if (binop.Left.GetType() == typeof(BinaryNode) || binop.Left.GetType() == typeof(UnaryNode) )
-            {
-                assign.Left = code.GetTempVar();
-                binop.Left.Visit(this);
-            }
-            
-            if (binop.Right.GetType() == typeof(IdNode))
-            {
-                var tmp = (IdNode) binop.Left;
-                assign.Right = code.GetVarByName(tmp.Name);
-            }
-            else if (binop.Right.GetType() == typeof(IntNumNode))
-            {
-                var tmp = (IntNumNode) binop.Left;
-                assign.Right = code.GetConst(tmp.Num);
-            } 
-            else if (binop.Right.GetType() == typeof(BinaryNode) || binop.Right.GetType() == typeof(UnaryNode) )
-            {
-                assign.Right = code.GetTempVar();
-                binop.Right.Visit(this);
-            }
-
-            assign.Result = code.GetTempVar();
-            if (Enum.TryParse(binop.Operation, out OpCode op))
-            {
-                assign.Operation = op;
-            }
-        }
-
-        public override void VisitUnaryNode(UnaryNode unop)
-        {
-            var assign = code.AddAssign();
-            assign.Left = null;
-            
-            if (unop.Num.GetType() == typeof(IdNode))
-            {
-                var tmp = (IdNode) unop.Num;
-                assign.Right = code.GetVarByName(tmp.Name);
-            }
-            else if (unop.Num.GetType() == typeof(IntNumNode))
-            {
-                var tmp = (IntNumNode) unop.Num;
-                assign.Right = code.GetConst(tmp.Num);
-            }
-            else if (unop.Num.GetType() == typeof(BinaryNode) || unop.Num.GetType() == typeof(UnaryNode))
-            {
-                assign.Right = code.GetTempVar();
-                unop.Num.Visit(this);
-            }
-            
-            assign.Result = code.GetTempVar();
-            if (Enum.TryParse(unop.Operation.ToString(), out OpCode op)) // Может сделать операцию string как и везде?
-            {
-                assign.Operation = op;
-            }
-        }
-
         // TODO
         public override void VisitLabelNode(LabelNode l)
         {
@@ -96,29 +25,7 @@ namespace Compiler.Parser.Visitors
         {   
             var assign = code.AddAssign();
             assign.Left = null;
-
-            if (a.Expr.GetType() == typeof(IdNode))
-            {
-                var tmp = (IdNode) a.Expr;
-                assign.Right = code.GetVarByName(tmp.Name);
-            }
-            else if (a.Expr.GetType() == typeof(IntNumNode))
-            {
-                var tmp = (IntNumNode) a.Expr;
-                assign.Right = code.GetConst(tmp.Num);
-            }
-            else if (a.Expr.GetType() == typeof(BinaryNode))
-            {
-                var tmp = (BinaryNode) a.Expr;
-                VisitBinaryNode(tmp);
-            }
-            else
-            {
-                assign.Right = code.GetTempVar();
-                var tmp = (UnaryNode) a.Expr;
-                VisitUnaryNode(tmp);
-            }
-            
+            assign.Right = RecAssign(a.Expr);
             assign.Result = code.GetVarByName(a.Id.Name);
         }
 
@@ -161,6 +68,45 @@ namespace Compiler.Parser.Visitors
         public override void VisitEmptyNode(EmptyNode w)
         {
             code.AddNop();
+        }
+        
+        private TA_Var RecAssign(ExprNode ex)
+        {
+            var assign = code.AddAssign();
+            var result = new TA_Var();
+            assign.Result = result;
+
+            switch (ex)
+            {
+                case IdNode tmp1:
+                    assign.Left = null;
+                    assign.Right = code.GetVarByName(tmp1.Name);
+                    return result;
+                case IntNumNode tmp2:
+                    assign.Left = null;
+                    assign.Right = code.GetConst(tmp2.Num);
+                    return result;
+                case BinaryNode tmp3:
+                    assign.Left = code.GetTempVar();
+                    assign.Right = code.GetTempVar();
+                    if (Enum.TryParse(tmp3.Operation, out OpCode op1))
+                    {
+                        assign.Operation = op1;
+                    }       
+                    RecAssign(tmp3);
+                    return result;
+                case UnaryNode tmp4:
+                    assign.Left = null;
+                    assign.Right = code.GetTempVar();
+                    if (Enum.TryParse(tmp4.Operation.ToString(), out OpCode op2))
+                    {
+                        assign.Operation = op2;
+                    }
+                    RecAssign(tmp4);
+                    return result;
+            }
+
+            return result;
         }
     }
 }
