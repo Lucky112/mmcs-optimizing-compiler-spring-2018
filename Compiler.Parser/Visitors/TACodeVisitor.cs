@@ -125,10 +125,12 @@ namespace Compiler.Parser.Visitors
                 case IdNode tmp1:
                     assign.Left = null;
                     assign.Right = code.GetVarByName(tmp1.Name);
+                    assign.Operation = OpCode.TA_Copy;
                     return result;
                 case IntNumNode tmp2:
                     assign.Left = null;
                     assign.Right = code.GetConst(tmp2.Num);
+                    assign.Operation = OpCode.TA_Copy;
                     return result;
                 case BinaryNode tmp3:
                     assign.Left = RecAssign(tmp3.Left);
