@@ -70,6 +70,7 @@ namespace Compiler.Parser.Visitors
             assign.Left = null;
             assign.Right = RecAssign(a.Expr);
             assign.Result = code.GetVarByName(a.Id.Name);
+            assign.Operation = OpCode.TA_Copy;
         }
 
         // TODO
