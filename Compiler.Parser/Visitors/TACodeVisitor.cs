@@ -87,22 +87,20 @@ namespace Compiler.Parser.Visitors
                     assign.Right = code.GetConst(tmp2.Num);
                     return result;
                 case BinaryNode tmp3:
-                    assign.Left = code.GetTempVar();
-                    assign.Right = code.GetTempVar();
+                    assign.Left = RecAssign(tmp3.Left);
+                    assign.Right = RecAssign(tmp3.Right);
                     if (Enum.TryParse(tmp3.Operation, out OpCode op1))
                     {
                         assign.Operation = op1;
                     }       
-                    RecAssign(tmp3);
                     return result;
                 case UnaryNode tmp4:
                     assign.Left = null;
-                    assign.Right = code.GetTempVar();
+                    assign.Right = RecAssign(tmp4.Num);
                     if (Enum.TryParse(tmp4.Operation.ToString(), out OpCode op2))
                     {
                         assign.Operation = op2;
                     }
-                    RecAssign(tmp4);
                     return result;
             }
 
