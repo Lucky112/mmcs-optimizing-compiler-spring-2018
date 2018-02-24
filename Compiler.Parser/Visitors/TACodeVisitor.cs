@@ -1,6 +1,7 @@
 ﻿using System;
 using Compiler.Parser.AST;
 using Compiler.ThreeAddressCode;
+using System.Collections.Generic;
 
 namespace Compiler.Parser.Visitors
 {
@@ -8,17 +9,59 @@ namespace Compiler.Parser.Visitors
     {
         private TACode code = new TACode();
 
-        // TODO
+        /// <summary>
+        /// Список помеченных команд(строк) трехадресного кода в формате ИмяМетки - Узел
+        /// </summary>
+        private Dictionary<string, TA_Node> labeledTANodes = new Dictionary<string, TA_Node>();
+        /// <summary>
+        /// Список команд безусловного перехода, ведущих в непреобразованную часть кода и ожидающих заполнения поля TargetLabel, в формате ИмяМетки - Список команд перехода к этой метке
+        /// </summary>
+        private Dictionary<string, List<TA_Goto>> forwardGotos = new Dictionary<string, List<TA_Goto>>();
+        
+
         public override void VisitLabelNode(LabelNode l)
         {
-            base.VisitLabelNode(l);
+            string labelName = l.Label.Name;
+            // Создаем пустой оператор и указываем, что на него есть переход по метке
+            TA_Empty labeledNop = code.AddNop();
+            labeledNop.IsLabeled = true;
+
+            // Добавляем метку и помеченный оператор в список помеченных операторов (это всегда нужно делать, т.к. дальше по тексту могут оказаться goto на данную метку)
+            labeledTANodes.Add(labelName, labeledNop);
+
+            // Проверяем, не было ли по этой метке переходов, преобразованных ранее
+            if (forwardGotos.ContainsKey(labelName))
+            {
+                // Если были, заполняем их поля меток и удаляем из списка ожидания
+                foreach (var ta_goto in forwardGotos[labelName])
+                    ta_goto.TargetLabel = labeledNop.Label;
+                forwardGotos.Remove(labelName);
+            }
+
+            // Продолжаем отдельно разбор помеченного оператора как обычного
+            l.Stat.Visit(this);
         }
 
         public override void VisitGoToNode(GoToNode g)
         {
-            var gt = code.AddGoto();
-            var target = code.GetVarByName(g.Label.Name);
-            gt.TargetLabel = target.ID;
+            string labelName = g.Label.Name;
+            // При посещении узла GoTо создаем соответсвующую команду трехадресного кода
+            TA_Goto gt = code.AddGoto();
+
+            // Если метка ведет в уже преобразованную часть программы
+            if (labeledTANodes.ContainsKey(labelName))
+            {
+                // Получаем помеченную строку треадресного кода и задаем ее как цель перехода
+                TA_Node target = labeledTANodes[labelName];
+                gt.TargetLabel = target.Label;
+            }
+            else
+            {
+                // Иначе помещаем строку в лист ожидания пока помеченная часть программы не будет преобразована
+                if (!forwardGotos.ContainsKey(labelName))
+                    forwardGotos.Add(labelName, new List<TA_Goto>());
+                forwardGotos[labelName].Add(gt);
+            }
         }
 
         public override void VisitAssignNode(AssignNode a)
