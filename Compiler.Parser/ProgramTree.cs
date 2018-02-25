@@ -2,6 +2,14 @@
 
 namespace Compiler.Parser.AST
 {
+    public enum OperationType
+    {
+        Plus, Minus, Mul, Div,
+        Greater, Less, GreaterEq, LessEq, Equal, NotEqual,
+        Not, 
+        UnaryMinus
+    }
+
     public class Node // базовый класс для всех узлов    
     {
     }
@@ -26,8 +34,8 @@ namespace Compiler.Parser.AST
     {
         public ExprNode Left { get; set; }
         public ExprNode Right { get; set; }
-        public string Operation { get; set; }
-        public BinaryNode(ExprNode left, ExprNode right, string op)
+        public OperationType Operation { get; set; }
+        public BinaryNode(ExprNode left, ExprNode right, OperationType op)
         {
             Left = left;
             Right = right;
@@ -38,13 +46,13 @@ namespace Compiler.Parser.AST
     public class UnaryNode : ExprNode
     {
         public ExprNode Num { get; set; }
-        public char Operation { get; set; }
-        public UnaryNode(ExprNode num, char op)
+        public OperationType Operation { get; set; }
+        public UnaryNode(ExprNode num, OperationType op)
         {
             Num = num;
             Operation = op;
         }
-        public UnaryNode(int num, char op) : this(new IntNumNode(num), op) {}
+        public UnaryNode(int num, OperationType op) : this(new IntNumNode(num), op) {}
     }
 
     public class StatementNode : Node // базовый класс для всех операторов

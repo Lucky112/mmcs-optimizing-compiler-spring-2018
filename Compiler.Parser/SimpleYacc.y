@@ -67,33 +67,33 @@ assign 	: ident ASSIGN expr { $$ = new AssignNode($1 as IdNode, $3); }
 		;
 		
 expr : W  { $$ = $1; }
-     | expr LT W { $$ = new BinaryNode($1, $3, "<"); }
-     | expr GE W { $$ = new BinaryNode($1, $3, ">"); }
-     | expr LE W { $$ = new BinaryNode($1, $3, "<="); }
-     | expr GT W { $$ = new BinaryNode($1, $3, ">="); }
-     | expr EQ W { $$ = new BinaryNode($1, $3, "=="); }
-     | expr NEQ W { $$ = new BinaryNode($1, $3, "!="); }
+     | expr LT W { $$ = new BinaryNode($1, $3, OperationType.Less); }
+     | expr GT W { $$ = new BinaryNode($1, $3, OperationType.Greater); }
+     | expr LE W { $$ = new BinaryNode($1, $3, OperationType.LessEq); }
+     | expr GE W { $$ = new BinaryNode($1, $3, OperationType.GreaterEq); }
+     | expr EQ W { $$ = new BinaryNode($1, $3, OperationType.Equal); }
+     | expr NEQ W { $$ = new BinaryNode($1, $3, OperationType.NotEqual); }
      ; 
 
 W    : T { $$ = $1; }
-     | expr PLUS T { $$ = new BinaryNode($1, $3, "+"); }
-     | expr MINUS T { $$ = new BinaryNode($1, $3, "-"); }
+     | expr PLUS T { $$ = new BinaryNode($1, $3, OperationType.Plus); }
+     | expr MINUS T { $$ = new BinaryNode($1, $3, OperationType.Minus); }
      ;
 
 T    : F { $$ = $1; }
-     | T MULT F { $$ = new BinaryNode($1, $3, "*"); }
-     | T DIV F { $$ = new BinaryNode($1, $3, "/"); }
+     | T MULT F { $$ = new BinaryNode($1, $3, OperationType.Mul); }
+     | T DIV F { $$ = new BinaryNode($1, $3, OperationType.Div); }
      ;
 
-F    : MINUS ident { $$ = new UnaryNode($2, '-');}
-     | MINUS INUM { $$ = new UnaryNode($2, '-');}
-     | NOT ident { $$ = new UnaryNode($2, '!');}
-     | NOT INUM { $$ = new UnaryNode($2, '!');}
+F    : MINUS ident { $$ = new UnaryNode($2, OperationType.UnaryMinus);}
+     | MINUS INUM { $$ = new UnaryNode($2, OperationType.UnaryMinus);}
+     | NOT ident { $$ = new UnaryNode($2, OperationType.Not);}
+     | NOT INUM { $$ = new UnaryNode($2, OperationType.Not);}
 	 | ident { $$ = $1 as IdNode; }
      | INUM { $$ = new IntNumNode($1); }
      | OPENBR expr CLOSEBR { $$ = $2; }
-     | MINUS OPENBR expr CLOSEBR { $$ = new UnaryNode($3, '-');}
-     | NOT OPENBR expr CLOSEBR { $$ = new UnaryNode($3, '!');}
+     | MINUS OPENBR expr CLOSEBR { $$ = new UnaryNode($3, OperationType.UnaryMinus);}
+     | NOT OPENBR expr CLOSEBR { $$ = new UnaryNode($3, OperationType.Not);}
      ;
 
 block	: BEGIN stlist END { $$ = $2; }
