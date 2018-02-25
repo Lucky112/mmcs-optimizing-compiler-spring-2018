@@ -89,19 +89,36 @@ namespace Compiler.Parser.Visitors
 
         public override void VisitCycleNode(CycleNode c)
         {
-            var igt = new TA_IfGoto();
-            
+            // Метка в начале цикла
+            TA_Empty cycleLabel = GetEmptyLabeledNode();
+
             // Результат вычисления логического выражения
             TA_Var cond = RecAssign(c.Condition);
-            igt.Condition = cond;
-            
+
+            // При истинности условия, переходим к телу цикла
+            var ifGotoBody = new TA_IfGoto();
+            ifGotoBody.Condition = cond;
+            code.AddNode(ifGotoBody);
+
+            // Иначе переходим за тело цикла
+            var gotoEnd = new TA_Goto();
+            code.AddNode(gotoEnd);
+
             // Добавление новой метки непосредственно перед телом цикла 
-            TA_Empty newLabel = GetEmptyLabeledNode();
-            igt.TargetLabel = newLabel.Label;
-            code.AddNode(igt);
+            TA_Empty bodyLabel = GetEmptyLabeledNode();
+            ifGotoBody.TargetLabel = bodyLabel.Label;
             
             // Обход выражений тела цикла
             c.Body.Visit(this);
+
+            // В конце цикла снова переходим к началу
+            var cycle_goto = new TA_Goto();
+            cycle_goto.TargetLabel = cycleLabel.Label;
+            code.AddNode(cycle_goto);
+
+            // Метка за телом цикла, сюда происходит переход, если не выполняется условие продолжения
+            var endLabel = GetEmptyLabeledNode();
+            gotoEnd.TargetLabel = endLabel.Label;
         }
         
         public override void VisitPrintNode(PrintNode pr)
