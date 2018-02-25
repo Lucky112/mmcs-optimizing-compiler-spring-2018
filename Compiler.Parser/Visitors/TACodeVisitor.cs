@@ -83,10 +83,18 @@ namespace Compiler.Parser.Visitors
             code.AddNode(assign);
         }
 
-        // TODO
         public override void VisitCycleNode(CycleNode c)
         {
-            base.VisitCycleNode(c);
+            var igt = new TA_IfGoto();
+            // Результат вычисления логического выражения
+            TA_Var cond = RecAssign(c.Expr);
+            igt.Condition = cond;
+            // Добавление новой метки непосредственно перед телом цикла 
+            TA_Empty newLabel = GetEmptyLabeledNode();
+            igt.TargetLabel = newLabel.Label;
+            // Обход выражений тела цикла
+            c.Stat.Visit(this);
+            code.AddNode(igt);
         }
 
         // TODO
@@ -116,7 +124,6 @@ namespace Compiler.Parser.Visitors
             base.VisitExprListNode(exn);
         }
 
-        // TODO
         public override void VisitIfNode(IfNode iif)
         {
             var igt = new TA_IfGoto();
