@@ -86,13 +86,16 @@ namespace Compiler.Parser.Visitors
         public override void VisitCycleNode(CycleNode c)
         {
             var igt = new TA_IfGoto();
+            
             // Результат вычисления логического выражения
             TA_Var cond = RecAssign(c.Condition);
             igt.Condition = cond;
+            
             // Добавление новой метки непосредственно перед телом цикла 
             TA_Empty newLabel = GetEmptyLabeledNode();
             igt.TargetLabel = newLabel.Label;
             code.AddNode(igt);
+            
             // Обход выражений тела цикла
             c.Body.Visit(this);
         }
@@ -115,13 +118,16 @@ namespace Compiler.Parser.Visitors
         public override void VisitIfNode(IfNode iif)
         {
             var ifGoto = new TA_IfGoto();
+            
             // Результат вычисления логического выражения
             TA_Var cond1 = RecAssign(iif.Conditon);
             ifGoto.Condition = cond1;
+            
             // Добавление новой метки непосредственно перед телом условного оператора 
             TA_Empty newLabelIf = GetEmptyLabeledNode();
             ifGoto.TargetLabel = newLabelIf.Label;
             code.AddNode(ifGoto);
+            
             // Обход выражений тела условного оператора
             iif.IfClause.Visit(this);
 
@@ -137,36 +143,37 @@ namespace Compiler.Parser.Visitors
 
         public override void VisitForNode(ForNode f)
         {
-            // Первое присвоение. Инициализация значения счетчика цикла
-            TA_Assign ass = new TA_Assign();
-            ass.Result = GetVarByName(f.Assign.Id.Name);
-            ass.Left = null;
-            ass.Right = RecAssign(f.Assign.Expr);
-            ass.Operation = OpCode.TA_Copy;
-            code.AddNode(ass);
+            // Значение счетчика цикла при инициализации
+            var counter = RecAssign(f.Assign.Expr);
             
             // далее необходимо сгенерить стоку условия цикла
-            TA_Assign initialCondition = new TA_Assign();
-            initialCondition.Result = new TA_Var();
-            initialCondition.Left = ass.Result;
-            initialCondition.Right = RecAssign(f.Border);
-            initialCondition.Operation = (OpCode) OperationType.Less;
+            TA_Assign initialCondition = new TA_Assign
+            {
+                Result = new TA_Var(),
+                Left = counter,
+                Right = RecAssign(f.Border),
+                Operation = (OpCode) OperationType.Less
+            };
             code.AddNode(initialCondition);
             
             // Кладем это в условие цикла
             var ifGoto = new TA_IfGoto();
             TA_Var cond = initialCondition.Result;
             ifGoto.Condition = cond;
-            TA_Empty newLabel = GetEmptyLabeledNode();
-            ifGoto.TargetLabel = newLabel.Label;
             
             // Создаем строку с увеличением счетчика
-            TA_Assign ass1 = new TA_Assign();
-            ass1.Result = GetVarByName(f.Assign.Id.Name);
-            ass1.Left = RecAssign(f.Assign.Expr);
-            ass1.Right = RecAssign(f.Inc);
-            ass1.Operation = OpCode.TA_Plus;
+            TA_Assign ass1 = new TA_Assign
+            {
+                Result = GetVarByName(f.Assign.Id.Name),
+                Left = RecAssign(f.Assign.Expr),
+                Right = RecAssign(f.Inc),
+                Operation = OpCode.TA_Plus
+            };
             code.AddNode(ass1);
+            
+            TA_Empty newLabel = GetEmptyLabeledNode();
+            ifGoto.TargetLabel = newLabel.Label;
+            code.AddNode(ifGoto);
             
             // Дальнейший разбор тела выражения
             f.Body.Visit(this);
