@@ -167,7 +167,7 @@ namespace Compiler.Parser.AST
             Body = body;
         }
 
-        public ForNode(AssignNode assign, ExprNode cond, StatementNode body): this(assign, cond, null, body) {}
+        public ForNode(AssignNode assign, ExprNode cond, StatementNode body): this(assign, cond, new IntNumNode(1), body) {}
     }
 
     public class EmptyNode : StatementNode
