@@ -92,15 +92,9 @@ namespace Compiler.Parser.Visitors
             // Добавление новой метки непосредственно перед телом цикла 
             TA_Empty newLabel = GetEmptyLabeledNode();
             igt.TargetLabel = newLabel.Label;
+            code.AddNode(igt);
             // Обход выражений тела цикла
             c.Body.Visit(this);
-            code.AddNode(igt);
-        }
-
-        // TODO
-        public override void VisitBlockNode(BlockNode bl)
-        {
-            base.VisitBlockNode(bl);
         }
         
         public override void VisitPrintNode(PrintNode pr)
@@ -118,31 +112,49 @@ namespace Compiler.Parser.Visitors
                 print.Sep = Environment.NewLine;
         }
 
-        // TODO
-        public override void VisitExprListNode(ExprListNode exn)
-        {
-            base.VisitExprListNode(exn);
-        }
-
         public override void VisitIfNode(IfNode iif)
         {
-            var igt = new TA_IfGoto();
+            var ifGoto = new TA_IfGoto();
             // Результат вычисления логического выражения
-            TA_Var cond = RecAssign(iif.Conditon);
-            igt.Condition = cond;
+            TA_Var cond1 = RecAssign(iif.Conditon);
+            ifGoto.Condition = cond1;
             // Добавление новой метки непосредственно перед телом условного оператора 
-            TA_Empty newLabel = GetEmptyLabeledNode();
-            igt.TargetLabel = newLabel.Label;
+            TA_Empty newLabelIf = GetEmptyLabeledNode();
+            ifGoto.TargetLabel = newLabelIf.Label;
+            code.AddNode(ifGoto);
             // Обход выражений тела условного оператора
             iif.IfClause.Visit(this);
-            iif.ElseClause.Visit(this);
-            code.AddNode(igt);
+
+            // Повторим аналогичные действия в случае наличия ветки Else
+            var elseGoTo = new TA_IfGoto();
+            TA_Var cond2 = RecAssign(iif.Conditon);
+            ifGoto.Condition = cond2;
+            TA_Empty newLabelElse = GetEmptyLabeledNode();
+            elseGoTo.TargetLabel = newLabelElse.Label;
+            code.AddNode(elseGoTo);
+            iif.ElseClause?.Visit(this);
         }
 
-        // TODO
         public override void VisitForNode(ForNode f)
         {
-            base.VisitForNode(f);
+            // Делигируем присвоение соответствующему визитору
+            VisitAssignNode(f.Assign);
+            
+            var ifGoto = new TA_IfGoto();
+            TA_Var cond = RecAssign(f.Border);
+            ifGoto.Condition = cond;
+            TA_Empty newLabel = GetEmptyLabeledNode();
+            ifGoto.TargetLabel = newLabel.Label;
+            
+            // Инкрементируемая переменная счетчика цикла  
+            TA_Assign increment = new TA_Assign();
+            increment.Left = null;
+            // Временная переменная для хранения счетчика цикла
+            increment.Right = new TA_Var();
+            increment.Operation = OpCode.TA_Plus;
+            code.AddNode(increment);
+            // Дальнейший разбор тела выражения
+            f.Body.Visit(this);
         }
 
         public override void VisitEmptyNode(EmptyNode w)
