@@ -15,16 +15,16 @@ namespace Compiler.ThreeAddrCode.CFG
         private static int _blockIdCounter;
 
         // список программ в формате трехадресного кода
-        private readonly List<Node> _code;
+        private readonly List<Node> _codeList;
 
         /// <summary>
         /// Конструктор базового блока
         /// </summary>
-        /// <param name="code">список узлов программы в трехадресной форме</param>
-        public BasicBlock(List<Node> code)
+        /// <param name="codeList">список узлов программы в трехадресной форме</param>
+        public BasicBlock(List<Node> codeList)
         {
             BlockId = _blockIdCounter++;
-            _code = code;
+            _codeList = codeList;
         }
 
         /// <summary>
@@ -33,11 +33,11 @@ namespace Compiler.ThreeAddrCode.CFG
         public int BlockId { get; private set; }
 
         /// <summary>
-        /// Список узлов программы в трехадресной форме, связанных с блоков
+        /// Список узлов программы в трехадресной форме, связанных с блоком
         /// </summary>
         public IEnumerable<Node> CodeList
         {
-            get { return _code; }
+            get { return _codeList; }
         }
 
         /// <summary>

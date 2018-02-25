@@ -10,7 +10,7 @@ namespace Compiler.ThreeAddrCode.CFG
     {
         private List<BasicBlock> _basicBlocks;
 
-        public ControlFlowGraph(IOrderedEnumerable<BasicBlock> basicBlocks)
+        public ControlFlowGraph(IEnumerable<BasicBlock> basicBlocks)
         {
             _basicBlocks = basicBlocks.ToList();
 
