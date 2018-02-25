@@ -99,11 +99,11 @@ F    : MINUS ident { $$ = new UnaryNode($2, '-');}
 block	: BEGIN stlist END { $$ = $2; }
 		;
 
-cycle	: CYCLE OPENBR expr CLOSEBR block  { $$ = new CycleNode($3, $5); }
+cycle	: CYCLE OPENBR expr CLOSEBR statement { $$ = new CycleNode($3, $5); }
 		;
 
-for 	: FOR OPENBR assign COMMA expr COMMA expr CLOSEBR block { $$ = new ForNode($3 as AssignNode, $5, $7, $9); }
-		| FOR OPENBR assign COMMA expr CLOSEBR block { $$ = new ForNode($3 as AssignNode, $5, $7); }
+for 	: FOR OPENBR assign COMMA expr COMMA expr CLOSEBR statement { $$ = new ForNode($3 as AssignNode, $5, $7, $9); }
+		| FOR OPENBR assign COMMA expr CLOSEBR statement { $$ = new ForNode($3 as AssignNode, $5, $7); }
 		;
 		
 exprlist: expr 
@@ -120,7 +120,7 @@ exprlist: expr
 print   : PRINT OPENBR exprlist CLOSEBR { $$ = new PrintNode($3); }
 		;
 
-if		: IF OPENBR expr CLOSEBR block ELSE block { $$ = new IfNode($3, $5, $7); }
-		| IF OPENBR expr CLOSEBR block { $$ = new IfNode($3, $5); }
+if		: IF OPENBR expr CLOSEBR statement ELSE statement { $$ = new IfNode($3, $5, $7); }
+		| IF OPENBR expr CLOSEBR statement { $$ = new IfNode($3, $5); }
 		;
 %%
