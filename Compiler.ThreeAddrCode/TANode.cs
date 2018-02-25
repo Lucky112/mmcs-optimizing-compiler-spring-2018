@@ -113,9 +113,9 @@ namespace Compiler.ThreeAddressCode
         public override string ToString()
         {
             if (Left == null)
-                return string.Format("{0} : {0} = {1}{2}", Label, Result, Operation.GetSymbol(), Right);
+                return string.Format("{0} : {1} = {2}{3}", Label, Result, Operation.GetSymbol(), Right);
             else
-                return string.Format("{0} : {0} = {1} {2} {3}", Label, Result, Left, Operation.GetSymbol(), Right);
+                return string.Format("{0} : {1} = {2} {3} {4}", Label, Result, Left, Operation.GetSymbol(), Right);
         }
     }
 
