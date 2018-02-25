@@ -2,8 +2,6 @@
 
 namespace Compiler.Parser.AST
 {
-    public enum AssignType { Assign, AssignPlus, AssignMinus, AssignMult, AssignDivide };
-
     public class Node // базовый класс для всех узлов    
     {
     }
@@ -79,12 +77,10 @@ namespace Compiler.Parser.AST
     {
         public IdNode Id { get; set; }
         public ExprNode Expr { get; set; }
-        public AssignType AssOp { get; set; }
-        public AssignNode(IdNode id, ExprNode expr, AssignType assop = AssignType.Assign)
+        public AssignNode(IdNode id, ExprNode expr)
         {
             Id = id;
             Expr = expr;
-            AssOp = assop;
         }
     }
 
