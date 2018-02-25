@@ -156,18 +156,18 @@ namespace Compiler.Parser.AST
     public class ForNode : StatementNode
     {
         public AssignNode Assign { get; set; }
-        public ExprNode Cond { get; set; }
+        public ExprNode Border { get; set; }
         public ExprNode Inc { get; set; }
         public StatementNode Body { get; set; }
-        public ForNode(AssignNode assign, ExprNode cond, ExprNode inc, StatementNode body)
+        public ForNode(AssignNode assign, ExprNode bord, ExprNode inc, StatementNode body)
         {
             Assign = assign;
-            Cond = cond;
+            Border = bord;
             Inc = inc;
             Body = body;
         }
 
-        public ForNode(AssignNode assign, ExprNode cond, StatementNode body): this(assign, cond, new IntNumNode(1), body) {}
+        public ForNode(AssignNode assign, ExprNode bord, StatementNode body): this(assign, bord, new IntNumNode(1), body) {}
     }
 
     public class EmptyNode : StatementNode
