@@ -137,22 +137,37 @@ namespace Compiler.Parser.Visitors
 
         public override void VisitForNode(ForNode f)
         {
-            // Делигируем присвоение соответствующему визитору
-            VisitAssignNode(f.Assign);
+            // Первое присвоение. Инициализация значения счетчика цикла
+            TA_Assign ass = new TA_Assign();
+            ass.Result = GetVarByName(f.Assign.Id.Name);
+            ass.Left = null;
+            ass.Right = RecAssign(f.Assign.Expr);
+            ass.Operation = OpCode.TA_Copy;
+            code.AddNode(ass);
             
+            // далее необходимо сгенерить стоку условия цикла
+            TA_Assign initialCondition = new TA_Assign();
+            initialCondition.Result = new TA_Var();
+            initialCondition.Left = ass.Result;
+            initialCondition.Right = RecAssign(f.Border);
+            initialCondition.Operation = (OpCode) OperationType.Less;
+            code.AddNode(initialCondition);
+            
+            // Кладем это в условие цикла
             var ifGoto = new TA_IfGoto();
-            TA_Var cond = RecAssign(f.Border);
+            TA_Var cond = initialCondition.Result;
             ifGoto.Condition = cond;
             TA_Empty newLabel = GetEmptyLabeledNode();
             ifGoto.TargetLabel = newLabel.Label;
             
-            // Инкрементируемая переменная счетчика цикла  
-            TA_Assign increment = new TA_Assign();
-            increment.Left = null;
-            // Временная переменная для хранения счетчика цикла
-            increment.Right = new TA_Var();
-            increment.Operation = OpCode.TA_Plus;
-            code.AddNode(increment);
+            // Создаем строку с увеличением счетчика
+            TA_Assign ass1 = new TA_Assign();
+            ass1.Result = GetVarByName(f.Assign.Id.Name);
+            ass1.Left = RecAssign(f.Assign.Expr);
+            ass1.Right = RecAssign(f.Inc);
+            ass1.Operation = OpCode.TA_Plus;
+            code.AddNode(ass1);
+            
             // Дальнейший разбор тела выражения
             f.Body.Visit(this);
         }
