@@ -253,7 +253,6 @@ namespace Compiler.ThreeAddressCode
         List<TA_Node> m_code;
 
         Dictionary<Guid, TA_Node> m_labeledCode;
-        Dictionary<string, TA_Var> m_varsInCode;
         
         public IEnumerable<TA_Node> CodeList
         {
@@ -264,7 +263,6 @@ namespace Compiler.ThreeAddressCode
         {
             m_code = new List<TA_Node>();
             m_labeledCode = new Dictionary<Guid, TA_Node>();
-            m_varsInCode = new Dictionary<string, TA_Var>();
         }
 
         /// <summary>
@@ -294,34 +292,7 @@ namespace Compiler.ThreeAddressCode
         {
             foreach (var node in nodes)
                 m_code.Remove(node);
-        }
-
-        /// <summary>
-        /// Найти переменную по имени в исходном коде
-        /// </summary>
-        public TA_Var GetVarByName(string name)
-        {
-            if (!m_varsInCode.ContainsKey(name))
-                m_varsInCode.Add(name, new TA_Var());
-
-            return m_varsInCode[name];
-        }
-
-        /// <summary>
-        /// Создать временную переменную
-        /// </summary>
-        public TA_Var GetTempVar()
-        {
-            return new TA_Var();
-        }
-
-        /// <summary>
-        /// Создать константу
-        /// </summary>
-        public TA_IntConst GetConst(int value)
-        {
-            return new TA_IntConst(value);
-        }
+        }        
 
         public override string ToString()
         {

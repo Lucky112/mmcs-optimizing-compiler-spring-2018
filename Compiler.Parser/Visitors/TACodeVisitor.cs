@@ -13,11 +13,16 @@ namespace Compiler.Parser.Visitors
         /// Список помеченных команд(строк) трехадресного кода в формате ИмяМетки - Узел
         /// </summary>
         private Dictionary<string, TA_Node> labeledTANodes = new Dictionary<string, TA_Node>();
+        
         /// <summary>
         /// Список команд безусловного перехода, ведущих в непреобразованную часть кода и ожидающих заполнения поля TargetLabel, в формате ИмяМетки - Список команд перехода к этой метке
         /// </summary>
         private Dictionary<string, List<TA_Goto>> forwardGotos = new Dictionary<string, List<TA_Goto>>();
-        
+
+        /// <summary>
+        /// Список переменных исходного кода в формате ИмяПеременной - Адрес в трехадресном коде
+        /// </summary>
+        private Dictionary<string, TA_Var> m_varsInCode = new Dictionary<string, TA_Var>();
 
         public override void VisitLabelNode(LabelNode l)
         {
@@ -71,7 +76,7 @@ namespace Compiler.Parser.Visitors
             var assign = new TA_Assign();
             assign.Left = null;
             assign.Right = RecAssign(a.Expr);
-            assign.Result = code.GetVarByName(a.Id.Name);
+            assign.Result = GetVarByName(a.Id.Name);
             assign.Operation = OpCode.TA_Copy;
 
             code.AddNode(assign);
@@ -127,6 +132,9 @@ namespace Compiler.Parser.Visitors
             code.AddNode(new TA_Empty());
         }
         
+        /// <summary>
+        /// Рекурсивный разбор выражений и генерация их кода
+        /// </summary>
         private TA_Var RecAssign(ExprNode ex)
         {
             var assign = new TA_Assign();
@@ -137,13 +145,13 @@ namespace Compiler.Parser.Visitors
             {
                 case IdNode tmp1:
                     assign.Left = null;
-                    assign.Right = code.GetVarByName(tmp1.Name);
+                    assign.Right = GetVarByName(tmp1.Name);
                     assign.Operation = OpCode.TA_Copy;
                     break;
 
                 case IntNumNode tmp2:
                     assign.Left = null;
-                    assign.Right = code.GetConst(tmp2.Num);
+                    assign.Right = GetConst(tmp2.Num);
                     assign.Operation = OpCode.TA_Copy;
                     break;
 
@@ -168,6 +176,25 @@ namespace Compiler.Parser.Visitors
 
             code.AddNode(assign);
             return result;
+        }
+
+        /// <summary>
+        /// Найти переменную по имени в исходном коде
+        /// </summary>
+        private TA_Var GetVarByName(string name)
+        {
+            if (!m_varsInCode.ContainsKey(name))
+                m_varsInCode.Add(name, new TA_Var());
+
+            return m_varsInCode[name];
+        }
+
+        /// <summary>
+        /// Создать константу
+        /// </summary>
+        private TA_IntConst GetConst(int value)
+        {
+            return new TA_IntConst(value);
         }
     }
 }
