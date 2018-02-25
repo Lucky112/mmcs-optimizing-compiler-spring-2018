@@ -33,6 +33,10 @@ namespace Compiler
 
                 var b = parser.Parse();
                 Console.WriteLine(!b ? "Ошибка" : "Синтаксическое дерево построено");
+
+                    var prettyPrinter = new PrettyPrintVisitor();
+                    parser.root.Visit(prettyPrinter);
+                    Console.WriteLine(prettyPrinter.Text);
             }
             catch (FileNotFoundException)
             {
