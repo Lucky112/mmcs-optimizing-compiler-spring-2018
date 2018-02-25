@@ -121,24 +121,27 @@ namespace Compiler.Parser.Visitors
             
             // Результат вычисления логического выражения
             TA_Var cond1 = RecAssign(iif.Conditon);
-            ifGoto.Condition = cond1;
+            ifGoto.Condition = cond1;            
             
-            // Добавление новой метки непосредственно перед телом условного оператора 
+            code.AddNode(ifGoto);
+
+            // Разбор тела else (если есть)
+            iif.ElseClause?.Visit(this);
+            
+            // Пропускаем тело if
+            var elseGoTo = new TA_Goto();
+            code.AddNode(elseGoTo);
+
+            // Добавление новой метки непосредственно перед телом if
             TA_Empty newLabelIf = GetEmptyLabeledNode();
             ifGoto.TargetLabel = newLabelIf.Label;
-            code.AddNode(ifGoto);
-            
+
             // Обход выражений тела условного оператора
             iif.IfClause.Visit(this);
 
-            // Повторим аналогичные действия в случае наличия ветки Else
-            var elseGoTo = new TA_IfGoto();
-            TA_Var cond2 = RecAssign(iif.Conditon);
-            ifGoto.Condition = cond2;
+            // Метка после тела if, на нее передается управление из else
             TA_Empty newLabelElse = GetEmptyLabeledNode();
             elseGoTo.TargetLabel = newLabelElse.Label;
-            code.AddNode(elseGoTo);
-            iif.ElseClause?.Visit(this);
         }
 
         public override void VisitForNode(ForNode f)
