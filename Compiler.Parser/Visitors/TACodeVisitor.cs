@@ -27,7 +27,7 @@ namespace Compiler.Parser.Visitors
         /// </summary>
         private Dictionary<string, TA_Var> m_varsInCode = new Dictionary<string, TA_Var>();
 
-        public override void VisitLabelNode(LabelNode l)
+        public void VisitLabelNode(LabeledNode l)
         {
             string labelName = l.Label.Name;
             // Создаем пустой оператор и указываем, что на него есть переход по метке
@@ -87,13 +87,13 @@ namespace Compiler.Parser.Visitors
         {
             var igt = new TA_IfGoto();
             // Результат вычисления логического выражения
-            TA_Var cond = RecAssign(c.Expr);
+            TA_Var cond = RecAssign(c.Condition);
             igt.Condition = cond;
             // Добавление новой метки непосредственно перед телом цикла 
             TA_Empty newLabel = GetEmptyLabeledNode();
             igt.TargetLabel = newLabel.Label;
             // Обход выражений тела цикла
-            c.Stat.Visit(this);
+            c.Body.Visit(this);
             code.AddNode(igt);
         }
 
@@ -106,7 +106,7 @@ namespace Compiler.Parser.Visitors
         public override void VisitPrintNode(PrintNode pr)
         {
             TA_Print print = null;
-            foreach (var expr in pr.ExprList.ExpList)
+            foreach (var expr in pr.ExprList.ExprList)
             {
                 print = new TA_Print();
                 print.Data = RecAssign(expr);
@@ -128,14 +128,14 @@ namespace Compiler.Parser.Visitors
         {
             var igt = new TA_IfGoto();
             // Результат вычисления логического выражения
-            TA_Var cond = RecAssign(iif.Expr);
+            TA_Var cond = RecAssign(iif.Conditon);
             igt.Condition = cond;
             // Добавление новой метки непосредственно перед телом условного оператора 
             TA_Empty newLabel = GetEmptyLabeledNode();
             igt.TargetLabel = newLabel.Label;
             // Обход выражений тела условного оператора
-            iif.Stat1.Visit(this);
-            iif.Stat2.Visit(this);
+            iif.IfClause.Visit(this);
+            iif.ElseClause.Visit(this);
             code.AddNode(igt);
         }
 
@@ -177,7 +177,7 @@ namespace Compiler.Parser.Visitors
                 case BinaryNode tmp3:
                     assign.Left = RecAssign(tmp3.Left);
                     assign.Right = RecAssign(tmp3.Right);
-                    if (Enum.TryParse(tmp3.Operation, out OpCode op1))
+                    if (Enum.TryParse(tmp3.ToString(), out OpCode op1))
                         assign.Operation = op1;
                     break;
 
