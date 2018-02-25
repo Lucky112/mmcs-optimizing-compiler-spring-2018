@@ -268,61 +268,14 @@ namespace Compiler.ThreeAddressCode
         }
 
         /// <summary>
-        /// Добавить пустой оператор
+        /// Добавить оператор
         /// </summary>
-        public TA_Empty AddNop()
+        public void AddNode(TA_Node node)
         {
-            var curNode = new TA_Empty();
-            m_code.Add(curNode);
-            m_labeledCode.Add(curNode.Label, curNode);
-
-            return curNode;
-        }
-
-        /// <summary>
-        /// Добавить оператор присваивания
-        /// </summary>
-        public TA_Assign AddAssign()
-        {
-            var curNode = new TA_Assign();
-            m_code.Add(curNode);
-            m_labeledCode.Add(curNode.Label, curNode);
-
-            return curNode;
-        }
-
-        /// <summary>
-        /// Добавить оператор безусловного перехода
-        /// </summary>
-        public TA_Goto AddGoto()
-        {
-            var curNode = new TA_Goto();
-            m_code.Add(curNode);
-            m_labeledCode.Add(curNode.Label, curNode);
-
-            return curNode;
+            m_code.Add(node);
+            m_labeledCode.Add(node.Label, node);
         }
         
-        /// <summary>
-        /// Добавить оператор условного перехода
-        /// </summary>
-        public TA_IfGoto AddIfGoto()
-        {
-            var curNode = new TA_IfGoto();
-            m_code.Add(curNode);
-            m_labeledCode.Add(curNode.Label, curNode);
-
-            return curNode;
-        }
-
-        public TA_Print AddPrint()
-        {
-            var curNode = new TA_Print();
-            m_code.Add(curNode);
-            m_labeledCode.Add(curNode.Label, curNode);
-
-            return curNode;
-        }
 
         /// <summary>
         /// Удалить оператор

@@ -23,8 +23,9 @@ namespace Compiler.Parser.Visitors
         {
             string labelName = l.Label.Name;
             // Создаем пустой оператор и указываем, что на него есть переход по метке
-            TA_Empty labeledNop = code.AddNop();
+            var labeledNop = new TA_Empty();
             labeledNop.IsLabeled = true;
+            code.AddNode(labeledNop);
 
             // Добавляем метку и помеченный оператор в список помеченных операторов (это всегда нужно делать, т.к. дальше по тексту могут оказаться goto на данную метку)
             labeledTANodes.Add(labelName, labeledNop);
@@ -46,7 +47,8 @@ namespace Compiler.Parser.Visitors
         {
             string labelName = g.Label.Name;
             // При посещении узла GoTо создаем соответсвующую команду трехадресного кода
-            TA_Goto gt = code.AddGoto();
+            var gt = new TA_Goto();
+            code.AddNode(gt);
 
             // Если метка ведет в уже преобразованную часть программы
             if (labeledTANodes.ContainsKey(labelName))
@@ -65,12 +67,14 @@ namespace Compiler.Parser.Visitors
         }
 
         public override void VisitAssignNode(AssignNode a)
-        {   
-            var assign = code.AddAssign();
+        {
+            var assign = new TA_Assign();
             assign.Left = null;
             assign.Right = RecAssign(a.Expr);
             assign.Result = code.GetVarByName(a.Id.Name);
             assign.Operation = OpCode.TA_Copy;
+
+            code.AddNode(assign);
         }
 
         // TODO
@@ -90,9 +94,10 @@ namespace Compiler.Parser.Visitors
             TA_Print print = null;
             foreach (var expr in pr.ExprList.ExpList)
             {
-                print = code.AddPrint();
+                print = new TA_Print();
                 print.Data = RecAssign(expr);
                 print.Sep = " ";
+                code.AddNode(print);
             }
 
             if (print != null)
@@ -119,12 +124,12 @@ namespace Compiler.Parser.Visitors
 
         public override void VisitEmptyNode(EmptyNode w)
         {
-            code.AddNop();
+            code.AddNode(new TA_Empty());
         }
         
         private TA_Var RecAssign(ExprNode ex)
         {
-            var assign = code.AddAssign();
+            var assign = new TA_Assign();
             var result = new TA_Var();
             assign.Result = result;
 
@@ -134,20 +139,23 @@ namespace Compiler.Parser.Visitors
                     assign.Left = null;
                     assign.Right = code.GetVarByName(tmp1.Name);
                     assign.Operation = OpCode.TA_Copy;
-                    return result;
+                    break;
+
                 case IntNumNode tmp2:
                     assign.Left = null;
                     assign.Right = code.GetConst(tmp2.Num);
                     assign.Operation = OpCode.TA_Copy;
-                    return result;
+                    break;
+
                 case BinaryNode tmp3:
                     assign.Left = RecAssign(tmp3.Left);
                     assign.Right = RecAssign(tmp3.Right);
                     if (Enum.TryParse(tmp3.Operation, out OpCode op1))
                     {
                         assign.Operation = op1;
-                    }       
-                    return result;
+                    }
+                    break;
+
                 case UnaryNode tmp4:
                     assign.Left = null;
                     assign.Right = RecAssign(tmp4.Num);
@@ -155,9 +163,10 @@ namespace Compiler.Parser.Visitors
                     {
                         assign.Operation = op2;
                     }
-                    return result;
+                    break;
             }
 
+            code.AddNode(assign);
             return result;
         }
     }
