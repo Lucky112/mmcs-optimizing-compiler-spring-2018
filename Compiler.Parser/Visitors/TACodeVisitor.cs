@@ -1,31 +1,35 @@
-﻿﻿using System;
-using Compiler.Parser.AST;
-using Compiler.ThreeAddressCode;
+﻿using System;
 using System.Collections.Generic;
+using Compiler.Parser.AST;
+using Compiler.ThreeAddrCode;
+using TACExpr = Compiler.ThreeAddrCode.Expressions;
+using TACNodes = Compiler.ThreeAddrCode.Nodes;
 
 namespace Compiler.Parser.Visitors
 {
     public class TACodeVisitor : AutoVisitor
     {
         /// <summary>
-        /// Программа в виде списка команд трехадреного кода
+        ///     Программа в виде списка команд трехадреного кода
         /// </summary>
-        private TACode code = new TACode();
+        private readonly TACode code = new TACode();
 
         /// <summary>
-        /// Список помеченных команд(строк) трехадресного кода в формате ИмяМетки - Узел
+        ///     Список команд безусловного перехода, ведущих в непреобразованную часть кода и ожидающих заполнения поля
+        ///     TargetLabel, в формате ИмяМетки - Список команд перехода к этой метке
         /// </summary>
-        private Dictionary<string, TA_Node> labeledTANodes = new Dictionary<string, TA_Node>();
-        
-        /// <summary>
-        /// Список команд безусловного перехода, ведущих в непреобразованную часть кода и ожидающих заполнения поля TargetLabel, в формате ИмяМетки - Список команд перехода к этой метке
-        /// </summary>
-        private Dictionary<string, List<TA_Goto>> forwardGotos = new Dictionary<string, List<TA_Goto>>();
+        private readonly Dictionary<string, List<TACNodes.Goto>> forwardGotos =
+            new Dictionary<string, List<TACNodes.Goto>>();
 
         /// <summary>
-        /// Список переменных исходного кода в формате ИмяПеременной - Адрес в трехадресном коде
+        ///     Список помеченных команд(строк) трехадресного кода в формате ИмяМетки - Узел
         /// </summary>
-        private Dictionary<string, TA_Var> m_varsInCode = new Dictionary<string, TA_Var>();
+        private readonly Dictionary<string, TACNodes.Node> labeledTANodes = new Dictionary<string, TACNodes.Node>();
+
+        /// <summary>
+        ///     Список переменных исходного кода в формате ИмяПеременной - Адрес в трехадресном коде
+        /// </summary>
+        private readonly Dictionary<string, TACExpr.Var> m_varsInCode = new Dictionary<string, TACExpr.Var>();
 
         public void VisitLabelNode(LabeledNode l)
         {
@@ -238,34 +242,34 @@ namespace Compiler.Parser.Visitors
             code.AddNode(assign);
             return result;
         }
-        
+
         /// <summary>
-        /// Создать новый пустой оператор - метку в ТА коде
+        ///     Создать новый пустой оператор - метку в ТА коде
         /// </summary>
-        private TA_Empty GetEmptyLabeledNode()
+        private TACNodes.Empty GetEmptyLabeledNode()
         {
-            var labeledNop = new TA_Empty {IsLabeled = true};
+            var labeledNop = new TACNodes.Empty {IsLabeled = true};
             code.AddNode(labeledNop);
             return labeledNop;
         }
 
         /// <summary>
-        /// Найти переменную по имени в исходном коде
+        ///     Найти переменную по имени в исходном коде
         /// </summary>
-        private TA_Var GetVarByName(string name)
+        private TACExpr.Var GetVarByName(string name)
         {
             if (!m_varsInCode.ContainsKey(name))
-                m_varsInCode.Add(name, new TA_Var());
+                m_varsInCode.Add(name, new TACExpr.Var());
 
             return m_varsInCode[name];
         }
 
         /// <summary>
-        /// Создать константу
+        ///     Создать константу
         /// </summary>
-        private TA_IntConst GetConst(int value)
+        private TACExpr.IntConst GetConst(int value)
         {
-            return new TA_IntConst(value);
+            return new TACExpr.IntConst(value);
         }
     }
 }

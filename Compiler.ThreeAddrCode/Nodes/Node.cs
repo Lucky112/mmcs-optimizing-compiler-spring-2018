@@ -1,0 +1,37 @@
+﻿using System;
+
+namespace Compiler.ThreeAddrCode.Nodes
+{
+    /// <summary>
+    ///     Базовый узел
+    /// </summary>
+    public class Node
+    {
+        public Node()
+        {
+            Label = Guid.NewGuid();
+        }
+
+        /// <summary>
+        ///     Уникальная метка-идентификатор
+        /// </summary>
+        public Guid Label { get; set; }
+
+        /// <summary>
+        ///     Флаг наличия перехода по goto на эту строку кода
+        /// </summary>
+        public bool IsLabeled { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Node)
+                return Label == (obj as Node).Label;
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Label.GetHashCode();
+        }
+    }
+}

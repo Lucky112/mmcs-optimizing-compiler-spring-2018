@@ -7,8 +7,8 @@
     <ProjectGuid>{DB2C1BC7-72B2-429F-9AA1-F364E11DE437}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ThreeAddrCode</RootNamespace>
-    <AssemblyName>ThreeAddrCode</AssemblyName>
+    <RootNamespace>Compiler.ThreeAddrCode</RootNamespace>
+    <AssemblyName>Compiler.ThreeAddrCode</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -41,8 +44,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Expressions\Expr.cs" />
+    <Compile Include="Expressions\IntConst.cs" />
+    <Compile Include="Expressions\Var.cs" />
+    <Compile Include="OpCode.cs" />
+    <Compile Include="OpCodeExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TANode.cs" />
+    <Compile Include="Nodes\Assign.cs" />
+    <Compile Include="Nodes\Empty.cs" />
+    <Compile Include="Nodes\Goto.cs" />
+    <Compile Include="Nodes\IfGoto.cs" />
+    <Compile Include="Nodes\Node.cs" />
+    <Compile Include="Nodes\Print.cs" />
+    <Compile Include="TACode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
