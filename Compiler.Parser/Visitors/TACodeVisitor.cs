@@ -145,14 +145,17 @@ namespace Compiler.Parser.Visitors
         {
             // Значение счетчика цикла при инициализации
             var counter = RecAssign(f.Assign.Expr);
-            
+
+            // Метка начала цикла
+            TA_Empty cycle = GetEmptyLabeledNode();
+
             // далее необходимо сгенерить стоку условия цикла
             TA_Assign initialCondition = new TA_Assign
             {
                 Result = new TA_Var(),
                 Left = counter,
                 Right = RecAssign(f.Border),
-                Operation = (OpCode) OperationType.Less
+                Operation = (OpCode) OperationType.GreaterEq
             };
             code.AddNode(initialCondition);
             
@@ -160,23 +163,29 @@ namespace Compiler.Parser.Visitors
             var ifGoto = new TA_IfGoto();
             TA_Var cond = initialCondition.Result;
             ifGoto.Condition = cond;
-            
+            code.AddNode(ifGoto);
+
+            // Дальнейший разбор тела выражения
+            f.Body.Visit(this);
+
             // Создаем строку с увеличением счетчика
             TA_Assign ass1 = new TA_Assign
             {
-                Result = GetVarByName(f.Assign.Id.Name),
-                Left = RecAssign(f.Assign.Expr),
+                Result = counter,
+                Left = counter,
                 Right = RecAssign(f.Inc),
                 Operation = OpCode.TA_Plus
             };
             code.AddNode(ass1);
-            
-            TA_Empty newLabel = GetEmptyLabeledNode();
-            ifGoto.TargetLabel = newLabel.Label;
-            code.AddNode(ifGoto);
-            
-            // Дальнейший разбор тела выражения
-            f.Body.Visit(this);
+                      
+            // Команда перехода к началу цикла  
+            var gt = new TA_Goto();
+            gt.TargetLabel = cycle.Label;
+            code.AddNode(gt);
+
+            // Метка за концом цикла
+            TA_Empty endCycle = GetEmptyLabeledNode();
+            ifGoto.TargetLabel = endCycle.Label;
         }
 
         public override void VisitEmptyNode(EmptyNode w)
