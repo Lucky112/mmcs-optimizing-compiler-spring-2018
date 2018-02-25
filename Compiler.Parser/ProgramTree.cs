@@ -59,12 +59,12 @@ namespace Compiler.Parser.AST
     {
     }
 
-    public class LabelNode : StatementNode
+    public class LabeledNode : StatementNode
     {
         public StatementNode Stat { get; set; }
         public IdNode Label { get; set; }
 
-        public LabelNode(IdNode label, StatementNode stat)
+        public LabeledNode(IdNode label, StatementNode stat)
         {
             Label = label;
             Stat = stat;
@@ -94,21 +94,22 @@ namespace Compiler.Parser.AST
 
     public class CycleNode : StatementNode
     {
-        public ExprNode Expr { get; set; }
-        public StatementNode Stat { get; set; }
+        public ExprNode Condition { get; set; }
+        public StatementNode Body { get; set; }
         public CycleNode(ExprNode expr, StatementNode stat)
         {
-            Expr = expr;
-            Stat = stat;
+            Condition = expr;
+            Body = stat;
         }
     }
 
     public class BlockNode : StatementNode
     {
-        public List<StatementNode> StList = new List<StatementNode>();
+        public List<StatementNode> StList { get; set; }
         public BlockNode(StatementNode stat)
         {
-            Add(stat);
+            StList = new List<StatementNode>();
+            StList.Add(stat);
         }
         public void Add(StatementNode stat)
         {
@@ -127,34 +128,28 @@ namespace Compiler.Parser.AST
 
     public class ExprListNode : Node
     {
-        public List<ExprNode> ExpList = new List<ExprNode>();
-        public ExprListNode(ExprNode exp)
+        public List<ExprNode> ExprList { get; set; }
+        public ExprListNode(ExprNode expr)
         {
-            Add(exp);
+            ExprList = new List<ExprNode>();
+            ExprList.Add(expr);
         }
-        public void Add(ExprNode exp)
+        public void Add(ExprNode expr)
         {
-            ExpList.Add(exp);
+            ExprList.Add(expr);
         }
     }
 
     public class IfNode : StatementNode
     {
-        public ExprNode Expr { get; set; }
-        public StatementNode Stat1 { get; set; }
-        public StatementNode Stat2 { get; set; }
-        public IfNode(ExprNode expr, StatementNode stat1, StatementNode stat2)
+        public ExprNode Conditon { get; set; }
+        public StatementNode IfClause { get; set; }
+        public StatementNode ElseClause { get; set; }
+        public IfNode(ExprNode expr, StatementNode ifClause, StatementNode elseClause = null)
         {
-            Expr = expr;
-            Stat1 = stat1;
-            Stat2 = stat2;
-        }
-
-        public IfNode(ExprNode expr, StatementNode stat1)
-        {
-            Expr = expr;
-            Stat1 = stat1;
-            Stat2 = null;
+            Conditon = expr;
+            IfClause = ifClause;
+            ElseClause = elseClause;
         }
     }
 
@@ -163,16 +158,16 @@ namespace Compiler.Parser.AST
         public AssignNode Assign { get; set; }
         public ExprNode Cond { get; set; }
         public ExprNode Inc { get; set; }
-        public StatementNode Stat { get; set; }
-        public ForNode(AssignNode assign, ExprNode cond, ExprNode inc, StatementNode stat)
+        public StatementNode Body { get; set; }
+        public ForNode(AssignNode assign, ExprNode cond, ExprNode inc, StatementNode body)
         {
             Assign = assign;
             Cond = cond;
             Inc = inc;
-            Stat = stat;
+            Body = body;
         }
 
-        public ForNode(AssignNode assign, ExprNode cond, StatementNode stat): this(assign, cond, null, stat) {}
+        public ForNode(AssignNode assign, ExprNode cond, StatementNode body): this(assign, cond, null, body) {}
     }
 
     public class EmptyNode : StatementNode

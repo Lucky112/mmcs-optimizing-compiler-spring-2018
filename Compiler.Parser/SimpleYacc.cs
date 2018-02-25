@@ -37,7 +37,7 @@ public struct ValueType
 	public PrintNode prVal;
 	public ExprListNode elVal;
 	public GoToNode gtNode;
-	public LabelNode lbNode;
+	public LabeledNode lbNode;
        }
 // Abstract base class for GPLEX scanners
 public abstract class ScanBase : AbstractScanner<ValueType,LexLocation> {
@@ -237,7 +237,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
 			}
         break;
       case 5: // statement -> ident, COLON, statement
-{ CurrentSemanticValue.stVal = new LabelNode(ValueStack[ValueStack.Depth-3].eVal as IdNode, ValueStack[ValueStack.Depth-1].stVal); }
+{ CurrentSemanticValue.stVal = new LabeledNode(ValueStack[ValueStack.Depth-3].eVal as IdNode, ValueStack[ValueStack.Depth-1].stVal); }
         break;
       case 6: // statement -> GOTO, ident, SEMICOLON
 { CurrentSemanticValue.stVal = new GoToNode(ValueStack[ValueStack.Depth-2].eVal as IdNode); }
