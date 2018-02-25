@@ -152,6 +152,20 @@ namespace Compiler.ThreeAddressCode
         }
     }
 
+    /// <summary>
+    /// Оператор печати
+    /// </summary>
+    public class TA_Print : TA_Node
+    {
+        public TA_Expr Data { get; set; }
+        public string Sep { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} : print {1} \"{2}\"", Label, Data, Sep);
+        }
+    }
+
 
     /*
      * =========================================================
