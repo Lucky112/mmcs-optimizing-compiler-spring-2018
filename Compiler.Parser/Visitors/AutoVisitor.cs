@@ -1,71 +1,84 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Compiler.Parser.AST;
 
 namespace Compiler.Parser.Visitors
 {
-    // базовая логика обхода без действий
-    // Если нужны действия или другая логика обхода, то соответствующие методы надо переопределять
-    // При переопределении методов для задания действий необходимо не забывать обходить подузлы
-    public class AutoVisitor : Visitor
+    /// <summary>
+    ///     Базовая логика обхода без действий
+    ///     <para>Если нужны действия или другая логика обхода, то соответствующие методы надо переопределять</para>
+    ///     <para>При переопределении методов для задания действий необходимо не забывать обходить подузлы</para>
+    /// </summary>
+    public abstract class AutoVisitor : IVisitor
     {
-        public override void VisitBinaryNode(BinaryNode binop)
+
+        public virtual void VisitBinaryNode(BinaryNode binop)
         {
             binop.Left.Visit(this);
             binop.Right.Visit(this);
         }
-        public override void VisitUnaryNode(UnaryNode unop)
+
+        public virtual void VisitUnaryNode(UnaryNode unop)
         {
             unop.Num.Visit(this);
         }
-        public override void VisitLabeledNode(LabeledNode l)
+
+        public virtual void VisitLabeledNode(LabeledNode l)
         {
             l.Label.Visit(this);
             l.Stat.Visit(this);
         }
-        public override void VisitGoToNode(GoToNode g)
+
+        public virtual void VisitGoToNode(GoToNode g)
         {
             g.Label.Visit(this);
         }
-        public override void VisitAssignNode(AssignNode a)
+
+        public virtual void VisitAssignNode(AssignNode a)
         {
             a.Id.Visit(this);
             a.Expr.Visit(this);
         }
-        public override void VisitCycleNode(CycleNode c)
+
+        public virtual void VisitCycleNode(CycleNode c)
         {
             c.Condition.Visit(this);
             c.Body.Visit(this);
         }
-        public override void VisitBlockNode(BlockNode bl)
+
+        public virtual void VisitBlockNode(BlockNode bl)
         {
             foreach (var st in bl.StList)
                 st.Visit(this);
         }
-        public override void VisitPrintNode(PrintNode pr)
+
+        public virtual void VisitPrintNode(PrintNode pr)
         {
             pr.ExprList.Visit(this);
         }
-        public override void VisitExprListNode(ExprListNode exn)
+
+        public virtual void VisitExprListNode(ExprListNode exn)
         {
-            foreach (ExprNode ex in exn.ExprList)
+            foreach (var ex in exn.ExprList)
                 ex.Visit(this);
         }
-        public override void VisitIfNode(IfNode iif)
+
+        public virtual void VisitIfNode(IfNode iif)
         {
             iif.Conditon.Visit(this);
             iif.IfClause.Visit(this);
             iif.ElseClause?.Visit(this);
         }
-        public override void VisitForNode(ForNode f)
+
+        public virtual void VisitForNode(ForNode f)
         {
             f.Assign.Visit(this);
             f.Border.Visit(this);
             f.Inc.Visit(this);
             f.Body.Visit(this);
         }
+
+        public abstract void VisitEmptyNode(EmptyNode w);
+        public abstract void VisitIdNode(IdNode id);
+        public abstract void VisitIntNumNode(IntNumNode num);
     }
 }

@@ -13,7 +13,7 @@ namespace Compiler.Parser.AST
 
     public abstract class Node // базовый класс для всех узлов    
     {
-        public abstract void Visit(Visitor v);
+        public abstract void Visit(IVisitor v);
     }
 
     public abstract class ExprNode : Node // базовый класс для всех выражений
@@ -24,7 +24,7 @@ namespace Compiler.Parser.AST
     {
         public string Name { get; set; }
         public IdNode(string name) { Name = name; }
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitIdNode(this);
         }
@@ -34,7 +34,7 @@ namespace Compiler.Parser.AST
     {
         public int Num { get; set; }
         public IntNumNode(int num) { Num = num; }
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitIntNumNode(this);
         }
@@ -51,7 +51,7 @@ namespace Compiler.Parser.AST
             Right = right;
             Operation = op;
         }
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitBinaryNode(this);
         }
@@ -67,7 +67,7 @@ namespace Compiler.Parser.AST
             Operation = op;
         }
         public UnaryNode(int num, OperationType op) : this(new IntNumNode(num), op) {}
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitUnaryNode(this);
         }
@@ -88,7 +88,7 @@ namespace Compiler.Parser.AST
             Stat = stat;
         }
 
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitLabeledNode(this);
         }
@@ -103,7 +103,7 @@ namespace Compiler.Parser.AST
             Label = label;
         }
 
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitGoToNode(this);
         }
@@ -118,7 +118,7 @@ namespace Compiler.Parser.AST
             Id = id;
             Expr = expr;
         }
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitAssignNode(this);
         }
@@ -133,7 +133,7 @@ namespace Compiler.Parser.AST
             Condition = expr;
             Body = stat;
         }
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitCycleNode(this);
         }
@@ -151,7 +151,7 @@ namespace Compiler.Parser.AST
         {
             StList.Add(stat);
         }
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitBlockNode(this);
         }
@@ -164,7 +164,7 @@ namespace Compiler.Parser.AST
         {
             ExprList = exprlist;
         }
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitPrintNode(this);
         }
@@ -182,7 +182,7 @@ namespace Compiler.Parser.AST
         {
             ExprList.Add(expr);
         }
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitExprListNode(this);
         }
@@ -199,7 +199,7 @@ namespace Compiler.Parser.AST
             IfClause = ifClause;
             ElseClause = elseClause;
         }
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitIfNode(this);
         }
@@ -221,7 +221,7 @@ namespace Compiler.Parser.AST
 
         public ForNode(AssignNode assign, ExprNode bord, StatementNode body): this(assign, bord, new IntNumNode(1), body) {}
 
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitForNode(this);
         }
@@ -229,7 +229,7 @@ namespace Compiler.Parser.AST
 
     public class EmptyNode : StatementNode
     {
-        public override void Visit(Visitor v)
+        public override void Visit(IVisitor v)
         {
             v.VisitEmptyNode(this);
         }

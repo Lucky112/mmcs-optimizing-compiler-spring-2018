@@ -288,5 +288,15 @@ namespace Compiler.Parser.Visitors
         {
             return new TACExpr.IntConst(value);
         }
+
+        public override void VisitIdNode(IdNode id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VisitIntNumNode(IntNumNode num)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

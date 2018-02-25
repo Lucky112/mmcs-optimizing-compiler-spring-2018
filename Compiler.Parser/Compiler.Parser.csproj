@@ -48,7 +48,7 @@
     <Compile Include="SimpleLex.cs" />
     <Compile Include="SimpleYacc.cs" />
     <Compile Include="Visitors\AutoVisitor.cs" />
-    <Compile Include="Visitors\Visitor.cs" />
+    <Compile Include="Visitors\IVisitor.cs" />
     <Compile Include="Visitors\TACodeVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
