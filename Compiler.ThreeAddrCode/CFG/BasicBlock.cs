@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Compiler.ThreeAddrCode.Nodes;
@@ -14,24 +15,18 @@ namespace Compiler.ThreeAddrCode.CFG
         private static int _blockIdCounter;
 
         // список программ в формате трехадресного кода
-        private readonly List<TACode> _code;
+        private readonly List<Node> _code;
 
-        public BasicBlock()
+        public BasicBlock(List<Node> code)
         {
             BlockId = _blockIdCounter++;
 
-            _code = new List<TACode>();
-        }
-
-        public BasicBlock(BasicBlock block)
-        {
-            BlockId = block.BlockId;
-            _code = block._code;
+            _code = code;
         }
 
         public int BlockId { get; set; }
 
-        public IEnumerable<TACode> CodeList
+        public IEnumerable<Node> CodeList
         {
             get { return _code; }
         }
@@ -41,40 +36,35 @@ namespace Compiler.ThreeAddrCode.CFG
             return BlockId;
         }
 
-        public static List<BasicBlock> CreateBasicBlockList(List<TACode> code)
+        public static List<BasicBlock> CreateBasicBlockList(TACode code)
         {
             Debug.Assert(code != null);
-            var basicBlockList = new List<BasicBlock>();
-            var leaderNumb = new List<int>();
-            var beforeLeadearNumb = new List<int>();
 
-            leaderNumb.Add(0);
-            for (var i = 1; i < code.Count; i++)
+            var basicBlockList = new List<BasicBlock>();
+
+            var leaders = new List<int>();
+            leaders.Add(0);
+
+            var commands = code.CodeList.ToList();
+            for (var i = 0; i < commands.Count; ++i)
             {
-                var node = code[i].CodeList.ElementAt(i);
+                var node = commands[i];
                 if (node.IsLabeled)
-                {
-                    leaderNumb.Add(i);
-                    beforeLeadearNumb.Add(i - 1);
-                }
-                if ((node is Goto) && i < code.Count - 1)
-                {
-                    beforeLeadearNumb.Add(i);
-                    leaderNumb.Add(i + 1);
-                }
+                    leaders.Add(i);
+                if (node is Goto)
+                    leaders.Add(i + 1);
             }
-            beforeLeadearNumb.Add(code.Count - 1);
-            var j = 0;
-            for (var i = 0; i < leaderNumb.Count; i++)
+
+            var ranges = leaders.Zip(leaders.Skip(1), Tuple.Create);
+            foreach (var range in ranges)
             {
-                basicBlockList[i] = new BasicBlock();
-                var currentPosition = leaderNumb[i];
-                while (currentPosition <= beforeLeadearNumb[i])
-                {
-                    basicBlockList[i]._code.Add(code[j]);
-                    currentPosition = currentPosition + 1;
-                    j = j + 1;
-                }
+                var bbList = new List<Node>();
+
+                for (var j = range.Item1; j < range.Item2; ++j)
+                    bbList.Add(commands[j]);
+
+                var bb = new BasicBlock(bbList);
+                basicBlockList.Add(bb);
             }
 
             return basicBlockList;
