@@ -66,10 +66,18 @@ namespace Compiler.ThreeAddrCode.CFG
                 if (node is Goto)
                     leaders.Add(i + 1);
             }
+            leaders.Add(commands.Count);
+
+            foreach (var l in leaders)
+                Console.WriteLine(l);
 
             // группируем список как набор пар:
             // [a0, a1, a2, a3, ...] -> [(a0, a1), (a1, a2), (a2, a3), ...]
             var ranges = leaders.Zip(leaders.Skip(1), Tuple.Create);
+
+            foreach (var r in ranges)
+                Console.WriteLine(r.Item1 + ", " + r.Item2);
+
             foreach (var range in ranges)
             {
                 var bbList = new List<Node>();
