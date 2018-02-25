@@ -90,7 +90,7 @@ namespace Compiler.Parser.AST
 
         public override void Visit(Visitor v)
         {
-            v.VisitLabelNode(this);
+            v.VisitLabeledNode(this);
         }
     }
 
