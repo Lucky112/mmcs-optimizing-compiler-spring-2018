@@ -84,11 +84,19 @@ namespace Compiler.Parser.Visitors
         {
             base.VisitBlockNode(bl);
         }
-
-        // TODO
+        
         public override void VisitPrintNode(PrintNode pr)
         {
-            base.VisitPrintNode(pr);
+            TA_Print print = null;
+            foreach (var expr in pr.ExprList.ExpList)
+            {
+                print = code.AddPrint();
+                print.Data = RecAssign(expr);
+                print.Sep = " ";
+            }
+
+            if (print != null)
+                print.Sep = Environment.NewLine;
         }
 
         // TODO

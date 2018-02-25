@@ -315,6 +315,15 @@ namespace Compiler.ThreeAddressCode
             return curNode;
         }
 
+        public TA_Print AddPrint()
+        {
+            var curNode = new TA_Print();
+            m_code.Add(curNode);
+            m_labeledCode.Add(curNode.Label, curNode);
+
+            return curNode;
+        }
+
         /// <summary>
         /// Удалить оператор
         /// </summary>
