@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using Compiler.Parser.AST;
 using Compiler.ThreeAddressCode;
 using System.Collections.Generic;
@@ -7,6 +7,9 @@ namespace Compiler.Parser.Visitors
 {
     public class TACodeVisitor : AutoVisitor
     {
+        /// <summary>
+        /// Программа в виде списка команд трехадреного кода
+        /// </summary>
         private TACode code = new TACode();
 
         /// <summary>
@@ -28,9 +31,7 @@ namespace Compiler.Parser.Visitors
         {
             string labelName = l.Label.Name;
             // Создаем пустой оператор и указываем, что на него есть переход по метке
-            var labeledNop = new TA_Empty();
-            labeledNop.IsLabeled = true;
-            code.AddNode(labeledNop);
+            TA_Empty labeledNop = GetEmptyLabeledNode();
 
             // Добавляем метку и помеченный оператор в список помеченных операторов (это всегда нужно делать, т.к. дальше по тексту могут оказаться goto на данную метку)
             labeledTANodes.Add(labelName, labeledNop);
@@ -118,7 +119,17 @@ namespace Compiler.Parser.Visitors
         // TODO
         public override void VisitIfNode(IfNode iif)
         {
-            base.VisitIfNode(iif);
+            var igt = new TA_IfGoto();
+            // Результат вычисления логического выражения
+            TA_Var cond = RecAssign(iif.Expr);
+            igt.Condition = cond;
+            // Добавление новой метки непосредственно перед телом условного оператора 
+            TA_Empty newLabel = GetEmptyLabeledNode();
+            igt.TargetLabel = newLabel.Label;
+            // Обход выражений тела условного оператора
+            iif.Stat1.Visit(this);
+            iif.Stat2.Visit(this);
+            code.AddNode(igt);
         }
 
         // TODO
@@ -141,6 +152,7 @@ namespace Compiler.Parser.Visitors
             var result = new TA_Var();
             assign.Result = result;
 
+            // Обход продолжается до тех пор, пока выражение не окажется переменной или константой
             switch (ex)
             {
                 case IdNode tmp1:
@@ -159,23 +171,29 @@ namespace Compiler.Parser.Visitors
                     assign.Left = RecAssign(tmp3.Left);
                     assign.Right = RecAssign(tmp3.Right);
                     if (Enum.TryParse(tmp3.Operation, out OpCode op1))
-                    {
                         assign.Operation = op1;
-                    }
                     break;
 
                 case UnaryNode tmp4:
                     assign.Left = null;
                     assign.Right = RecAssign(tmp4.Num);
                     if (Enum.TryParse(tmp4.Operation.ToString(), out OpCode op2))
-                    {
                         assign.Operation = op2;
-                    }
                     break;
             }
 
             code.AddNode(assign);
             return result;
+        }
+        
+        /// <summary>
+        /// Создать новый пустой оператор - метку в ТА коде
+        /// </summary>
+        private TA_Empty GetEmptyLabeledNode()
+        {
+            var labeledNop = new TA_Empty {IsLabeled = true};
+            code.AddNode(labeledNop);
+            return labeledNop;
         }
 
         /// <summary>
