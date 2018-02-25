@@ -4,7 +4,7 @@
 
 // GPPG version 1.3.6
 // Machine:  LENOVO-PC
-// DateTime: 25.02.2018 12:15:59
+// DateTime: 25.02.2018 12:22:33
 // UserName: ??????
 // Input file <SimpleYacc.y>
 
@@ -57,19 +57,19 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
   private static Dictionary<int, string> aliasses;
 #pragma warning restore 649
   private static Rule[] rules = new Rule[47];
-  private static State[] states = new State[98];
+  private static State[] states = new State[99];
   private static string[] nonTerms = new string[] {
       "expr", "ident", "W", "T", "F", "assign", "statement", "cycle", "for", 
       "if", "stlist", "block", "print", "exprlist", "progr", "$accept", };
 
   static Parser() {
-    states[0] = new State(new int[]{29,8,26,9,5,15,12,24,11,81,17,89,3,20,2,-13},new int[]{-15,1,-11,3,-7,97,-2,5,-6,12,-8,14,-9,23,-13,79,-10,88,-12,96});
+    states[0] = new State(new int[]{29,8,26,9,5,15,12,24,11,81,17,89,3,20,7,97},new int[]{-15,1,-11,3,-7,98,-2,5,-6,12,-8,14,-9,23,-13,79,-10,88,-12,96});
     states[1] = new State(new int[]{2,2});
     states[2] = new State(-1);
-    states[3] = new State(new int[]{29,8,26,9,5,15,12,24,11,81,17,89,3,20,2,-2},new int[]{-7,4,-2,5,-6,12,-8,14,-9,23,-13,79,-10,88,-12,96});
+    states[3] = new State(new int[]{29,8,26,9,5,15,12,24,11,81,17,89,3,20,7,97,2,-2},new int[]{-7,4,-2,5,-6,12,-8,14,-9,23,-13,79,-10,88,-12,96});
     states[4] = new State(-4);
     states[5] = new State(new int[]{27,6,6,77});
-    states[6] = new State(new int[]{29,8,26,9,5,15,12,24,11,81,17,89,3,20,2,-13,4,-13},new int[]{-7,7,-2,5,-6,12,-8,14,-9,23,-13,79,-10,88,-12,96});
+    states[6] = new State(new int[]{29,8,26,9,5,15,12,24,11,81,17,89,3,20,7,97},new int[]{-7,7,-2,5,-6,12,-8,14,-9,23,-13,79,-10,88,-12,96});
     states[7] = new State(-5);
     states[8] = new State(-14);
     states[9] = new State(new int[]{29,8},new int[]{-2,10});
@@ -83,8 +83,8 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
     states[17] = new State(new int[]{9,18,13,33,20,43,21,54,22,62,19,67,23,69,24,71,14,65});
     states[18] = new State(new int[]{3,20},new int[]{-12,19});
     states[19] = new State(-39);
-    states[20] = new State(new int[]{29,8,26,9,5,15,12,24,11,81,17,89,3,20,4,-13},new int[]{-11,21,-7,97,-2,5,-6,12,-8,14,-9,23,-13,79,-10,88,-12,96});
-    states[21] = new State(new int[]{4,22,29,8,26,9,5,15,12,24,11,81,17,89,3,20},new int[]{-7,4,-2,5,-6,12,-8,14,-9,23,-13,79,-10,88,-12,96});
+    states[20] = new State(new int[]{29,8,26,9,5,15,12,24,11,81,17,89,3,20,7,97},new int[]{-11,21,-7,98,-2,5,-6,12,-8,14,-9,23,-13,79,-10,88,-12,96});
+    states[21] = new State(new int[]{4,22,29,8,26,9,5,15,12,24,11,81,17,89,3,20,7,97},new int[]{-7,4,-2,5,-6,12,-8,14,-9,23,-13,79,-10,88,-12,96});
     states[22] = new State(-38);
     states[23] = new State(-9);
     states[24] = new State(new int[]{8,25});
@@ -156,11 +156,12 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
     states[90] = new State(new int[]{14,37,25,48,29,8,28,58,8,59},new int[]{-1,91,-3,73,-4,45,-5,56,-2,57});
     states[91] = new State(new int[]{9,92,13,33,20,43,21,54,22,62,19,67,23,69,24,71,14,65});
     states[92] = new State(new int[]{3,20},new int[]{-12,93});
-    states[93] = new State(new int[]{18,94,29,-46,26,-46,5,-46,12,-46,11,-46,17,-46,3,-46,2,-46,4,-46});
+    states[93] = new State(new int[]{18,94,29,-46,26,-46,5,-46,12,-46,11,-46,17,-46,3,-46,7,-46,2,-46,4,-46});
     states[94] = new State(new int[]{3,20},new int[]{-12,95});
     states[95] = new State(-45);
     states[96] = new State(-12);
-    states[97] = new State(-3);
+    states[97] = new State(-13);
+    states[98] = new State(-3);
 
     rules[1] = new Rule(-16, new int[]{-15,2});
     rules[2] = new Rule(-15, new int[]{-11});
@@ -174,7 +175,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
     rules[10] = new Rule(-7, new int[]{-13,7});
     rules[11] = new Rule(-7, new int[]{-10});
     rules[12] = new Rule(-7, new int[]{-12});
-    rules[13] = new Rule(-7, new int[]{});
+    rules[13] = new Rule(-7, new int[]{7});
     rules[14] = new Rule(-2, new int[]{29});
     rules[15] = new Rule(-6, new int[]{-2,6,-1});
     rules[16] = new Rule(-1, new int[]{-3});
@@ -259,7 +260,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
       case 12: // statement -> block
 { CurrentSemanticValue.stVal = ValueStack[ValueStack.Depth-1].blVal; }
         break;
-      case 13: // statement -> /* empty */
+      case 13: // statement -> SEMICOLON
 { CurrentSemanticValue.stVal = new EmptyNode(); }
         break;
       case 14: // ident -> ID

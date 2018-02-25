@@ -30,8 +30,8 @@ namespace Compiler
                 else
                 {
                     Console.WriteLine("Синтаксическое дерево построено");
-                    //foreach (var st in parser.root.StList)
-                    //Console.WriteLine(st);
+                    foreach (var st in parser.root.StList)
+                    Console.WriteLine(st);
                 }
             }
             catch (FileNotFoundException)

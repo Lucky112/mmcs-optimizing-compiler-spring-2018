@@ -57,7 +57,7 @@ statement: ident COLON statement { $$ = new LabelNode($1 as IdNode, $3); }
 		| print SEMICOLON { $$ = $1; }
 		| if { $$ = $1; }
 		| block  { $$ = $1; }
-		| { $$ = new EmptyNode(); }
+		| SEMICOLON { $$ = new EmptyNode(); }
 		;
 
 ident 	: ID { $$ = new IdNode($1); }	
