@@ -130,10 +130,10 @@ namespace Compiler
             taCode.AddNode(ass5);
             taCode.AddNode(ass6);
 
-            //var algOpt = new AlgebraicOptimization();
-            //algOpt.Optimize(ta_code.Code);
+            var algOpt = new AlgebraicOptimization();
+            algOpt.Optimize(ta_code.Code);
             
-            //Console.WriteLine($"TA Code\n: {taCode}");
+            Console.WriteLine($"TA Code\n: {taCode}");
 
             var bBlocks = taCode.CreateBasicBlockList();
             foreach (var bbl in bBlocks)
