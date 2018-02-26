@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Compiler.ThreeAddrCode.CFG;
 using Compiler.ThreeAddrCode.Nodes;
 
 namespace Compiler.ThreeAddrCode
@@ -14,20 +16,27 @@ namespace Compiler.ThreeAddrCode
     public class TACode
     {
         /// <summary>
+        ///     Список команд программы в трехадресном формате
         /// </summary>
-        private readonly List<Node> m_code;
+        private readonly List<Node> _code;
 
-        private readonly Dictionary<Guid, Node> m_labeledCode;
+        /// <summary>
+        ///     Список команд программы в трехадресном формате
+        /// </summary>
+        public IEnumerable<Node> CodeList => _code;
 
+        /// <summary>
+        ///     Словарь соответствий меток и узлов
+        /// </summary>
+        public Dictionary<Guid, Node> LabeledCode { get; }
+
+        /// <summary>
+        ///     Конструктор программы в формате трехадресного кода
+        /// </summary>
         public TACode()
         {
-            m_code = new List<Node>();
-            m_labeledCode = new Dictionary<Guid, Node>();
-        }
-
-        public IEnumerable<Node> CodeList
-        {
-            get { return m_code; }
+            _code = new List<Node>();
+            LabeledCode = new Dictionary<Guid, Node>();
         }
 
         /// <summary>
@@ -35,10 +44,9 @@ namespace Compiler.ThreeAddrCode
         /// </summary>
         public void AddNode(Node node)
         {
-            m_code.Add(node);
-            m_labeledCode.Add(node.Label, node);
+            _code.Add(node);
+            LabeledCode.Add(node.Label, node);
         }
-
 
         /// <summary>
         ///     Удалить оператор
@@ -46,22 +54,67 @@ namespace Compiler.ThreeAddrCode
         /// <param name="node">Оператор</param>
         public bool RemoveNode(Node node)
         {
-            return m_code.Remove(node);
+            return _code.Remove(node);
         }
 
         /// <summary>
         ///     Удалить набор операторов
         /// </summary>
         /// <param name="nodes">Список</param>
-        public void RemoveRange(IEnumerable<Node> nodes)
+        public void RemoveNodes(IEnumerable<Node> nodes)
         {
             foreach (var node in nodes)
-                m_code.Remove(node);
+                _code.Remove(node);
+        }
+
+        /// <summary>
+        ///     Построить список базовых блоков по программе в формате трехадресного кода
+        /// </summary>
+        /// <returns>список базовых блоков</returns>
+        public IEnumerable<BasicBlock> CreateBasicBlockList()
+        {
+            var basicBlockList = new List<BasicBlock>();
+
+            // список лидеров -- хранит "номера строк", 0 -- всегда лидер
+            var leaders = new List<int> {0};
+
+            var commands = CodeList.ToList();
+            for (var i = 1; i < commands.Count; ++i)
+            {
+                var node = commands[i];
+
+                // если в узел есть переход по GoTo
+                if (node.IsLabeled)
+                    leaders.Add(i);
+                // если узел является переходом GoTo
+                if (node is Goto)
+                    leaders.Add(i + 1);
+            }
+
+            // добавляем финальную команду в список для правильной группировки пар
+            leaders.Add(commands.Count);
+
+            // группируем список как набор пар:
+            // [a0, a1, a2, a3, ...] -> [(a0, a1), (a1, a2), (a2, a3), ...]
+            var ranges = leaders.Zip(leaders.Skip(1), Tuple.Create);
+
+            foreach (var range in ranges)
+            {
+                var bbList = new List<Node>();
+
+                for (var j = range.Item1; j < range.Item2; ++j)
+                    bbList.Add(commands[j]);
+
+                var bb = new BasicBlock(bbList);
+                basicBlockList.Add(bb);
+            }
+
+            return basicBlockList;
         }
 
         public override string ToString()
         {
-            return m_code.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
+            return _code.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
         }
     }
 }

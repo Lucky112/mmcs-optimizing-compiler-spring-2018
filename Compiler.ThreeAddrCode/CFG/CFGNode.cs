@@ -1,65 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using Compiler.ThreeAddrCode.Nodes;
 
 namespace Compiler.ThreeAddrCode.CFG
 {
     /// <summary>
     /// Класс-обёртка, который содержит в себе экземпляр базового блока и списки его детей и потомков
     /// </summary>
-    public class CFGNode
+    public class CFGNode : IComparable<CFGNode>
     {
         /// <summary>
-        /// Базовый блок
+        ///     Базовый блок
         /// </summary>
-        private BasicBlock bbl;
+        public BasicBlock Block { get; }
 
         /// <summary>
-        /// Дети узла CFG графа
+        ///     Дети узла CFG графа
         /// </summary>
-        private List<BasicBlock> childs;
-        
-        /// <summary>
-        /// Родители узла CFG графа 
-        /// </summary>
-        private List<BasicBlock> parents;
+        public SortedSet<CFGNode> Children { get; }
 
         /// <summary>
-        /// Конструктор узла графа CFG
+        ///     Родители узла CFG графа 
         /// </summary>
-        /// <param name="bbl"></param>
-        public CFGNode(BasicBlock bbl)
-        {
-            this.bbl = bbl;
-            childs = new List<BasicBlock>();
-            parents = new List<BasicBlock>();
-        }
+        public SortedSet<CFGNode> Parents { get; }
 
-        public List<BasicBlock> GetChilds()
+        /// <summary>
+        ///     Конструктор узла графа CFG
+        /// </summary>
+        /// <param name="block">базовый блок</param>
+        public CFGNode(BasicBlock block)
         {
-            return this.childs;           
-        }
-
-        public List<BasicBlock> GetParents()
-        {
-            return this.parents;
+            if (block == null)
+                throw new NullReferenceException("Block cannot be null");
+            
+            Block = block;
+            Children = new SortedSet<CFGNode>();
+            Parents = new SortedSet<CFGNode>();
         }
 
         /// <summary>
-        /// Новый ребёнок
+        ///     Связать узел с другим по принципу родитель -> ребенок
         /// </summary>
-        /// <param name="child"></param>
-        public void AddChild(BasicBlock child)
+        /// <param name="child">дочерний узел</param>
+        public void AddChild(CFGNode child)
         {
-            this.childs.Add(child);
+            Children.Add(child);
+            child.Parents.Add(this);
         }
 
         /// <summary>
-        /// Новый родитель
+        ///     Связать узел с другим по принципу ребенок -> родитель 
         /// </summary>
-        /// <param name="parent"></param>
-        public void AddParent(BasicBlock parent)
+        /// <param name="parent">родитель</param>
+        public void AddParent(CFGNode parent)
         {
-            this.parents.Add(parent);
+            Parents.Add(parent);
+            parent.Children.Add(this);
+        }
+       
+        public int CompareTo(CFGNode other)
+        {
+            if (ReferenceEquals(this, other)) return 0;
+            if (ReferenceEquals(null, other)) return 1;
+            return Comparer<BasicBlock>.Default.Compare(Block, other.Block);
         }
     }
 }

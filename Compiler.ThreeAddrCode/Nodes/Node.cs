@@ -1,4 +1,5 @@
 ﻿using System;
+using Compiler.ThreeAddrCode.CFG;
 
 namespace Compiler.ThreeAddrCode.Nodes
 {
@@ -16,6 +17,11 @@ namespace Compiler.ThreeAddrCode.Nodes
         ///     Уникальная метка-идентификатор
         /// </summary>
         public Guid Label { get; set; }
+        
+        /// <summary>
+        ///     К какому базовому блоку принадлежит строка
+        /// </summary>
+        public BasicBlock Block { get; set; }
 
         /// <summary>
         ///     Флаг наличия перехода по goto на эту строку кода

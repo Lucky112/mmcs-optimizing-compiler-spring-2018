@@ -9,87 +9,48 @@ namespace Compiler.ThreeAddrCode.CFG
     /// <summary>
     ///     Базовый блок участка программы
     /// </summary>
-    public class BasicBlock
+    public class BasicBlock : IComparable<BasicBlock>
     {
-        // Счетчик, инкрементируется каждый раз при создании блока и служит его номером
+        /// <summary>
+        ///     Счетчик
+        ///     <para>инкрементируется каждый раз при создании блока и служит его номером</para>
+        /// </summary>
         private static int _blockIdCounter;
 
-        // список программ в формате трехадресного кода
-        private readonly List<Node> _codeList;
-
         /// <summary>
-        /// Конструктор базового блока
+        ///     Конструктор базового блока
         /// </summary>
         /// <param name="codeList">список узлов программы в трехадресной форме</param>
         public BasicBlock(List<Node> codeList)
         {
             BlockId = _blockIdCounter++;
-            _codeList = codeList;
+            CodeList = codeList;
+
+            foreach (var node in codeList)
+                node.Block = this;
         }
 
         /// <summary>
-        /// Идентификатор блока
+        ///     Идентификатор блока
         /// </summary>
-        public int BlockId { get; private set; }
+        public int BlockId { get; }
 
         /// <summary>
-        /// Список узлов программы в трехадресной форме, связанных с блоком
+        ///     Список узлов программы в трехадресной форме, связанных с блоком
         /// </summary>
-        public IEnumerable<Node> CodeList
-        {
-            get { return _codeList; }
-        }
-
-        /// <summary>
-        /// Построить список базовых блоков по программе в формате трехадресного кода
-        /// </summary>
-        /// <param name="code">программа в форме трехадресного кода</param>
-        /// <returns>список базовых блоков</returns>
-        public static List<BasicBlock> CreateBasicBlockList(TACode code)
-        {
-            Debug.Assert(code != null);
-            
-            var basicBlockList = new List<BasicBlock>();
-            
-            // список лидеров -- хранит "номера строк", 0 -- всегда лидер
-            var leaders = new List<int> {0};
-
-            var commands = code.CodeList.ToList();
-            for (var i = 1; i < commands.Count; ++i)
-            {
-                var node = commands[i];
-
-                // если в узел есть переход по GoTo
-                if (node.IsLabeled)
-                    leaders.Add(i);
-                // если узел является переходом GoTo
-                if (node is Goto)
-                    leaders.Add(i + 1);
-            }
-            leaders.Add(commands.Count);
-
+        public List<Node> CodeList { get; }
             foreach (var l in leaders)
                 Console.WriteLine(l);
 
-            // группируем список как набор пар:
-            // [a0, a1, a2, a3, ...] -> [(a0, a1), (a1, a2), (a2, a3), ...]
-            var ranges = leaders.Zip(leaders.Skip(1), Tuple.Create);
 
             foreach (var r in ranges)
                 Console.WriteLine(r.Item1 + ", " + r.Item2);
 
-            foreach (var range in ranges)
-            {
-                var bbList = new List<Node>();
-
-                for (var j = range.Item1; j < range.Item2; ++j)
-                    bbList.Add(commands[j]);
-
-                var bb = new BasicBlock(bbList);
-                basicBlockList.Add(bb);
-            }
-
-            return basicBlockList;
+        public int CompareTo(BasicBlock other)
+        {
+            if (ReferenceEquals(this, other)) return 0;
+            if (ReferenceEquals(null, other)) return 1;
+            return BlockId.CompareTo(other.BlockId);
         }
     }
 }
