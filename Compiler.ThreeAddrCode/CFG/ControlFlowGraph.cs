@@ -26,6 +26,8 @@ namespace Compiler.ThreeAddrCode.CFG
         {
             _code = code;
             _blockList = _code.CreateBasicBlockList().ToList();
+
+            CFGNodes = new SortedSet<CFGNode>();
             CreateCFGNodes();
         }
 
@@ -52,7 +54,7 @@ namespace Compiler.ThreeAddrCode.CFG
                     var targetNode = new CFGNode(targetFirst.Block);
                     // устанавливаем связи cfgNode <-> targetNode 
                     cfgNode.AddChild(targetNode);
-                    
+
                     // добавляем его в набор узлов CFG
                     CFGNodes.Add(targetNode);
                 }
