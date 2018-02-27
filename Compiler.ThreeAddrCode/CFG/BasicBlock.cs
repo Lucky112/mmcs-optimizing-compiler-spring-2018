@@ -36,12 +36,6 @@ namespace Compiler.ThreeAddrCode.CFG
                 node.Block = this;
         }
 
-            foreach (var l in leaders)
-                Console.WriteLine(l);
-
-
-            foreach (var r in ranges)
-                Console.WriteLine(r.Item1 + ", " + r.Item2);
         public int CompareTo(BasicBlock other)
         {
             if (ReferenceEquals(this, other)) return 0;

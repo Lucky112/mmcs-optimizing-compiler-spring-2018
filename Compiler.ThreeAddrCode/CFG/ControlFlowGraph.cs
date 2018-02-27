@@ -48,9 +48,9 @@ namespace Compiler.ThreeAddrCode.CFG
                 // блок содержит GoTo в последней строке
                 if (last is Goto)
                 {
-					Goto gt = (Goto)last;
-					// ищем на какую строку идет переход 
-					var targetFirst = labelDict[gt.TargetLabel];
+                    Goto gt = (Goto)last;
+                    // ищем на какую строку идет переход 
+                    var targetFirst = labelDict[gt.TargetLabel];
                     // забираем информацию о том, какому блоку принадлежит эта строка
                     var targetNode = new CFGNode(targetFirst.Block);
                     // устанавливаем связи cfgNode <-> targetNode 

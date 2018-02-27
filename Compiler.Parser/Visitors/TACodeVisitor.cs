@@ -35,9 +35,10 @@ namespace Compiler.Parser.Visitors
         {
             string labelName = l.Label.Name;
             // Создаем пустой оператор и указываем, что на него есть переход по метке
-            TA_Empty labeledNop = GetEmptyLabeledNode();
+            var labeledNop = GetEmptyLabeledNode();
 
-            // Добавляем метку и помеченный оператор в список помеченных операторов (это всегда нужно делать, т.к. дальше по тексту могут оказаться goto на данную метку)
+            // Добавляем метку и помеченный оператор в список помеченных операторов (это всегда нужно делать,
+            // т.к. дальше по тексту могут оказаться goto на данную метку)
             labeledTANodes.Add(labelName, labeledNop);
 
             // Проверяем, не было ли по этой метке переходов, преобразованных ранее
@@ -57,32 +58,34 @@ namespace Compiler.Parser.Visitors
         {
             string labelName = g.Label.Name;
             // При посещении узла GoTо создаем соответсвующую команду трехадресного кода
-            var gt = new TA_Goto();
+            var gt = new TACNodes.Goto();
             code.AddNode(gt);
 
             // Если метка ведет в уже преобразованную часть программы
             if (labeledTANodes.ContainsKey(labelName))
             {
                 // Получаем помеченную строку треадресного кода и задаем ее как цель перехода
-                TA_Node target = labeledTANodes[labelName];
+                var target = labeledTANodes[labelName];
                 gt.TargetLabel = target.Label;
             }
             else
             {
                 // Иначе помещаем строку в лист ожидания пока помеченная часть программы не будет преобразована
                 if (!forwardGotos.ContainsKey(labelName))
-                    forwardGotos.Add(labelName, new List<TA_Goto>());
+                    forwardGotos.Add(labelName, new List<TACNodes.Goto>());
                 forwardGotos[labelName].Add(gt);
             }
         }
 
         public override void VisitAssignNode(AssignNode a)
         {
-            var assign = new TA_Assign();
-            assign.Left = null;
-            assign.Right = RecAssign(a.Expr);
-            assign.Result = GetVarByName(a.Id.Name);
-            assign.Operation = OpCode.TA_Copy;
+            var assign = new TACNodes.Assign
+            {
+                Left = null,
+                Right = RecAssign(a.Expr),
+                Result = GetVarByName(a.Id.Name),
+                Operation = OpCode.Copy
+            };
 
             code.AddNode(assign);
         }
@@ -90,45 +93,47 @@ namespace Compiler.Parser.Visitors
         public override void VisitCycleNode(CycleNode c)
         {
             // Метка в начале цикла
-            TA_Empty cycleLabel = GetEmptyLabeledNode();
+            var cycleLabel = GetEmptyLabeledNode();
 
             // Результат вычисления логического выражения
-            TA_Var cond = RecAssign(c.Condition);
+            var cond = RecAssign(c.Condition);
 
             // При истинности условия, переходим к телу цикла
-            var ifGotoBody = new TA_IfGoto();
+            var ifGotoBody = new TACNodes.IfGoto();
             ifGotoBody.Condition = cond;
             code.AddNode(ifGotoBody);
 
             // Иначе переходим за тело цикла
-            var gotoEnd = new TA_Goto();
+            var gotoEnd = new TACNodes.Goto();
             code.AddNode(gotoEnd);
 
             // Добавление новой метки непосредственно перед телом цикла 
-            TA_Empty bodyLabel = GetEmptyLabeledNode();
+            var bodyLabel = GetEmptyLabeledNode();
             ifGotoBody.TargetLabel = bodyLabel.Label;
-            
+
             // Обход выражений тела цикла
             c.Body.Visit(this);
 
             // В конце цикла снова переходим к началу
-            var cycle_goto = new TA_Goto();
-            cycle_goto.TargetLabel = cycleLabel.Label;
-            code.AddNode(cycle_goto);
+            var cycleGoto = new TACNodes.Goto();
+            cycleGoto.TargetLabel = cycleLabel.Label;
+            code.AddNode(cycleGoto);
 
             // Метка за телом цикла, сюда происходит переход, если не выполняется условие продолжения
             var endLabel = GetEmptyLabeledNode();
             gotoEnd.TargetLabel = endLabel.Label;
         }
-        
+
         public override void VisitPrintNode(PrintNode pr)
         {
-            TA_Print print = null;
+            TACNodes.Print print = null;
             foreach (var expr in pr.ExprList.ExprList)
             {
-                print = new TA_Print();
-                print.Data = RecAssign(expr);
-                print.Sep = " ";
+                print = new TACNodes.Print
+                {
+                    Data = RecAssign(expr),
+                    Sep = " "
+                };
                 code.AddNode(print);
             }
 
@@ -138,30 +143,30 @@ namespace Compiler.Parser.Visitors
 
         public override void VisitIfNode(IfNode iif)
         {
-            var ifGoto = new TA_IfGoto();
-            
+            var ifGoto = new TACNodes.IfGoto();
+
             // Результат вычисления логического выражения
-            TA_Var cond1 = RecAssign(iif.Conditon);
-            ifGoto.Condition = cond1;            
-            
+            var cond1 = RecAssign(iif.Conditon);
+            ifGoto.Condition = cond1;
+
             code.AddNode(ifGoto);
 
             // Разбор тела else (если есть)
             iif.ElseClause?.Visit(this);
-            
+
             // Пропускаем тело if
-            var elseGoTo = new TA_Goto();
+            var elseGoTo = new TACNodes.Goto();
             code.AddNode(elseGoTo);
 
             // Добавление новой метки непосредственно перед телом if
-            TA_Empty newLabelIf = GetEmptyLabeledNode();
+            var newLabelIf = GetEmptyLabeledNode();
             ifGoto.TargetLabel = newLabelIf.Label;
 
             // Обход выражений тела условного оператора
             iif.IfClause.Visit(this);
 
             // Метка после тела if, на нее передается управление из else
-            TA_Empty newLabelElse = GetEmptyLabeledNode();
+            var newLabelElse = GetEmptyLabeledNode();
             elseGoTo.TargetLabel = newLabelElse.Label;
         }
 
@@ -171,21 +176,21 @@ namespace Compiler.Parser.Visitors
             var counter = RecAssign(f.Assign.Expr);
 
             // Метка начала цикла
-            TA_Empty cycle = GetEmptyLabeledNode();
+            var cycle = GetEmptyLabeledNode();
 
             // далее необходимо сгенерить стоку условия цикла
-            TA_Assign initialCondition = new TA_Assign
+            var initialCondition = new TACNodes.Assign
             {
-                Result = new TA_Var(),
+                Result = new TACExpr.Var(),
                 Left = counter,
                 Right = RecAssign(f.Border),
                 Operation = (OpCode) OperationType.GreaterEq
             };
             code.AddNode(initialCondition);
-            
+
             // Кладем это в условие цикла
-            var ifGoto = new TA_IfGoto();
-            TA_Var cond = initialCondition.Result;
+            var ifGoto = new TACNodes.IfGoto();
+            var cond = initialCondition.Result;
             ifGoto.Condition = cond;
             code.AddNode(ifGoto);
 
@@ -193,37 +198,37 @@ namespace Compiler.Parser.Visitors
             f.Body.Visit(this);
 
             // Создаем строку с увеличением счетчика
-            TA_Assign ass1 = new TA_Assign
+            var ass1 = new TACNodes.Assign
             {
                 Result = counter,
                 Left = counter,
                 Right = RecAssign(f.Inc),
-                Operation = OpCode.TA_Plus
+                Operation = OpCode.Plus
             };
             code.AddNode(ass1);
-                      
+
             // Команда перехода к началу цикла  
-            var gt = new TA_Goto();
+            var gt = new TACNodes.Goto();
             gt.TargetLabel = cycle.Label;
             code.AddNode(gt);
 
             // Метка за концом цикла
-            TA_Empty endCycle = GetEmptyLabeledNode();
+            var endCycle = GetEmptyLabeledNode();
             ifGoto.TargetLabel = endCycle.Label;
         }
 
         public override void VisitEmptyNode(EmptyNode w)
         {
-            code.AddNode(new TA_Empty());
+            code.AddNode(new TACNodes.Empty());
         }
-        
+
         /// <summary>
         /// Рекурсивный разбор выражений и генерация их кода
         /// </summary>
-        private TA_Var RecAssign(ExprNode ex)
+        private TACExpr.Var RecAssign(ExprNode ex)
         {
-            var assign = new TA_Assign();
-            var result = new TA_Var();
+            var assign = new TACNodes.Assign();
+            var result = new TACExpr.Var();
             assign.Result = result;
 
             // Обход продолжается до тех пор, пока выражение не окажется переменной или константой
@@ -232,13 +237,13 @@ namespace Compiler.Parser.Visitors
                 case IdNode tmp1:
                     assign.Left = null;
                     assign.Right = GetVarByName(tmp1.Name);
-                    assign.Operation = OpCode.TA_Copy;
+                    assign.Operation = OpCode.Copy;
                     break;
 
                 case IntNumNode tmp2:
                     assign.Left = null;
                     assign.Right = GetConst(tmp2.Num);
-                    assign.Operation = OpCode.TA_Copy;
+                    assign.Operation = OpCode.Copy;
                     break;
 
                 case BinaryNode tmp3:
