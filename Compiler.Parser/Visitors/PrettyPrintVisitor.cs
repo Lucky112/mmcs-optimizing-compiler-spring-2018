@@ -8,7 +8,7 @@ using Compiler.Parser.AST;
 
 namespace Compiler.Parser.Visitors
 {
-    public class PrettyPrintVisitor : Visitor
+    public class PrettyPrintVisitor : AutoVisitor
     {
         public string Text = "";
         private int Indent = 0;
@@ -59,15 +59,15 @@ namespace Compiler.Parser.Visitors
             c.Condition.Visit(this);
             Text += ")";
             Text += Environment.NewLine;
-			if (!(c.Body is BlockNode))
-			{
-				IndentPlus();
-				c.Body.Visit(this);
-				Text += ";" + Environment.NewLine;
-				IndentMinus();
-			}
-			else
-				c.Body.Visit(this);
+            if (!(c.Body is BlockNode))
+            {
+                IndentPlus();
+                c.Body.Visit(this);
+                Text += ";" + Environment.NewLine;
+                IndentMinus();
+            }
+            else
+                c.Body.Visit(this);
         }
         public override void VisitBlockNode(BlockNode bl)
         {

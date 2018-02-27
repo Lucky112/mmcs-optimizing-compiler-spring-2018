@@ -285,27 +285,27 @@ namespace Compiler.Parser.Visitors
             {
                 case IdNode tmp1:
                     assign.Left = null;
-                    assign.Right = GetVarByName(tmp1.Name);
-                    assign.Operation = OpCode.Copy;
-                    break;
+                assign.Right = GetVarByName(tmp1.Name);
+                assign.Operation = OpCode.Copy;
+                break;
 
                 case IntNumNode tmp2:
                     assign.Left = null;
-                    assign.Right = GetConst(tmp2.Num);
-                    assign.Operation = OpCode.Copy;
-                    break;
+                assign.Right = GetConst(tmp2.Num);
+                assign.Operation = OpCode.Copy;
+                break;
 
                 case BinaryNode tmp3:
                     assign.Left = RecAssign(tmp3.Left);
-                    assign.Right = RecAssign(tmp3.Right);
-                    assign.Operation = ConvertOp(tmp3.Operation);
-                    break;
+                assign.Right = RecAssign(tmp3.Right);
+                assign.Operation = ConvertOp(tmp3.Operation);
+                break;
 
                 case UnaryNode tmp4:
                     assign.Left = null;
-                    assign.Right = RecAssign(tmp4.Num);
-                    assign.Operation = ConvertOp(tmp4.Operation);
-                    break;
+                assign.Right = RecAssign(tmp4.Num);
+                assign.Operation = ConvertOp(tmp4.Operation);
+                break;
             }
 
             code.AddNode(assign);
@@ -395,6 +395,11 @@ namespace Compiler.Parser.Visitors
         }
 
         public override void VisitIntNumNode(IntNumNode num)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VisitExprNode(ExprNode node)
         {
             throw new NotImplementedException();
         }
