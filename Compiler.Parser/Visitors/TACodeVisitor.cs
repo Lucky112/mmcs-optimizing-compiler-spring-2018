@@ -12,6 +12,11 @@ namespace Compiler.Parser.Visitors
         /// <summary>
         ///     Программа в виде списка команд трехадреного кода
         /// </summary>
+        public TACode Code => code;
+
+        /// <summary>
+        /// Экземпляр программы в треадресном коде
+        /// </summary>
         private readonly TACode code = new TACode();
 
         /// <summary>
