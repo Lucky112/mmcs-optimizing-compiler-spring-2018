@@ -11,23 +11,23 @@ namespace Compiler.ThreeAddrCode.CFG
     /// </summary>
     public class BasicBlock : IComparable<BasicBlock>
     {
-		/// <summary>
-		///     Идентификатор блока
-		/// </summary>
-		public int BlockId { get; }
+        /// <summary>
+        ///     Идентификатор блока
+        /// </summary>
+        public int BlockId { get; }
 
-		/// <summary>
-		///     Список узлов программы в трехадресной форме, связанных с блоком
-		/// </summary>
-		public List<Node> CodeList { get; }
+        /// <summary>
+        ///     Список узлов программы в трехадресной форме, связанных с блоком
+        /// </summary>
+        public List<Node> CodeList { get; }
 
-		/// <summary>
-		///     Конструктор базового блока
-		/// </summary>
-		/// <param name="codeList">список узлов программы в трехадресной форме</param>
-		/// <param name="num">номер блока</param>
-		/// <remarks>важно, чтобы номера блоков было различны, т.к. на номер блока операется компаратор</remarks>
-		public BasicBlock(List<Node> codeList, int num)
+        /// <summary>
+        ///     Конструктор базового блока
+        /// </summary>
+        /// <param name="codeList">список узлов программы в трехадресной форме</param>
+        /// <param name="num">номер блока</param>
+        /// <remarks>важно, чтобы номера блоков было различны, т.к. на номер блока операется компаратор</remarks>
+        public BasicBlock(List<Node> codeList, int num)
         {
             BlockId = num;
             CodeList = codeList;
