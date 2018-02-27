@@ -8,6 +8,14 @@
         Div,
 
         UnaryMinus,
-        Copy
+        Copy,
+        
+        Greater,
+        Less,
+        GreaterEq,
+        LessEq,
+        Equal,
+        NotEqual,
+        Not
     }
 }

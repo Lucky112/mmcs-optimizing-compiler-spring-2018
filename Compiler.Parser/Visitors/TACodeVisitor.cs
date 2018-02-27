@@ -99,8 +99,7 @@ namespace Compiler.Parser.Visitors
             var cond = RecAssign(c.Condition);
 
             // При истинности условия, переходим к телу цикла
-            var ifGotoBody = new TACNodes.IfGoto();
-            ifGotoBody.Condition = cond;
+            var ifGotoBody = new TACNodes.IfGoto {Condition = cond};
             code.AddNode(ifGotoBody);
 
             // Иначе переходим за тело цикла
@@ -115,8 +114,7 @@ namespace Compiler.Parser.Visitors
             c.Body.Visit(this);
 
             // В конце цикла снова переходим к началу
-            var cycleGoto = new TACNodes.Goto();
-            cycleGoto.TargetLabel = cycleLabel.Label;
+            var cycleGoto = new TACNodes.Goto {TargetLabel = cycleLabel.Label};
             code.AddNode(cycleGoto);
 
             // Метка за телом цикла, сюда происходит переход, если не выполняется условие продолжения
@@ -184,7 +182,7 @@ namespace Compiler.Parser.Visitors
                 Result = new TACExpr.Var(),
                 Left = counter,
                 Right = RecAssign(f.Border),
-                Operation = (OpCode) OperationType.GreaterEq
+                Operation = OpCode.GreaterEq
             };
             code.AddNode(initialCondition);
 
@@ -208,8 +206,7 @@ namespace Compiler.Parser.Visitors
             code.AddNode(ass1);
 
             // Команда перехода к началу цикла  
-            var gt = new TACNodes.Goto();
-            gt.TargetLabel = cycle.Label;
+            var gt = new TACNodes.Goto {TargetLabel = cycle.Label};
             code.AddNode(gt);
 
             // Метка за концом цикла
@@ -249,20 +246,54 @@ namespace Compiler.Parser.Visitors
                 case BinaryNode tmp3:
                     assign.Left = RecAssign(tmp3.Left);
                     assign.Right = RecAssign(tmp3.Right);
-                    if (Enum.TryParse(tmp3.ToString(), out OpCode op1))
-                        assign.Operation = op1;
+                    assign.Operation = ConvertOp(tmp3.Operation);
                     break;
 
                 case UnaryNode tmp4:
                     assign.Left = null;
                     assign.Right = RecAssign(tmp4.Num);
-                    if (Enum.TryParse(tmp4.Operation.ToString(), out OpCode op2))
-                        assign.Operation = op2;
+                    assign.Operation = ConvertOp(tmp4.Operation);
                     break;
             }
 
             code.AddNode(assign);
             return result;
+        }
+
+        /// <summary>
+        ///     Конвертер типа операции из АСТ в тип операции ТА кода
+        /// </summary>
+        private OpCode ConvertOp(OperationType op)
+        {
+            switch (op)
+            {
+                case OperationType.Plus:
+                    return OpCode.Plus;
+                case OperationType.Minus:
+                    return OpCode.Minus;
+                case OperationType.Mul:
+                    return OpCode.Mul;
+                case OperationType.Div:
+                    return OpCode.Div;
+                case OperationType.Greater:
+                    return OpCode.Greater;
+                case OperationType.Less:
+                    return OpCode.Less;
+                case OperationType.GreaterEq:
+                    return OpCode.GreaterEq;
+                case OperationType.LessEq:
+                    return OpCode.LessEq;
+                case OperationType.Equal:
+                    return OpCode.Equal;
+                case OperationType.NotEqual:
+                    return OpCode.NotEqual;
+                case OperationType.Not:
+                    return OpCode.Not;
+                case OperationType.UnaryMinus:
+                    return OpCode.UnaryMinus;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(op), op, null);
+            }
         }
 
         /// <summary>
