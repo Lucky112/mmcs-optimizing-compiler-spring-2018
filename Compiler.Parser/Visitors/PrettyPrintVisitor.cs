@@ -34,14 +34,14 @@ namespace Compiler.Parser.Visitors
             Text += num.Num.ToString();
         }
         public override void VisitUnaryNode(UnaryNode unop) {
-            Text += unop.Operation.ToString() + " ";
+            Text += unop.Operation.ToSymbolString() + " ";
             unop.Num.Visit(this);
         }
         public override void VisitBinaryNode(BinaryNode binop)
         {
             Text += "(";
             binop.Left.Visit(this);
-            Text += " " + binop.Operation.ToString() + " ";
+            Text += " " + binop.Operation.ToSymbolString() + " ";
             binop.Right.Visit(this);
             Text += ")";
         }
@@ -56,14 +56,24 @@ namespace Compiler.Parser.Visitors
         public override void VisitCycleNode(CycleNode c)
         {
             Text += IndentStr() + "while(";
-            c.Expr.Visit(this);
+            c.Condition.Visit(this);
             Text += ")";
             Text += Environment.NewLine;
-            c.Stat.Visit(this);
+			if (!(c.Body is BlockNode))
+			{
+				IndentPlus();
+				c.Body.Visit(this);
+				Text += ";" + Environment.NewLine;
+				IndentMinus();
+			}
+			else
+				c.Body.Visit(this);
         }
         public override void VisitBlockNode(BlockNode bl)
         {
-            Text += IndentStr() + "{" + Environment.NewLine;
+            bool isNotBeginOfProgram = Text != "";
+            if (isNotBeginOfProgram)
+                Text += IndentStr() + "{" + Environment.NewLine;
             IndentPlus();
             var Count = bl.StList.Count;
             for (var i = 0; i < Count; i++)
@@ -71,11 +81,12 @@ namespace Compiler.Parser.Visitors
                 bl.StList[i].Visit(this);
                 if (!(bl.StList[i] is EmptyNode))
                     if (!(bl.StList[i] is ForNode  || bl.StList[i] is CycleNode ||
-                          bl.StList[i] is LabelNode || bl.StList[i] is IfNode))
+                          bl.StList[i] is LabeledNode || bl.StList[i] is IfNode))
                         Text += ";" + Environment.NewLine;
             }
             IndentMinus();
-            Text +=  IndentStr() + "}" + Environment.NewLine;
+            if (isNotBeginOfProgram)
+                Text += IndentStr() + "}" + Environment.NewLine;
         }
         public override void VisitPrintNode(PrintNode p)
         {
@@ -88,15 +99,24 @@ namespace Compiler.Parser.Visitors
             Text += IndentStr() + "goto ";
             g.Label.Visit(this);
         }
-        public override void VisitLabelNode(LabelNode l)
+        public override void VisitLabeledNode(LabeledNode l)
         {
+            Text += IndentStr();
             l.Label.Visit(this);
             Text += ":" + Environment.NewLine;
-            l.Stat.Visit(this);
+            if (!(l.Stat is BlockNode))
+            {
+                IndentPlus();
+                l.Stat.Visit(this);
+                Text += ";" + Environment.NewLine;
+                IndentMinus();
+            }
+            else
+                l.Stat.Visit(this);
         }
         public override void VisitExprListNode(ExprListNode el) {
-            var last = el.ExpList.Last();
-            el.ExpList.ForEach(expr => 
+            var last = el.ExprList.Last();
+            el.ExprList.ForEach(expr => 
                 {
                     expr.Visit(this);
                     if (expr != last)
@@ -106,13 +126,30 @@ namespace Compiler.Parser.Visitors
         public override void VisitIfNode(IfNode iif)
         {
             Text += IndentStr() + "if (";
-            iif.Expr.Visit(this);
+            iif.Conditon.Visit(this);
             Text += ")" + Environment.NewLine;
-            iif.Stat1.Visit(this);
-            if (iif.Stat2 != null)
+            
+            if (!(iif.IfClause is BlockNode))
+            {
+                IndentPlus();
+                iif.IfClause.Visit(this);
+                Text += ";" + Environment.NewLine;
+                IndentMinus();
+            }
+            else
+                iif.IfClause.Visit(this);
+            if (iif.ElseClause != null)
             {
                 Text += IndentStr()  + "else" + Environment.NewLine;
-                iif.Stat2.Visit(this);
+                if (!(iif.ElseClause is BlockNode))
+                {
+                    IndentPlus();
+                    iif.ElseClause.Visit(this);
+                    Text += ";" + Environment.NewLine;
+                    IndentMinus();
+                }
+                else
+                    iif.ElseClause.Visit(this);
             }
         }
 
@@ -121,7 +158,7 @@ namespace Compiler.Parser.Visitors
             Text += IndentStr() + "for(";
             w.Assign.Visit(this);
             Text += ",";
-            w.Cond.Visit(this);
+            w.Border.Visit(this);
             if (w.Inc != null)
             {
                 Text += ",";
@@ -129,7 +166,15 @@ namespace Compiler.Parser.Visitors
             }
             Text += ")";
             Text += Environment.NewLine;
-            w.Stat.Visit(this);
+             if (!(w.Body is BlockNode))
+            {
+                IndentPlus();
+                w.Body.Visit(this);
+                Text += ";" + Environment.NewLine;
+                IndentMinus();
+            }
+            else
+                w.Body.Visit(this);
         }
         public override void VisitEmptyNode(EmptyNode w) {}
 
