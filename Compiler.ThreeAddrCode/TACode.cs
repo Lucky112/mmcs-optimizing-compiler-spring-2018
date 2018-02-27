@@ -97,7 +97,7 @@ namespace Compiler.ThreeAddrCode
             // группируем список как набор пар:
             // [a0, a1, a2, a3, ...] -> [(a0, a1), (a1, a2), (a2, a3), ...]
             var ranges = leaders.Zip(leaders.Skip(1), Tuple.Create);
-
+			int num = 0;
             foreach (var range in ranges)
             {
                 var bbList = new List<Node>();
@@ -105,7 +105,7 @@ namespace Compiler.ThreeAddrCode
                 for (var j = range.Item1; j < range.Item2; ++j)
                     bbList.Add(commands[j]);
 
-                var bb = new BasicBlock(bbList);
+                var bb = new BasicBlock(bbList, num++);
                 basicBlockList.Add(bb);
             }
 
