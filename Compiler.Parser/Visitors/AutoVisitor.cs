@@ -78,9 +78,7 @@ namespace Compiler.Parser.Visitors
         }
 
         public abstract void VisitEmptyNode(EmptyNode w);
-        
-        public abstract void VisitLabelNode(LabeledNode l);
-        
+                
         public abstract void VisitIdNode(IdNode id);
         
         public abstract void VisitIntNumNode(IntNumNode num);

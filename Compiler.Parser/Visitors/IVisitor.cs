@@ -31,7 +31,5 @@ namespace Compiler.Parser.Visitors
         void VisitForNode(ForNode w);
 
         void VisitEmptyNode(EmptyNode w);
-
-        void VisitLabelNode(LabeledNode l);
     }
 }

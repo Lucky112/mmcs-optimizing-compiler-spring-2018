@@ -31,7 +31,7 @@ namespace Compiler.Parser.Visitors
         /// </summary>
         private readonly Dictionary<string, TACExpr.Var> m_varsInCode = new Dictionary<string, TACExpr.Var>();
 
-        public override void VisitLabelNode(LabeledNode l)
+        public override void VisitLabeledNode(LabeledNode l)
         {
             string labelName = l.Label.Name;
             // Создаем пустой оператор и указываем, что на него есть переход по метке
