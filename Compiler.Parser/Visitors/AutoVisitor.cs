@@ -1,5 +1,4 @@
-﻿using System;
-using Compiler.Parser.AST;
+﻿using Compiler.Parser.AST;
 
 namespace Compiler.Parser.Visitors
 {
@@ -10,7 +9,6 @@ namespace Compiler.Parser.Visitors
     /// </summary>
     public abstract class AutoVisitor : IVisitor
     {
-
         public virtual void VisitBinaryNode(BinaryNode binop)
         {
             binop.Left.Visit(this);
@@ -78,9 +76,9 @@ namespace Compiler.Parser.Visitors
         }
 
         public abstract void VisitEmptyNode(EmptyNode w);
-                
+
         public abstract void VisitIdNode(IdNode id);
-        
+
         public abstract void VisitIntNumNode(IntNumNode num);
     }
 }

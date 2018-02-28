@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Compiler.ThreeAddrCode.Nodes;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using Compiler.ThreeAddrCode.Nodes;
 
 namespace Compiler.ThreeAddrCode.CFG
 {

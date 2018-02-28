@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using Compiler.ThreeAddrCode.CFG;
+﻿using Compiler.ThreeAddrCode.CFG;
 using Compiler.ThreeAddrCode.Nodes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Compiler.ThreeAddrCode
 {
@@ -76,7 +75,7 @@ namespace Compiler.ThreeAddrCode
             var basicBlockList = new List<BasicBlock>();
 
             // список лидеров -- хранит "номера строк", 0 -- всегда лидер
-            var leaders = new List<int> {0};
+            var leaders = new List<int> { 0 };
 
             var commands = CodeList.ToList();
             for (var i = 1; i < commands.Count; ++i)
@@ -97,7 +96,7 @@ namespace Compiler.ThreeAddrCode
             // группируем список как набор пар:
             // [a0, a1, a2, a3, ...] -> [(a0, a1), (a1, a2), (a2, a3), ...]
             var ranges = leaders.Zip(leaders.Skip(1), Tuple.Create);
-			int num = 0;
+            int num = 0;
             foreach (var range in ranges)
             {
                 var bbList = new List<Node>();

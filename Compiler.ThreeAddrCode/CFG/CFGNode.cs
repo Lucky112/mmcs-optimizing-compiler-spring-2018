@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using Compiler.ThreeAddrCode.Nodes;
 
 namespace Compiler.ThreeAddrCode.CFG
 {
@@ -21,7 +19,7 @@ namespace Compiler.ThreeAddrCode.CFG
         public SortedSet<CFGNode> Children { get; }
 
         /// <summary>
-        ///     Родители узла CFG графа 
+        ///     Родители узла CFG графа
         /// </summary>
         public SortedSet<CFGNode> Parents { get; }
 
@@ -33,7 +31,7 @@ namespace Compiler.ThreeAddrCode.CFG
         {
             if (block == null)
                 throw new NullReferenceException("Block cannot be null");
-            
+
             Block = block;
             Children = new SortedSet<CFGNode>();
             Parents = new SortedSet<CFGNode>();
@@ -50,7 +48,7 @@ namespace Compiler.ThreeAddrCode.CFG
         }
 
         /// <summary>
-        ///     Связать узел с другим по принципу ребенок -> родитель 
+        ///     Связать узел с другим по принципу ребенок -> родитель
         /// </summary>
         /// <param name="parent">родитель</param>
         public void AddParent(CFGNode parent)
@@ -58,7 +56,7 @@ namespace Compiler.ThreeAddrCode.CFG
             Parents.Add(parent);
             parent.Children.Add(this);
         }
-       
+
         public int CompareTo(CFGNode other)
         {
             if (ReferenceEquals(this, other)) return 0;

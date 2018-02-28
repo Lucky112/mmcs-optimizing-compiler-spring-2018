@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Compiler.ThreeAddrCode.Nodes;
+using System.Collections.Generic;
 using System.Linq;
-using Compiler.ThreeAddrCode.Nodes;
 
 namespace Compiler.ThreeAddrCode.CFG
 {
@@ -49,11 +49,11 @@ namespace Compiler.ThreeAddrCode.CFG
                 if (last is Goto)
                 {
                     Goto gt = (Goto)last;
-                    // ищем на какую строку идет переход 
+                    // ищем на какую строку идет переход
                     var targetFirst = labelDict[gt.TargetLabel];
                     // забираем информацию о том, какому блоку принадлежит эта строка
                     var targetNode = new CFGNode(targetFirst.Block);
-                    // устанавливаем связи cfgNode <-> targetNode 
+                    // устанавливаем связи cfgNode <-> targetNode
                     cfgNode.AddChild(targetNode);
 
                     // добавляем его в набор узлов CFG

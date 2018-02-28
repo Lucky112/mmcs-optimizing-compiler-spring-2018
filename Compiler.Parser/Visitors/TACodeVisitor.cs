@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Compiler.Parser.AST;
+﻿using Compiler.Parser.AST;
 using Compiler.ThreeAddrCode;
+using System;
+using System.Collections.Generic;
 using TACExpr = Compiler.ThreeAddrCode.Expressions;
 using TACNodes = Compiler.ThreeAddrCode.Nodes;
 
@@ -104,14 +104,14 @@ namespace Compiler.Parser.Visitors
             var cond = RecAssign(c.Condition);
 
             // При истинности условия, переходим к телу цикла
-            var ifGotoBody = new TACNodes.IfGoto {Condition = cond};
+            var ifGotoBody = new TACNodes.IfGoto { Condition = cond };
             code.AddNode(ifGotoBody);
 
             // Иначе переходим за тело цикла
             var gotoEnd = new TACNodes.Goto();
             code.AddNode(gotoEnd);
 
-            // Добавление новой метки непосредственно перед телом цикла 
+            // Добавление новой метки непосредственно перед телом цикла
             var bodyLabel = GetEmptyLabeledNode();
             ifGotoBody.TargetLabel = bodyLabel.Label;
 
@@ -119,7 +119,7 @@ namespace Compiler.Parser.Visitors
             c.Body.Visit(this);
 
             // В конце цикла снова переходим к началу
-            var cycleGoto = new TACNodes.Goto {TargetLabel = cycleLabel.Label};
+            var cycleGoto = new TACNodes.Goto { TargetLabel = cycleLabel.Label };
             code.AddNode(cycleGoto);
 
             // Метка за телом цикла, сюда происходит переход, если не выполняется условие продолжения
@@ -215,7 +215,7 @@ namespace Compiler.Parser.Visitors
 
             // Пропускаем ветку прямого направления
             var forwSkipGoto = new TACNodes.Goto();
-            code.AddNode(forwSkipGoto);           
+            code.AddNode(forwSkipGoto);
 
             // Начало ветки прямого направления
             var forwardLabel = GetEmptyLabeledNode();
@@ -230,7 +230,7 @@ namespace Compiler.Parser.Visitors
                 Operation = OpCode.GreaterEq
             };
             code.AddNode(initialForwardCondition);
-            
+
             // Добавляем переход за конец цикла при выполнении условия выхода
             var ifGotoForw = new TACNodes.IfGoto();
             ifGotoForw.Condition = initialForwardCondition.Result;
@@ -256,8 +256,8 @@ namespace Compiler.Parser.Visitors
             };
             code.AddNode(ass1);
 
-            // Команда перехода к началу цикла  
-            var cycleGoto = new TACNodes.Goto {TargetLabel = cycle.Label};
+            // Команда перехода к началу цикла
+            var cycleGoto = new TACNodes.Goto { TargetLabel = cycle.Label };
             code.AddNode(cycleGoto);
 
             // Метка за концом цикла - сюда происходит переход при выполнении условия выхода
@@ -321,28 +321,40 @@ namespace Compiler.Parser.Visitors
             {
                 case OperationType.Plus:
                     return OpCode.Plus;
+
                 case OperationType.Minus:
                     return OpCode.Minus;
+
                 case OperationType.Mul:
                     return OpCode.Mul;
+
                 case OperationType.Div:
                     return OpCode.Div;
+
                 case OperationType.Greater:
                     return OpCode.Greater;
+
                 case OperationType.Less:
                     return OpCode.Less;
+
                 case OperationType.GreaterEq:
                     return OpCode.GreaterEq;
+
                 case OperationType.LessEq:
                     return OpCode.LessEq;
+
                 case OperationType.Equal:
                     return OpCode.Equal;
+
                 case OperationType.NotEqual:
                     return OpCode.NotEqual;
+
                 case OperationType.Not:
                     return OpCode.Not;
+
                 case OperationType.UnaryMinus:
                     return OpCode.UnaryMinus;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(op), op, null);
             }
@@ -353,7 +365,7 @@ namespace Compiler.Parser.Visitors
         /// </summary>
         private TACNodes.Empty GetEmptyLabeledNode()
         {
-            var labeledNop = new TACNodes.Empty {IsLabeled = true};
+            var labeledNop = new TACNodes.Empty { IsLabeled = true };
             code.AddNode(labeledNop);
             return labeledNop;
         }
