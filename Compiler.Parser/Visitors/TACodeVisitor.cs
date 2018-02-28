@@ -175,48 +175,95 @@ namespace Compiler.Parser.Visitors
 
         public override void VisitForNode(ForNode f)
         {
-            // Значение счетчика цикла при инициализации
+            // Значение счетчика цикла и инкремента при инициализации
             var counter = RecAssign(f.Assign.Expr);
+            var inc = RecAssign(f.Inc);
 
             // Метка начала цикла
             var cycle = GetEmptyLabeledNode();
 
-            // далее необходимо сгенерить стоку условия цикла
-            var initialCondition = new TACNodes.Assign
+            // Условие выбора направления цикла
+            var dirCond = new TACNodes.Assign()
+            {
+                Result = new TACExpr.Var(),
+                Left = inc,
+                Right = new TACExpr.IntConst(0),
+                Operation = OpCode.GreaterEq
+            };
+            code.AddNode(dirCond);
+
+            // Выбор направления
+            var dirIfGoto = new TACNodes.IfGoto();
+            dirIfGoto.Condition = dirCond.Result;
+            code.AddNode(dirIfGoto);
+
+            // Для обратного направления счетчик сравнивается с границей на меньше равно - это условие выхода
+            var initialBackwardCondition = new TACNodes.Assign
+            {
+                Result = new TACExpr.Var(),
+                Left = counter,
+                Right = RecAssign(f.Border),
+                Operation = OpCode.LessEq
+            };
+            code.AddNode(initialBackwardCondition);
+
+            // Добавляем переход за конец цикла при выполнении условия выхода
+            var ifGotoBackw = new TACNodes.IfGoto();
+            var cond = initialBackwardCondition.Result;
+            ifGotoBackw.Condition = cond;
+            code.AddNode(ifGotoBackw);
+
+            // Пропускаем ветку прямого направления
+            var forwSkipGoto = new TACNodes.Goto();
+            code.AddNode(forwSkipGoto);           
+
+            // Начало ветки прямого направления
+            var forwardLabel = GetEmptyLabeledNode();
+            dirIfGoto.TargetLabel = forwardLabel.Label;
+
+            // Для прямого направления счетчик сравнивается с границей на больше равно - это условие выхода
+            var initialForwardCondition = new TACNodes.Assign
             {
                 Result = new TACExpr.Var(),
                 Left = counter,
                 Right = RecAssign(f.Border),
                 Operation = OpCode.GreaterEq
             };
-            code.AddNode(initialCondition);
+            code.AddNode(initialForwardCondition);
+            
+            // Добавляем переход за конец цикла при выполнении условия выхода
+            var ifGotoForw = new TACNodes.IfGoto();
+            ifGotoForw.Condition = initialForwardCondition.Result;
+            code.AddNode(ifGotoForw);
 
-            // Кладем это в условие цикла
-            var ifGoto = new TACNodes.IfGoto();
-            var cond = initialCondition.Result;
-            ifGoto.Condition = cond;
-            code.AddNode(ifGoto);
+            // Метка перед телом цикла - сюда происходит переход при пропуске ветки прямого обхода
+            var forwSkipLabel = GetEmptyLabeledNode();
+            forwSkipGoto.TargetLabel = forwSkipLabel.Label;
 
             // Дальнейший разбор тела выражения
             f.Body.Visit(this);
+
+            // Пересчет инкремента
+            inc = RecAssign(f.Inc);
 
             // Создаем строку с увеличением счетчика
             var ass1 = new TACNodes.Assign
             {
                 Result = counter,
                 Left = counter,
-                Right = RecAssign(f.Inc),
+                Right = inc,
                 Operation = OpCode.Plus
             };
             code.AddNode(ass1);
 
             // Команда перехода к началу цикла  
-            var gt = new TACNodes.Goto {TargetLabel = cycle.Label};
-            code.AddNode(gt);
+            var cycleGoto = new TACNodes.Goto {TargetLabel = cycle.Label};
+            code.AddNode(cycleGoto);
 
-            // Метка за концом цикла
+            // Метка за концом цикла - сюда происходит переход при выполнении условия выхода
             var endCycle = GetEmptyLabeledNode();
-            ifGoto.TargetLabel = endCycle.Label;
+            ifGotoForw.TargetLabel = endCycle.Label;
+            ifGotoBackw.TargetLabel = endCycle.Label;
         }
 
         public override void VisitEmptyNode(EmptyNode w)
