@@ -1,4 +1,5 @@
-﻿using Compiler.Parser.AST;
+﻿using System;
+using Compiler.Parser.AST;
 
 namespace Compiler.Parser.Visitors
 {
@@ -80,5 +81,7 @@ namespace Compiler.Parser.Visitors
         public abstract void VisitIdNode(IdNode id);
 
         public abstract void VisitIntNumNode(IntNumNode num);
+
+        public abstract void VisitExprNode(ExprNode node);
     }
 }

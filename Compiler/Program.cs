@@ -1,4 +1,5 @@
 ﻿using Compiler.Parser;
+using Compiler.Parser.Visitors;
 using Compiler.ThreeAddrCode;
 using Compiler.ThreeAddrCode.CFG;
 using Compiler.ThreeAddrCode.Expressions;
@@ -14,8 +15,8 @@ namespace Compiler
     {
         public static void Main()
         {
-            TaCodeTest();
-            //            ASTTest();
+            //TaCodeTest();
+            ASTTest();
         }
 
         private static void ASTTest()
@@ -33,6 +34,10 @@ namespace Compiler
 
                 var b = parser.Parse();
                 Console.WriteLine(!b ? "Ошибка" : "Синтаксическое дерево построено");
+
+                    var prettyPrinter = new PrettyPrintVisitor();
+                    parser.root.Visit(prettyPrinter);
+                    Console.WriteLine(prettyPrinter.Text);
             }
             catch (FileNotFoundException)
             {

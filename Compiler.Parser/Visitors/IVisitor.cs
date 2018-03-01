@@ -8,6 +8,8 @@ namespace Compiler.Parser.Visitors
 
         void VisitIntNumNode(IntNumNode num);
 
+        void VisitExprNode(ExprNode node);
+
         void VisitBinaryNode(BinaryNode binop);
 
         void VisitUnaryNode(UnaryNode unop);
