@@ -4,11 +4,11 @@
 #define EXPORT_GPPG
 
 using System;
-using System.Text;
-using System.Globalization;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Runtime.Serialization;
+using System.Text;
 
 namespace QUT.Gppg
 {
@@ -21,6 +21,7 @@ namespace QUT.Gppg
     /// <typeparam name="TValue">Semantic value type</typeparam>
     /// <typeparam name="TSpan">Location type</typeparam>
 #if EXPORT_GPPG
+
     public abstract class ShiftReduceParser<TValue, TSpan>
 #else
     internal abstract class ShiftReduceParser<TValue, TSpan>
@@ -28,10 +29,12 @@ namespace QUT.Gppg
  where TSpan : IMerge<TSpan>, new()
     {
         public AbstractScanner<TValue, TSpan> scanner;
+
         /// <summary>
         /// The abstract scanner for this parser.
         /// </summary>
-        protected AbstractScanner<TValue, TSpan> Scanner {
+        protected AbstractScanner<TValue, TSpan> Scanner
+        {
             get { return scanner; }
             set { scanner = value; }
         }
@@ -56,7 +59,7 @@ namespace QUT.Gppg
         // "get_CurrentSemanticValue().myField = blah;" will fail since
         // the getter pushes the value of the field, not the reference.
         // So, in the presence of properties, gppg would need to encode
-        // such field accesses as ... 
+        // such field accesses as ...
         //  "tmp = get_CurrentSemanticValue(); // Fetch value
         //   tmp.myField = blah;               // update
         //   set_CurrentSemanticValue(tmp); "  // Write update back.
@@ -108,17 +111,17 @@ namespace QUT.Gppg
         /// <param name="rules">The array of Rule objects</param>
         protected void InitRules(Rule[] rules) { this.rules = rules; }
 
-      /// <summary>
-      /// Initialization method to allow derived classes to
-      /// insert the states table into this base class.
-      /// </summary>
-      /// <param name="states">The pre-initialized states table</param>
+        /// <summary>
+        /// Initialization method to allow derived classes to
+        /// insert the states table into this base class.
+        /// </summary>
+        /// <param name="states">The pre-initialized states table</param>
         protected void InitStates(State[] states) { this.states = states; }
 
-      /// <summary>
-      /// OBSOLETE FOR VERSION 1.4.0
-      /// </summary>
-      /// <param name="size"></param>
+        /// <summary>
+        /// OBSOLETE FOR VERSION 1.4.0
+        /// </summary>
+        /// <param name="size"></param>
         protected void InitStateTable(int size) { states = new State[size]; }
 
         /// <summary>
@@ -141,37 +144,55 @@ namespace QUT.Gppg
         protected void InitNonTerminals(string[] names) { nonTerminals = names; }
 
         #region YYAbort, YYAccept etcetera.
+
         [Serializable]
         [SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
         // Reason for FxCop message suppression -
         // This exception cannot escape from the local context
         private class AcceptException : Exception
         {
-            internal AcceptException() { }
-            protected AcceptException(SerializationInfo i, StreamingContext c) : base(i, c) { }
+            internal AcceptException()
+            {
+            }
+
+            protected AcceptException(SerializationInfo i, StreamingContext c) : base(i, c)
+            {
+            }
         }
+
         [Serializable]
         [SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
         // Reason for FxCop message suppression -
         // This exception cannot escape from the local context
         private class AbortException : Exception
         {
-            internal AbortException() { }
-            protected AbortException(SerializationInfo i, StreamingContext c) : base(i, c) { }
+            internal AbortException()
+            {
+            }
+
+            protected AbortException(SerializationInfo i, StreamingContext c) : base(i, c)
+            {
+            }
         }
+
         [Serializable]
         [SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
         // Reason for FxCop message suppression -
         // This exception cannot escape from the local context
         private class ErrorException : Exception
         {
-            internal ErrorException() { }
-            protected ErrorException(SerializationInfo i, StreamingContext c) : base(i, c) { }
+            internal ErrorException()
+            {
+            }
+
+            protected ErrorException(SerializationInfo i, StreamingContext c) : base(i, c)
+            {
+            }
         }
 
         // The following methods are only called from within
         // a semantic action. The thrown exceptions can never
-        // propagate outside the ShiftReduceParser class in 
+        // propagate outside the ShiftReduceParser class in
         // which they are nested.
 
         /// <summary>
@@ -194,7 +215,8 @@ namespace QUT.Gppg
         /// Check if parser in error recovery state.
         /// </summary>
         protected bool YYRecovering { get { return recovering; } }
-        #endregion
+
+        #endregion YYAbort, YYAccept etcetera.
 
         /// <summary>
         /// Abstract base method. ShiftReduceParser calls this
@@ -269,7 +291,6 @@ namespace QUT.Gppg
                             return false;
                         else
                             throw;  // Rethrow x, preserving information.
-
                     }
                 }
                 else if (action == 0)   // error
@@ -338,7 +359,7 @@ namespace QUT.Gppg
                     //  Default action "@$ = @1.Merge(@N)" for location info.
                     TSpan at1 = LocationStack[LocationStack.Depth - rule.RightHandSide.Length];
                     TSpan atN = LocationStack[LocationStack.Depth - 1];
-                    CurrentLocationSpan = 
+                    CurrentLocationSpan =
                         ((at1 != null && atN != null) ? at1.Merge(atN) : default(TSpan));
                 }
             }
@@ -383,7 +404,7 @@ namespace QUT.Gppg
                 return false;
             //
             //  The interim fix for the "looping in error recovery"
-            //  artifact involved moving the setting of the recovering 
+            //  artifact involved moving the setting of the recovering
             //  bool until after invalid tokens have been discarded.
             //
             ShiftErrorToken();
@@ -417,15 +438,15 @@ namespace QUT.Gppg
 
         private void ReportError()
         {
-            object[] args = new object[FsaState.ParserTable.Keys.Count+1];
+            object[] args = new object[FsaState.ParserTable.Keys.Count + 1];
             args[0] = TerminalToString(NextToken);
-            int i=1;
+            int i = 1;
             foreach (int terminal in FsaState.ParserTable.Keys)
             {
                 args[i] = TerminalToString(terminal);
                 i++;
             }
-            scanner.yyerror("",args);
+            scanner.yyerror("", args);
         }
 
         private void ShiftErrorToken()
@@ -474,7 +495,6 @@ namespace QUT.Gppg
 
         private bool DiscardInvalidTokens()
         {
-
             int action = FsaState.defaultAction;
 
             if (FsaState.ParserTable != null)
@@ -486,7 +506,7 @@ namespace QUT.Gppg
                     {
 #if TRACE_ACTIONS
                             Console.Error.Write("Reading a token: ");
-#endif                       
+#endif
                         NextToken = scanner.yylex();
                     }
 
@@ -512,11 +532,11 @@ namespace QUT.Gppg
             }
             else if (recovering && tokensSinceLastError == 0)
             {
-                // 
+                //
                 //  Boolean recovering is not set until after the first
-                //  error token has been shifted.  Thus if we get back 
+                //  error token has been shifted.  Thus if we get back
                 //  here with recovering set and no tokens read we are
-                //  looping on the same error recovery action.  This 
+                //  looping on the same error recovery action.  This
                 //  happens if current_state.ParserTable is null because
                 //  the state has an LR(0) reduction, but not all
                 //  lookahead tokens are valid.  This only occurs for
@@ -536,7 +556,6 @@ namespace QUT.Gppg
             }
             else
                 return true;
-
         }
 
         /// <summary>
@@ -647,6 +666,7 @@ namespace QUT.Gppg
     /// </summary>
     /// <typeparam name="TSpan">The Location type</typeparam>
 #if EXPORT_GPPG
+
     public interface IMerge<TSpan>
 #else
     internal interface IMerge<TSpan>
@@ -670,6 +690,7 @@ namespace QUT.Gppg
     /// will expect to deal with this type.
     /// </summary>
 #if EXPORT_GPPG
+
     public class LexLocation : IMerge<LexLocation>
 #else
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
@@ -719,23 +740,23 @@ namespace QUT.Gppg
         { startLine = sl; startColumn = sc; endLine = el; endColumn = ec; }
 
         /// <summary>
-        /// Create a text location which spans from the 
+        /// Create a text location which spans from the
         /// start of "this" to the end of the argument "last"
         /// </summary>
         /// <param name="last">The last location in the result span</param>
         /// <returns>The merged span</returns>
         public LexLocation Merge(LexLocation last)
         { return new LexLocation(this.startLine, this.startColumn, last.endLine, last.endColumn); }
-
     }
 
     /// <summary>
-    /// Abstract scanner class that GPPG expects its scanners to 
+    /// Abstract scanner class that GPPG expects its scanners to
     /// extend.
     /// </summary>
     /// <typeparam name="TValue">Semantic value type YYSTYPE</typeparam>
     /// <typeparam name="TSpan">Source location type YYLTYPE</typeparam>
 #if EXPORT_GPPG
+
     public abstract class AbstractScanner<TValue, TSpan>
 #else
     internal abstract class AbstractScanner<TValue, TSpan>
@@ -749,12 +770,6 @@ namespace QUT.Gppg
         [SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
         [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "yylval")]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yylval")]
-        // Reason for FxCop message suppression -
-        // This is a traditional name for YACC-like functionality
-        // A field must be declared for this value of parametric type,
-        // since it may be instantiated by a value struct.  If it were 
-        // implemented as a property, machine generated code in derived
-        // types would not be able to select on the returned value.
         public TValue yylval;                     // Lexical value: set by scanner
 
         /// <summary>
@@ -800,6 +815,7 @@ namespace QUT.Gppg
     /// Opaque to users, visible to the tool-generated code.
     /// </summary>
 #if EXPORT_GPPG
+
     public class State
 #else
     internal class State
@@ -811,9 +827,9 @@ namespace QUT.Gppg
         internal int defaultAction; // = 0;		     // ParseAction
 
         /// <summary>
-        /// State transition data for this state. Pairs of elements of the 
+        /// State transition data for this state. Pairs of elements of the
         /// goto array associate symbol ordinals with next state indices.
-        /// The actions array is passed to another constructor. 
+        /// The actions array is passed to another constructor.
         /// </summary>
         /// <param name="actions">The action list</param>
         /// <param name="goToList">Next state data</param>
@@ -826,7 +842,7 @@ namespace QUT.Gppg
         }
 
         /// <summary>
-        /// Action data for this state. Pairs of elements of the 
+        /// Action data for this state. Pairs of elements of the
         /// action array associate action ordinals with each of
         /// those symbols that have actions in the current state.
         /// </summary>
@@ -865,6 +881,7 @@ namespace QUT.Gppg
     /// Rule representation at runtime.
     /// </summary>
 #if EXPORT_GPPG
+
     public class Rule
 #else
     internal class Rule
@@ -896,6 +913,7 @@ namespace QUT.Gppg
     /// </summary>
     /// <typeparam name="T"></typeparam>
 #if EXPORT_GPPG
+
     public class PushdownPrefixState<T>
 #else
     internal class PushdownPrefixState<T>
@@ -905,6 +923,7 @@ namespace QUT.Gppg
         //  here as derived types need to index into stacks.
         //
         private T[] array = new T[8];
+
         private int tos = 0;
 
         /// <summary>
@@ -937,8 +956,14 @@ namespace QUT.Gppg
             return rslt;
         }
 
-        internal T TopElement() { return array[tos - 1]; }
+        internal T TopElement()
+        {
+            return array[tos - 1];
+        }
 
-        internal bool IsEmpty() { return tos == 0; }
+        internal bool IsEmpty()
+        {
+            return tos == 0;
+        }
     }
 }

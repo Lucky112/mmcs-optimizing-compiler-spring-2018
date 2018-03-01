@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1A72E236-90D3-4729-9571-FDD1711E4CA7}</ProjectGuid>
+    <ProjectGuid>{DB2C1BC7-72B2-429F-9AA1-F364E11DE437}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Compiler.Parser</RootNamespace>
-    <AssemblyName>Compiler.Parser</AssemblyName>
+    <RootNamespace>Compiler.ThreeAddrCode</RootNamespace>
+    <AssemblyName>Compiler.ThreeAddrCode</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -41,21 +44,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AST\ProgramTree.cs" />
-    <Compile Include="ParserHelper.cs" />
+    <Compile Include="CFG\BasicBlock.cs" />
+    <Compile Include="CFG\CFGNode.cs" />
+    <Compile Include="CFG\ControlFlowGraph.cs" />
+    <Compile Include="Expressions\Expr.cs" />
+    <Compile Include="Expressions\IntConst.cs" />
+    <Compile Include="Expressions\Var.cs" />
+    <Compile Include="OpCode.cs" />
+    <Compile Include="OpCodeExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShiftReduceParserCode.cs" />
-    <Compile Include="SimpleLex.cs" />
-    <Compile Include="SimpleYacc.cs" />
-    <Compile Include="Visitors\AutoVisitor.cs" />
-    <Compile Include="Visitors\IVisitor.cs" />
-    <Compile Include="Visitors\TACodeVisitor.cs" />
+    <Compile Include="Nodes\Assign.cs" />
+    <Compile Include="Nodes\Empty.cs" />
+    <Compile Include="Nodes\Goto.cs" />
+    <Compile Include="Nodes\IfGoto.cs" />
+    <Compile Include="Nodes\Node.cs" />
+    <Compile Include="Nodes\Print.cs" />
+    <Compile Include="TACode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Compiler.ThreeAddrCode\Compiler.ThreeAddrCode.csproj">
-      <Project>{db2c1bc7-72b2-429f-9aa1-f364e11de437}</Project>
-      <Name>Compiler.ThreeAddrCode</Name>
-    </ProjectReference>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

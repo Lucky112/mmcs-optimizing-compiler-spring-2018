@@ -54,6 +54,10 @@
       <Project>{1a72e236-90d3-4729-9571-fdd1711e4ca7}</Project>
       <Name>Compiler.Parser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Compiler.ThreeAddrCode\Compiler.ThreeAddrCode.csproj">
+      <Project>{db2c1bc7-72b2-429f-9aa1-f364e11de437}</Project>
+      <Name>Compiler.ThreeAddrCode</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
