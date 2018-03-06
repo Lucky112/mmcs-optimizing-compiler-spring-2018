@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.ThreeAddrCode", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.Optimizations", "Compiler.Optimizations\Compiler.Optimizations.csproj", "{59559291-27B9-4124-8F46-50DA03ED3E44}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.ThreeAddrCode.Tests", "Compiler.ThreeAddrCode.Tests\Compiler.ThreeAddrCode.Tests.csproj", "{07E1468B-F71F-4848-BF68-C05CF4E875EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
