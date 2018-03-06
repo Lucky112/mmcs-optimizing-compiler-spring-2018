@@ -1,5 +1,8 @@
 # Проект по разработке оптимизирующих компиляторов, ИММиКН им. Воровича, весна 2018
 
+[![Build Status](https://travis-ci.org/ugg0t/mmcs-optimizing-compiler-spring-2018.svg?branch=master)]
+(https://travis-ci.org/ugg0t/mmcs-optimizing-compiler-spring-2018)
+
 |Название команды|Аббревиатура|Участники|
 |----------------|------------|---------|
 |Рассвет|АРС|**Светличный, Хурдаян**|
