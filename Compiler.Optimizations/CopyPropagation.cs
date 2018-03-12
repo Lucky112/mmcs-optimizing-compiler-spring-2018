@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Compiler.ThreeAddrCode;
 using Compiler.ThreeAddrCode.Nodes;
+using Compiler.ThreeAddrCode.Expressions;
 
 namespace Compiler.Optimizations
 {
@@ -15,36 +16,29 @@ namespace Compiler.Optimizations
 			var app = false;
 			for (int i = 0; i < nodes.Count; i++)
 			{
-				//Если одной переменной присваивается значение другой переменной
-				if (nodes[i] is Assign)
+				if (nodes[i] is Assign node && node.Operation == OpCode.Copy && !(node.Right is IntConst))
 				{
-					Assign node = (Assign)nodes[i];
-					if (node.Operation == OpCode.Copy)
+					for (int j = i + 1; j < nodes.Count; j++)
 					{
-						for (int j = i + 1; j < nodes.Count; j++)
+						if (nodes[j] is Assign nextNode)
 						{
-							if (nodes[j] is Assign)
+							//Если мы встретили объявление этого же элемента
+							if (node.Result.Equals(nextNode.Result))
+								break;
+							//Проверка использования Result в левом операнде другого узла
+							if (node.Result.Equals(nextNode.Left))
 							{
-								Assign nextNode = (Assign)nodes[j];
-								//Если мы встретили объявление этого же элемента
-								if (node.Result.Equals(nextNode.Result))
-									break;
-								//Проверка использования Result в левом операнде другого узла
-								if (node.Result.Equals(nextNode.Left))
-								{
-									nextNode.Left = node.Right;
-									nodes[j] = nextNode;
-									app = true;
-								}
-								//Проверка использования Result в правом операнде другого узла
-								if (node.Result.Equals(nextNode.Right))
-								{
-									nextNode.Right = node.Right;
-									nodes[j] = nextNode;
-									app = true;
-								}
+								nextNode.Left = node.Right;
+								nodes[j] = nextNode;
+								app = true;
 							}
-
+							//Проверка использования Result в правом операнде другого узла
+							if (node.Result.Equals(nextNode.Right))
+							{
+								nextNode.Right = node.Right;
+								nodes[j] = nextNode;
+								app = true;
+							}
 						}
 					}
 				}

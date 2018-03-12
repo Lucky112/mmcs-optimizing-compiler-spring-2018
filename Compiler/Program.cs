@@ -181,7 +181,7 @@ namespace Compiler
 			{
 				Left = null,
 				Operation = OpCode.Copy,
-				Right = new IntConst(5),
+				Right = new Var(),
 				Result = new Var()
 			};
 			var assgn2 = new Assign()

@@ -16,8 +16,8 @@ namespace Compiler.Optimizations.Tests
             {
                 Left = null,
                 Operation = OpCode.Copy,
-                Right = new IntConst(5),
-                Result = new Var()
+				Right = new Var(),
+				Result = new Var()
             };
             var assgn2 = new Assign()
             {
