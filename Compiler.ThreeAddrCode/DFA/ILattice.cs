@@ -2,7 +2,7 @@
 
 namespace Compiler.ThreeAddrCode.DFA
 {
-    interface ILattice: IEquatable<ILattice>
+    public interface ILattice: IEquatable<ILattice>
     {
     }
 }
