@@ -50,7 +50,6 @@
     <Compile Include="DFA\ILattice.cs" />
     <Compile Include="DFA\IStrategy.cs" />
     <Compile Include="DFA\ITransferFunction.cs" />
-    <Compile Include="DFA\IStrategy.cs" />
     <Compile Include="DFA\ReachingDefinitions\ReachingDefenition.cs" />
     <Compile Include="Expressions\Expr.cs" />
     <Compile Include="Expressions\IntConst.cs" />
