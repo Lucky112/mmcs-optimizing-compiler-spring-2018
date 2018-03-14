@@ -14,6 +14,11 @@ namespace Compiler.ThreeAddrCode.Expressions
             Id = Guid.NewGuid();
         }
 
+        public Var(Guid id)
+        {
+            Id = id;
+        }
+
         public override string ToString()
         {
             return Id.ToString();
