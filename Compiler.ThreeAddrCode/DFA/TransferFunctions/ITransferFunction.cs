@@ -3,7 +3,7 @@ using Compiler.ThreeAddrCode.CFG;
 
 namespace Compiler.ThreeAddrCode.DFA
 {
-    public interface ITransferFunction<T> where T: ILattice
+    public interface ITransferFunction<T>
     {
         ISet<T> Compute(BasicBlock block);
     }

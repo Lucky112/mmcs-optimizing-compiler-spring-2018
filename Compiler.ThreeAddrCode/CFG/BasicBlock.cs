@@ -40,12 +40,12 @@ namespace Compiler.ThreeAddrCode.CFG
         /// <summary>
         ///     IN множество
         /// </summary>
-        public ISet<ILattice> In { get; set; }
+        public ISet<Guid> In { get; set; }
         
         /// <summary>
         ///     OUT множество
         /// </summary>
-        public ISet<ILattice> Out { get; set; }
+        public ISet<Guid> Out { get; set; }
 
         /// <summary>
         ///     Конструктор базового блока

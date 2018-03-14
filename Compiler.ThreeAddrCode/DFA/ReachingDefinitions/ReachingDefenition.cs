@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Compiler.ThreeAddrCode.DFA.ReachingDefinitions
 {
-    public class ReachingDefenition : IStrategy
+    public class ReachingDefenition : IStrategy<Guid>
     {
         Dictionary<Guid, HashSet<Guid>> gen = new Dictionary<Guid, HashSet<Guid>>();
         Dictionary<Guid, HashSet<Guid>> kill = new Dictionary<Guid, HashSet<Guid>>();

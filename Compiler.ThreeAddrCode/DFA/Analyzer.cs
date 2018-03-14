@@ -19,7 +19,7 @@ namespace Compiler.ThreeAddrCode.DFA
         /// <param name="cfg">граф потока управления</param>
         /// <param name="strategy">стратегия обхода графа потока управления</param>
         /// <returns>копия графа с заполненными IN/OUT множествами</returns>
-        public static ControlFlowGraph Analyze(ControlFlowGraph cfg, IStrategy strategy)
+        public static ControlFlowGraph Analyze(ControlFlowGraph cfg, IStrategy<Guid> strategy)
         {
             throw new NotImplementedException();
         }
