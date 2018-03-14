@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Compiler.ThreeAddrCode.DFA;
 
 namespace Compiler.ThreeAddrCode.CFG
 {
@@ -35,6 +36,16 @@ namespace Compiler.ThreeAddrCode.CFG
         public IEnumerable<Node> CodeList => _codeList.AsReadOnly();
 
         private readonly List<Node> _codeList;
+
+        /// <summary>
+        ///     IN множество
+        /// </summary>
+        public ISet<ILattice> In { get; set; }
+        
+        /// <summary>
+        ///     OUT множество
+        /// </summary>
+        public ISet<ILattice> Out { get; set; }
 
         /// <summary>
         ///     Конструктор базового блока
