@@ -62,7 +62,7 @@ namespace Compiler.Optimizations.Tests
             taCodeCopyProp.AddNode(assgn5);
             taCodeCopyProp.AddNode(assgn6);
 
-            /*
+			/*
               a = b
               c = b - a     -----> c = b - b
               d = c + 1
@@ -71,9 +71,9 @@ namespace Compiler.Optimizations.Tests
               k = c + a     -----> k = c + a
             */
 
-            // TODO Assert'ы
-            
-            Assert.True(true);
+			// TODO Assert'ы
+
+			Assert.True(true);
         }
     }
 }
