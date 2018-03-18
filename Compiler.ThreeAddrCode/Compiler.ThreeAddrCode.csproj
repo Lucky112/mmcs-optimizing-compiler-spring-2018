@@ -49,6 +49,8 @@
     <Compile Include="DFA\Analyzer.cs" />
     <Compile Include="DFA\ILattice.cs" />
     <Compile Include="DFA\IStrategy.cs" />
+    <Compile Include="DFA\ReachingExpressions\ExpressionsCleaner.cs" />
+    <Compile Include="DFA\ReachingExpressions\ReachingExpressions.cs" />
     <Compile Include="DFA\TransferFunctions\ITransferFunction.cs" />
     <Compile Include="DFA\ReachingDefinitions\ReachingDefenition.cs" />
     <Compile Include="DFA\TransferFunctions\TransferFormula.cs" />
