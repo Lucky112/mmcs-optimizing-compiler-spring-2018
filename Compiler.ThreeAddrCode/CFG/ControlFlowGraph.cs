@@ -15,8 +15,8 @@ namespace Compiler.ThreeAddrCode.CFG
         ///     Список узлов потока управления;
         ///     <para>Первый узел -- входной</para>
         /// </summary>
-        public IEnumerable<BasicBlock> CFGNodes => _cfgNodes;
-        private List<BasicBlock> _cfgNodes;
+        public IEnumerable<BasicBlock> CFGNodes => _cfgNodes.AsReadOnly();
+        private readonly List<BasicBlock> _cfgNodes;
 
         /// <summary>
         ///     Конструктор

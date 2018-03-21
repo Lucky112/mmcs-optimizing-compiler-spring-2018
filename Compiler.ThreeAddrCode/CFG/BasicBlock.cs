@@ -38,16 +38,6 @@ namespace Compiler.ThreeAddrCode.CFG
         private readonly List<Node> _codeList;
 
         /// <summary>
-        ///     IN множество
-        /// </summary>
-        public ISet<Guid> In { get; set; }
-        
-        /// <summary>
-        ///     OUT множество
-        /// </summary>
-        public ISet<Guid> Out { get; set; }
-
-        /// <summary>
         ///     Конструктор базового блока
         /// </summary>
         /// <param name="codeList">список узлов программы в трехадресной форме</param>
