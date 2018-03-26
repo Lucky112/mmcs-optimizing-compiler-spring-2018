@@ -90,6 +90,9 @@ namespace Compiler.ThreeAddrCode.Tests
             Assert.AreEqual(cfg.CFGNodes.ElementAt(0).CodeList.Count(), outset.Count);
             Assert.IsEmpty(outset.Except(cfg.CFGNodes.ElementAt(0).CodeList.Select(x => x.Label)));
 
+            var iter = new IterativeAlgorithm();
+            var inout = iter.Analyze(cfg, op, tf);
+            // TODO: тестирование
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Compiler.ThreeAddrCode.DFA
     ///     расширения функционала и упрошения синтаксиса
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class InOutData<T> : Dictionary<BasicBlock, Tuple<T, T>>
+    public class InOutData<T> : Dictionary<BasicBlock, (T, T)>
     {        
     }
 }
