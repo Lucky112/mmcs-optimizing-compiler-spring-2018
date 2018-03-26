@@ -50,8 +50,8 @@
     <Compile Include="DFA\IAlgorithm.cs" />
     <Compile Include="DFA\InOutData.cs" />
     <Compile Include="DFA\ITransferFunction.cs" />
-    <Compile Include="DFA\ReachingDefinitions\ReachingDefenition.cs" />
-    <Compile Include="DFA\TransferFormula.cs" />
+    <Compile Include="DFA\ReachingDefinitions\Operations.cs" />
+    <Compile Include="DFA\ReachingDefinitions\TransferFunction.cs" />
     <Compile Include="Expressions\Expr.cs" />
     <Compile Include="Expressions\IntConst.cs" />
     <Compile Include="Expressions\Var.cs" />
