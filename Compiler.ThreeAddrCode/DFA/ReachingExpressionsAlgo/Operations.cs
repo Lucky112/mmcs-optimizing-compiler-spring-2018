@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Compiler.ThreeAddrCode.Nodes;
+using Compiler.ThreeAddrCode.Expressions;
 
 namespace Compiler.ThreeAddrCode.DFA.ReachingExpressionsAlgo
 {
@@ -15,14 +16,26 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressionsAlgo
         /// Верхняя граница полурешётки для достигающих выражений. 
         /// Верхняя граница - все выражения трёх-адрессного кода 
         /// </summary>
-        private HashSet<Guid> upper; 
+        private HashSet<Guid> upper;
+
+        /// <summary>
+        /// Список, который хранит выражения-присваивания
+        /// </summary>
+        private List<Node> AssignStore { get; }
 
         public Operations(TACode code)
         {
             foreach (var node in code.CodeList)
             {
-                if (node is Assign ass) //Если узел-присваивание, то добавляем его в верхнюю границу
-                    upper.Add(ass.Label);
+                //Если узел - присваивание и хотя бы один операнд - это переменная, то добавляем его в верхнюю границу
+                if (node is Assign ass) 
+                {
+                    if (ass.Left is Var || ass.Right is Var)
+                    {
+                        upper.Add(ass.Label);
+                        AssignStore.Add(ass);
+                    }
+                }
             }
         }
 
