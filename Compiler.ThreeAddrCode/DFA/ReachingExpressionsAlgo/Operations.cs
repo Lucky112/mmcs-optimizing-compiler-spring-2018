@@ -18,11 +18,6 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressionsAlgo
         /// </summary>
         private HashSet<Guid> upper;
 
-        /// <summary>
-        /// Список, который хранит выражения-присваивания
-        /// </summary>
-        private List<Node> AssignStore { get; }
-
         public Operations(TACode code)
         {
             foreach (var node in code.CodeList)
@@ -31,10 +26,7 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressionsAlgo
                 if (node is Assign ass) 
                 {
                     if (ass.Left is Var || ass.Right is Var)
-                    {
                         upper.Add(ass.Label);
-                        AssignStore.Add(ass);
-                    }
                 }
             }
         }
