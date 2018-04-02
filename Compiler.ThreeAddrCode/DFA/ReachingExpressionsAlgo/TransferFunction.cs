@@ -46,7 +46,8 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressionsAlgo
             foreach (var node in basicBlock.CodeList)
             {
                 if (node is Assign ass)
-                    aux_dict_gen[ass.Label]++;
+                    if (ass.Left is Var || ass.Right is Var)
+                        aux_dict_gen[ass.Label]++;
             }
             
             //Формирование множества e_gen
