@@ -28,6 +28,8 @@ namespace Compiler
             sTest.SubexpressionOptimizationTest();
         }
 
+        private static TACode tacodeInstance;
+
         private static void ASTTest()
         {
             Console.OutputEncoding = Encoding.UTF8;
@@ -47,6 +49,11 @@ namespace Compiler
                 var prettyPrinter = new PrettyPrintVisitor();
                 parser.root.Visit(prettyPrinter);
                 Console.WriteLine(prettyPrinter.Text);
+
+                var tacodeVisitor = new TACodeVisitor();
+                parser.root.Visit(tacodeVisitor);
+                tacodeInstance = tacodeVisitor.Code;
+
             }
             catch (FileNotFoundException)
             {
