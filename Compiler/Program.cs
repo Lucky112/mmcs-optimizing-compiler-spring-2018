@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Compiler.Parser.AST;
 
 namespace Compiler
 {
@@ -24,16 +25,26 @@ namespace Compiler
             //Test.DeclarationOptimizationTest();
 
             //Test subexpression tree
-            var sTest = new SubexprTest();
-            sTest.SubexpressionOptimizationTest();
+            //var sTest = new SubexprTest();
+            //sTest.SubexpressionOptimizationTest();
+
+            string fileName = @"..\..\sample.txt";
+
+            astRoot = AST(fileName);
+            if (astRoot == null)
+                return;
+                
+            var tacodeVisitor = new TACodeVisitor();
+            astRoot.Visit(tacodeVisitor);
+            tacodeInstance = tacodeVisitor.Code;
         }
 
+        private static BlockNode astRoot;
         private static TACode tacodeInstance;
 
-        private static void ASTTest()
+        private static BlockNode AST(string fileName)
         {
             Console.OutputEncoding = Encoding.UTF8;
-            string fileName = @"..\..\sample.txt";
             try
             {
                 string text = File.ReadAllText(fileName);
@@ -44,16 +55,15 @@ namespace Compiler
                 var parser = new Parser.Parser(scanner);
 
                 var b = parser.Parse();
-                Console.WriteLine(!b ? "Ошибка" : "Синтаксическое дерево построено");
-
-                var prettyPrinter = new PrettyPrintVisitor();
-                parser.root.Visit(prettyPrinter);
-                Console.WriteLine(prettyPrinter.Text);
-
-                var tacodeVisitor = new TACodeVisitor();
-                parser.root.Visit(tacodeVisitor);
-                tacodeInstance = tacodeVisitor.Code;
-
+                if (b)
+                {
+                    Console.WriteLine("Синтаксическое дерево построено");
+                    return parser.root;
+                }
+                else
+                {
+                    Console.WriteLine("Ошибка");
+                }
             }
             catch (FileNotFoundException)
             {
@@ -67,8 +77,7 @@ namespace Compiler
             {
                 Console.WriteLine($"Синтаксическая ошибка. {e.Message}");
             }
-
-            Console.ReadLine();
+            return null;
         }
 
         private static void TaCodeTest()
