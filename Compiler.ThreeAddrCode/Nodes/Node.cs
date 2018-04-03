@@ -23,9 +23,9 @@ namespace Compiler.ThreeAddrCode.Nodes
         /// </summary>
         public bool IsLabeled { get; set; }
         
-        public Node()
+        public Node(string name = "")
         {
-            Label = new PrettyGuid(IDType.Label);
+            Label = new PrettyGuid(IDType.Label, name);
         }
 
         public override bool Equals(object obj)
