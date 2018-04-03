@@ -11,7 +11,7 @@ namespace Compiler.ThreeAddrCode.Nodes
         /// <summary>
         ///     Уникальная метка-идентификатор
         /// </summary>
-        public Guid Label { get; set; }
+        public PrettyGuid Label { get; set; }
 
         /// <summary>
         ///     К какому базовому блоку принадлежит строка
@@ -25,7 +25,7 @@ namespace Compiler.ThreeAddrCode.Nodes
         
         public Node()
         {
-            Label = Guid.NewGuid();
+            Label = new PrettyGuid(IDType.Label);
         }
 
         public override bool Equals(object obj)

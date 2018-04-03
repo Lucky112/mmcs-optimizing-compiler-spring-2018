@@ -10,7 +10,7 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingDefinitions
 
         public Operations(TACode code)
         {
-            upper = new HashSet<Guid>(code.CodeList.Select(x => x.Label));
+            upper = new HashSet<Guid>(code.CodeList.Select(x => (Guid)x.Label));
         }
 
         public HashSet<Guid> Lower => new HashSet<Guid>();

@@ -88,7 +88,7 @@ namespace Compiler.ThreeAddrCode.Tests
             var outset = tf.Transfer(cfg.CFGNodes.ElementAt(0), op.Lower, op);
 
             Assert.AreEqual(cfg.CFGNodes.ElementAt(0).CodeList.Count(), outset.Count);
-            Assert.IsEmpty(outset.Except(cfg.CFGNodes.ElementAt(0).CodeList.Select(x => x.Label)));
+            Assert.IsEmpty(outset.Except(cfg.CFGNodes.ElementAt(0).CodeList.Select(x => (Guid)x.Label)));
 
             var iter = new IterativeAlgorithm();
             var inout = iter.Analyze(cfg, op, tf);

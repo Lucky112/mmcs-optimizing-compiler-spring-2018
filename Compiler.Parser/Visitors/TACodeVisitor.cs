@@ -379,7 +379,7 @@ namespace Compiler.Parser.Visitors
         private TACExpr.Var GetVarByName(string name)
         {
             if (!m_varsInCode.ContainsKey(name))
-                m_varsInCode.Add(name, new TACExpr.Var());
+                m_varsInCode.Add(name, new TACExpr.Var(name));
 
             return m_varsInCode[name];
         }
