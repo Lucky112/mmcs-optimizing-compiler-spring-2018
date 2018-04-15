@@ -106,11 +106,13 @@
     <Compile Include="Nodes\Node.cs" />
     <Compile Include="Nodes\Print.cs" />
     <Compile Include="TACode.cs" />
+    <Compile Include="DFA\TransferFunction\TransferFunctionUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
