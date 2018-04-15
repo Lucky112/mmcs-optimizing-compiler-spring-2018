@@ -11,10 +11,18 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingDefinitions
     {
         public HashSet<Guid> Transfer(BasicBlock basicBlock, HashSet<Guid> input, ILatticeOperations<HashSet<Guid>> ops)
         {
-            var gen = new HashSet<Guid>(basicBlock.CodeList.Select(x => x.Label));
-            var kill = new HashSet<Guid>(ops.Upper.Except(gen));
+            var (gen, kill) = GetGenAndKill(basicBlock, ops);
             var inset = new HashSet<Guid>(input);
             return new HashSet<Guid>(inset.Except(kill).Union(gen));
         }
+
+        public (HashSet<Guid>, HashSet<Guid>) GetGenAndKill (BasicBlock basicBlock, ILatticeOperations<HashSet<Guid>> ops)
+        {
+            var gen =new HashSet<Guid>(basicBlock.CodeList.Select(x => x.Label));
+            var kill = new HashSet<Guid>(ops.Upper.Except(gen));
+            return (gen, kill);
+        }
+
+        
     }
 }

@@ -1,18 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DB2C1BC7-72B2-429F-9AA1-F364E11DE437}</ProjectGuid>
+    <ProjectGuid>{6BE788EE-6B8B-40F8-9423-5D71D99BD024}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Compiler.ThreeAddrCode</RootNamespace>
-    <AssemblyName>Compiler.ThreeAddrCode</AssemblyName>
+    <RootNamespace>Compiler.ILcodeGenerator</RootNamespace>
+    <AssemblyName>Compiler.ILcodeGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -32,9 +31,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -69,9 +65,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -80,38 +73,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CFG\BasicBlock.cs" />
-    <Compile Include="CFG\ControlFlowGraph.cs" />
-    <Compile Include="DFA\ConstantPropagation\IterativeAlgorithm.cs" />
-    <Compile Include="DFA\ConstantPropagation\Operations.cs" />
-    <Compile Include="DFA\ConstantPropagation\TransferFunctions.cs" />
-    <Compile Include="DFA\ConstantPropagation\VarValue.cs" />
-    <Compile Include="DFA\ILatticeOperations.cs" />
-    <Compile Include="DFA\IAlgorithm.cs" />
-    <Compile Include="DFA\InOutData.cs" />
-    <Compile Include="DFA\ITransferFunction.cs" />
-    <Compile Include="DFA\ReachingDefinitions\IterativeAlgorithm.cs" />
-    <Compile Include="DFA\ReachingDefinitions\Operations.cs" />
-    <Compile Include="DFA\ReachingDefinitions\TransferFunction.cs" />
-    <Compile Include="Expressions\Expr.cs" />
-    <Compile Include="Expressions\IntConst.cs" />
-    <Compile Include="Expressions\Var.cs" />
-    <Compile Include="OpCode.cs" />
-    <Compile Include="OpCodeExtension.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Nodes\Assign.cs" />
-    <Compile Include="Nodes\Empty.cs" />
-    <Compile Include="Nodes\Goto.cs" />
-    <Compile Include="Nodes\IfGoto.cs" />
-    <Compile Include="Nodes\Node.cs" />
-    <Compile Include="Nodes\Print.cs" />
-    <Compile Include="TACode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -119,11 +86,4 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.10.1\build\NUnit.props'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
