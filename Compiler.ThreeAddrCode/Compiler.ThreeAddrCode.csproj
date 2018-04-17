@@ -93,6 +93,9 @@
     <Compile Include="DFA\ReachingDefinitions\IterativeAlgorithm.cs" />
     <Compile Include="DFA\ReachingDefinitions\Operations.cs" />
     <Compile Include="DFA\ReachingDefinitions\TransferFunction.cs" />
+	<Compile Include="DFA\ReachingExpressionsAlgo\IterativeAlgorithm.cs" />
+	<Compile Include="DFA\ReachingExpressionsAlgo\Operations.cs" />
+	<Compile Include="DFA\ReachingExpressionsAlgo\TransferFunction.cs" />
     <Compile Include="Expressions\Expr.cs" />
     <Compile Include="Expressions\IntConst.cs" />
     <Compile Include="Expressions\Var.cs" />
