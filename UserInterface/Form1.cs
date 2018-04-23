@@ -21,5 +21,17 @@ namespace UserInterface
         {
 
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            textBox1.SelectionStart = 0;
+            textBox1.SelectionLength = 0;
+        }
+
+        private void textBox1_Enter(Object sender, System.EventArgs e)
+        {
+            textBox1.SelectionStart = 0;
+            textBox1.SelectionLength = 0;
+        }
     }
 }
