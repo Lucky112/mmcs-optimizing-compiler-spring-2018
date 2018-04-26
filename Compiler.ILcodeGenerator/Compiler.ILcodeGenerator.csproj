@@ -73,11 +73,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ILcodeGeneratorTest.cs" />
+    <Compile Include="TAcode2ILcodeTranslator.cs" />
+    <Compile Include="GenCodeCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Compiler.Parser\Compiler.Parser.csproj">
+      <Project>{1A72E236-90D3-4729-9571-FDD1711E4CA7}</Project>
+      <Name>Compiler.Parser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Compiler.ThreeAddrCode\Compiler.ThreeAddrCode.csproj">
+      <Project>{db2c1bc7-72b2-429f-9aa1-f364e11de437}</Project>
+      <Name>Compiler.ThreeAddrCode</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

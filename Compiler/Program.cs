@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Compiler.Parser.AST;
+using Compiler.ILcodeGenerator;
 
 namespace Compiler
 {
@@ -28,7 +29,7 @@ namespace Compiler
             //var sTest = new SubexprTest();
             //sTest.SubexpressionOptimizationTest();
 
-            string fileName = @"..\..\sample.txt";
+            string fileName = @"..\..\sampleEuclide.txt";
 
             astRoot = AST(fileName);
             if (astRoot == null)
@@ -37,6 +38,10 @@ namespace Compiler
             var tacodeVisitor = new TACodeVisitor();
             astRoot.Visit(tacodeVisitor);
             tacodeInstance = tacodeVisitor.Code;
+            TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
+            trans.Translate(tacodeInstance);
+            var temp = trans.PrintCommands();
+            trans.RunProgram();
         }
 
         private static BlockNode astRoot;

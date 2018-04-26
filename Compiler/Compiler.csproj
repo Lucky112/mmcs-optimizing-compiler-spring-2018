@@ -78,6 +78,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Compiler.ILcodeGenerator\Compiler.ILcodeGenerator.csproj">
+      <Project>{6BE788EE-6B8B-40F8-9423-5D71D99BD024}</Project>
+      <Name>Compiler.ILcodeGenerator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Compiler.Optimizations\Compiler.Optimizations.csproj">
       <Project>{59559291-27b9-4124-8f46-50da03ed3e44}</Project>
       <Name>Compiler.Optimizations</Name>
