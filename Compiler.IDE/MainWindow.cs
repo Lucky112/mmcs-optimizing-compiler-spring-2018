@@ -1,18 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using Compiler.IDE.Handlers;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Compiler.IDE
 {
     public partial class MainWindow : Form
     {
+        ParseHandler parseHandler = new ParseHandler();
+        
         public MainWindow()
         {
             InitializeComponent();
+            
+            parseHandler.ParsingCompleted += (o, e) => outTextBox.AppendText("Синтаксическое дерево построено\n");
+            parseHandler.ParsingErrored += (o, e) => outTextBox.AppendText("Ошибка парсинга программы\n");
+            parseHandler.ParsingSyntaxErrored += (o, e) => outTextBox.AppendText($"Синтаксическая ошибка. {e.Message}\n");
+            parseHandler.ParsingLexErrored += (o, e) => outTextBox.AppendText($"Лексическая ошибка. {e.Message}\n");
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -33,12 +37,14 @@ namespace Compiler.IDE
                 return;
 
             string content = File.ReadAllText(fileDialog.FileName);
-            fillInput(content);
+            inputTextBox.Text = content;
+            outTextBox.Text = "";
         }
 
-        private void fillInput(string content)
+        private void compileButton_Click(object sender, EventArgs e)
         {
-            inputTextBox.Text = content;
+            outTextBox.Text = "";
+            parseHandler.handle(inputTextBox.Text);
         }
     }
 }

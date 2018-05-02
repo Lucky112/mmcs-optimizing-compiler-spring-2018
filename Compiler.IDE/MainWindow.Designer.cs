@@ -161,6 +161,7 @@
             this.compileButton.TabIndex = 5;
             this.compileButton.Text = "Compile";
             this.compileButton.UseVisualStyleBackColor = true;
+            this.compileButton.Click += new System.EventHandler(this.compileButton_Click);
             // 
             // runButton
             // 
@@ -206,7 +207,7 @@
             this.outBox.Margin = new System.Windows.Forms.Padding(2);
             this.outBox.Name = "outBox";
             this.outBox.Padding = new System.Windows.Forms.Padding(2);
-            this.outBox.Size = new System.Drawing.Size(449, 64);
+            this.outBox.Size = new System.Drawing.Size(449, 66);
             this.outBox.TabIndex = 2;
             this.outBox.TabStop = false;
             this.outBox.Text = "Output";
@@ -220,7 +221,7 @@
             this.outTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.outTextBox.Multiline = true;
             this.outTextBox.Name = "outTextBox";
-            this.outTextBox.Size = new System.Drawing.Size(445, 47);
+            this.outTextBox.Size = new System.Drawing.Size(445, 49);
             this.outTextBox.TabIndex = 0;
             // 
             // tabsControl
@@ -268,7 +269,7 @@
             this.ILCodePage.Margin = new System.Windows.Forms.Padding(2);
             this.ILCodePage.Name = "ILCodePage";
             this.ILCodePage.Padding = new System.Windows.Forms.Padding(2);
-            this.ILCodePage.Size = new System.Drawing.Size(446, 224);
+            this.ILCodePage.Size = new System.Drawing.Size(446, 223);
             this.ILCodePage.TabIndex = 1;
             this.ILCodePage.Text = "IL-Code";
             this.ILCodePage.UseVisualStyleBackColor = true;
@@ -278,7 +279,7 @@
             this.ILCodeTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ILCodeTextBox.Location = new System.Drawing.Point(2, 2);
             this.ILCodeTextBox.Name = "ILCodeTextBox";
-            this.ILCodeTextBox.Size = new System.Drawing.Size(442, 220);
+            this.ILCodeTextBox.Size = new System.Drawing.Size(442, 219);
             this.ILCodeTextBox.TabIndex = 0;
             this.ILCodeTextBox.Text = "";
             // 
@@ -289,7 +290,7 @@
             this.threeAddrPage.Margin = new System.Windows.Forms.Padding(2);
             this.threeAddrPage.Name = "threeAddrPage";
             this.threeAddrPage.Padding = new System.Windows.Forms.Padding(2);
-            this.threeAddrPage.Size = new System.Drawing.Size(446, 224);
+            this.threeAddrPage.Size = new System.Drawing.Size(446, 223);
             this.threeAddrPage.TabIndex = 2;
             this.threeAddrPage.Text = "3-Address Code";
             this.threeAddrPage.UseVisualStyleBackColor = true;
@@ -299,7 +300,7 @@
             this.threeAddrTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.threeAddrTextBox.Location = new System.Drawing.Point(2, 2);
             this.threeAddrTextBox.Name = "threeAddrTextBox";
-            this.threeAddrTextBox.Size = new System.Drawing.Size(442, 220);
+            this.threeAddrTextBox.Size = new System.Drawing.Size(442, 219);
             this.threeAddrTextBox.TabIndex = 0;
             this.threeAddrTextBox.Text = "";
             // 
@@ -310,7 +311,7 @@
             this.CFGPage.Margin = new System.Windows.Forms.Padding(2);
             this.CFGPage.Name = "CFGPage";
             this.CFGPage.Padding = new System.Windows.Forms.Padding(2);
-            this.CFGPage.Size = new System.Drawing.Size(446, 224);
+            this.CFGPage.Size = new System.Drawing.Size(446, 223);
             this.CFGPage.TabIndex = 3;
             this.CFGPage.Text = "CFG";
             this.CFGPage.UseVisualStyleBackColor = true;
@@ -320,7 +321,7 @@
             this.CFGPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CFGPictureBox.Location = new System.Drawing.Point(2, 2);
             this.CFGPictureBox.Name = "CFGPictureBox";
-            this.CFGPictureBox.Size = new System.Drawing.Size(442, 220);
+            this.CFGPictureBox.Size = new System.Drawing.Size(442, 219);
             this.CFGPictureBox.TabIndex = 0;
             this.CFGPictureBox.TabStop = false;
             // 
@@ -331,7 +332,7 @@
             this.ASTPage.Margin = new System.Windows.Forms.Padding(2);
             this.ASTPage.Name = "ASTPage";
             this.ASTPage.Padding = new System.Windows.Forms.Padding(2);
-            this.ASTPage.Size = new System.Drawing.Size(446, 224);
+            this.ASTPage.Size = new System.Drawing.Size(446, 223);
             this.ASTPage.TabIndex = 4;
             this.ASTPage.Text = "AST";
             this.ASTPage.UseVisualStyleBackColor = true;
@@ -341,7 +342,7 @@
             this.ASTPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ASTPictureBox.Location = new System.Drawing.Point(2, 2);
             this.ASTPictureBox.Name = "ASTPictureBox";
-            this.ASTPictureBox.Size = new System.Drawing.Size(442, 220);
+            this.ASTPictureBox.Size = new System.Drawing.Size(442, 219);
             this.ASTPictureBox.TabIndex = 0;
             this.ASTPictureBox.TabStop = false;
             // 
