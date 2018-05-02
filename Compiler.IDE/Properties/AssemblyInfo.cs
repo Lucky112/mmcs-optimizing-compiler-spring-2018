@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("UserInterface")]
+[assembly: AssemblyTitle("Compiler.IDE")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("DNS")]
-[assembly: AssemblyProduct("UserInterface")]
-[assembly: AssemblyCopyright("Copyright © DNS 2018")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Compiler.IDE")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("42028e68-89da-4a89-8ebc-ecb72abb3ca9")]
+[assembly: Guid("a7cea661-aba3-462b-b18a-e3d7838517c0")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //
