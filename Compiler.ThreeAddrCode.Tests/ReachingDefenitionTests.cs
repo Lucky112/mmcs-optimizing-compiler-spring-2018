@@ -92,9 +92,9 @@ namespace Compiler.ThreeAddrCode.Tests
             taCode.CreateBasicBlockList();
 
             var op = new Operations(taCode);
-            var tf = new TransferFunction();
+            var tf = new TransferFunction(taCode);
 
-
+            var tmp = taCode.ToString();
             var (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(0), op);
             Assert.True(gen.SetEquals(new HashSet<Guid> { ass1.Label, ass2.Label, ass3.Label }));
             Assert.True(kill.SetEquals(new HashSet<Guid> { ass4.Label, ass5.Label, ass6.Label, ass7.Label }));
@@ -213,7 +213,7 @@ namespace Compiler.ThreeAddrCode.Tests
             taCode.CreateBasicBlockList();
 
             var op = new Operations(taCode);
-            var tf = new TransferFunction();
+            var tf = new TransferFunction(taCode);
             
 
             var (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(0), op);
@@ -350,7 +350,7 @@ namespace Compiler.ThreeAddrCode.Tests
             taCode.CreateBasicBlockList();
 
             var op = new Operations(taCode);
-            var tf = new TransferFunction();
+            var tf = new TransferFunction(taCode);
 
 
             var (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(0), op);
