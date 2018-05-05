@@ -9,19 +9,25 @@ namespace Compiler.ThreeAddrCode.Expressions
     {
         public Guid Id { get; set; }
         
-        public Var()
+        public Var() : this(Guid.NewGuid())
         {
-            Id = Guid.NewGuid();
         }
 
         public Var(Guid id)
         {
             Id = id;
+            TACodeNameManager.Instance.TempVar(Id);
+        }
+
+        public Var(string name)
+        {
+            Id = Guid.NewGuid();
+            TACodeNameManager.Instance.Name(Id, name);
         }
 
         public override string ToString()
         {
-            return Id.ToString();
+            return TACodeNameManager.Instance[Id];
         }
         
         public override bool Equals(object obj)
