@@ -99,7 +99,6 @@
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.openToolStripMenuItem.Text = "Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -107,7 +106,6 @@
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -161,11 +159,11 @@
             this.compileButton.TabIndex = 5;
             this.compileButton.Text = "Compile";
             this.compileButton.UseVisualStyleBackColor = true;
-            this.compileButton.Click += new System.EventHandler(this.compileButton_Click);
             // 
             // runButton
             // 
             this.runButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.runButton.Enabled = false;
             this.runButton.Location = new System.Drawing.Point(74, 301);
             this.runButton.Margin = new System.Windows.Forms.Padding(2);
             this.runButton.Name = "runButton";
@@ -207,7 +205,7 @@
             this.outBox.Margin = new System.Windows.Forms.Padding(2);
             this.outBox.Name = "outBox";
             this.outBox.Padding = new System.Windows.Forms.Padding(2);
-            this.outBox.Size = new System.Drawing.Size(449, 66);
+            this.outBox.Size = new System.Drawing.Size(449, 68);
             this.outBox.TabIndex = 2;
             this.outBox.TabStop = false;
             this.outBox.Text = "Output";
@@ -221,7 +219,8 @@
             this.outTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.outTextBox.Multiline = true;
             this.outTextBox.Name = "outTextBox";
-            this.outTextBox.Size = new System.Drawing.Size(445, 49);
+            this.outTextBox.ReadOnly = true;
+            this.outTextBox.Size = new System.Drawing.Size(445, 51);
             this.outTextBox.TabIndex = 0;
             // 
             // tabsControl
@@ -279,6 +278,7 @@
             this.ILCodeTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ILCodeTextBox.Location = new System.Drawing.Point(2, 2);
             this.ILCodeTextBox.Name = "ILCodeTextBox";
+            this.ILCodeTextBox.ReadOnly = true;
             this.ILCodeTextBox.Size = new System.Drawing.Size(442, 219);
             this.ILCodeTextBox.TabIndex = 0;
             this.ILCodeTextBox.Text = "";
@@ -300,6 +300,7 @@
             this.threeAddrTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.threeAddrTextBox.Location = new System.Drawing.Point(2, 2);
             this.threeAddrTextBox.Name = "threeAddrTextBox";
+            this.threeAddrTextBox.ReadOnly = true;
             this.threeAddrTextBox.Size = new System.Drawing.Size(442, 219);
             this.threeAddrTextBox.TabIndex = 0;
             this.threeAddrTextBox.Text = "";

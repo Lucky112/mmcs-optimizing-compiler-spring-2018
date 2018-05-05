@@ -11,7 +11,7 @@ namespace Compiler.IDE.Handlers
         public event EventHandler<SyntaxException> ParsingSyntaxErrored;
         public event EventHandler<LexException> ParsingLexErrored;
 
-        public void handle(string text)
+        public void Parse(string text)
         {
             try
             {

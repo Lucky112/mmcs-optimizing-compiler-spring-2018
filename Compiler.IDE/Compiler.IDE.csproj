@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handlers\ThreeAddrCodeHandler.cs" />
     <Compile Include="Handlers\ParseHandler.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
@@ -83,6 +84,10 @@
     <ProjectReference Include="..\Compiler.Parser\Compiler.Parser.csproj">
       <Project>{1A72E236-90D3-4729-9571-FDD1711E4CA7}</Project>
       <Name>Compiler.Parser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Compiler.ThreeAddrCode\Compiler.ThreeAddrCode.csproj">
+      <Project>{DB2C1BC7-72B2-429F-9AA1-F364E11DE437}</Project>
+      <Name>Compiler.ThreeAddrCode</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
