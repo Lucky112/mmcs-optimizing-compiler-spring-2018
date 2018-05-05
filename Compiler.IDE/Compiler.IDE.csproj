@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Handlers\CFGHandler.cs" />
+    <Compile Include="Handlers\OutputSanitizer.cs" />
     <Compile Include="Handlers\ThreeAddrCodeHandler.cs" />
     <Compile Include="Handlers\ParseHandler.cs" />
     <Compile Include="MainWindow.cs">

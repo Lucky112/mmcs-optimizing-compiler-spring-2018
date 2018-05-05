@@ -21,7 +21,7 @@ namespace Compiler.IDE.Handlers
 
         private void PostProcess(ThreeAddrCode.TACode code)
         {
-            String postProcessCode = code.ToString().Replace($"\"{Environment.NewLine}\"", "\"%NEW_LINE%\"");
+            string postProcessCode = OutputSanitizer.Sanitize(code.ToString(), OutputSanitizer.SanitizeLevel.TextBox);
             PrintableCodeGenerated(null, postProcessCode);
         }
     }
