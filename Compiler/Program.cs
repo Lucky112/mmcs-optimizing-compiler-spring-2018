@@ -39,6 +39,9 @@ namespace Compiler
             astRoot.Visit(tacodeVisitor);
             tacodeInstance = tacodeVisitor.Code;
             TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
+
+            Console.WriteLine(tacodeInstance.ToString());
+
             trans.Translate(tacodeInstance);
             var temp = trans.PrintCommands();
             trans.RunProgram();

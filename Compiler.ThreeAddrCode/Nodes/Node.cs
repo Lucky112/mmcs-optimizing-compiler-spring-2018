@@ -26,6 +26,7 @@ namespace Compiler.ThreeAddrCode.Nodes
         public Node()
         {
             Label = Guid.NewGuid();
+            TACodeNameManager.Instance.Label(Label);
         }
 
         public override bool Equals(object obj)

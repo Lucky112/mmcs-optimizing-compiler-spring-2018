@@ -7,7 +7,7 @@
     {
         public override string ToString()
         {
-            return $"{Label} : nop";
+            return $"{TACodeNameManager.Instance[Label]} : nop";
         }
     }
 }
