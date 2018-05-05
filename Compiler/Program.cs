@@ -29,7 +29,7 @@ namespace Compiler
             //var sTest = new SubexprTest();
             //sTest.SubexpressionOptimizationTest();
 
-            string fileName = @"..\..\sampleEuclide.txt";
+            string fileName = @"..\..\sample.txt";
 
             astRoot = AST(fileName);
             if (astRoot == null)
@@ -38,6 +38,10 @@ namespace Compiler
             var tacodeVisitor = new TACodeVisitor();
             astRoot.Visit(tacodeVisitor);
             tacodeInstance = tacodeVisitor.Code;
+
+            var allOpt = new AllOptimizations();
+            tacodeInstance.CodeList = allOpt.ApplyAllOptimizations(tacodeInstance.CodeList);
+
             TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
 
             Console.WriteLine(tacodeInstance.ToString());

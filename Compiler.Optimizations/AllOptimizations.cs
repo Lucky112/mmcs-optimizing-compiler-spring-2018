@@ -20,13 +20,13 @@ namespace Compiler.Optimizations
 			ConstantPropagation constPropOptimization = new ConstantPropagation();
 			DeclarationOptimization declOptimization = new DeclarationOptimization();
 
-			optimizations.Add(algOptimization);
 			optimizations.Add(copyPropOptimization);
 			optimizations.Add(constFoldingOptimization);
 			optimizations.Add(constPropOptimization);
-			optimizations.Add(declOptimization);
+			//optimizations.Add(declOptimization);
+            optimizations.Add(algOptimization);
 
-			return optimizations;
+            return optimizations;
 		}
 		public List<Node> ApplyAllOptimizations(List<Node> nodes)
 		{
