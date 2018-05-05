@@ -6,6 +6,7 @@ using Compiler.ThreeAddrCode.Expressions;
 using Compiler.ThreeAddrCode.Nodes;
 using Compiler.ThreeAddrCode.CFG;
 using Compiler.ThreeAddrCode.DFA.ReachingDefinitions;
+using Compiler.ThreeAddrCode.DFA;
 
 namespace Compiler.ThreeAddrCode.Tests
 {
@@ -111,9 +112,19 @@ namespace Compiler.ThreeAddrCode.Tests
             Assert.True(gen.SetEquals(new HashSet<Guid> { ass7.Label }));
             Assert.True(kill.SetEquals(new HashSet<Guid> { ass1.Label, ass4.Label }));
 
+            var inout = new GenericIterativeAlgorithm<HashSet<Guid>>()
+            {
+                Finish = (a, b) =>
+                {
+                    var (a1, a2) = a;
+                    var (b1, b2) = b;
 
-
-            var inout = (new IterativeAlgorithm()).Analyze(cfg, op, tf);
+                    return !a2.Except(b2).Any();
+                },
+                Comparer = (x, y) => !x.Except(y).Any(),
+                Fill = () => (op.Lower, op.Lower),
+                DebugToString = (x) => x.Aggregate("", (s, y) => s + ", " + TACodeNameManager.Instance[y])
+            }.Analyze(cfg, op, tf);
 
             var trueInOut = new DFA.InOutData<HashSet<System.Guid>>();
             trueInOut.Add(cfg.CFGNodes.ElementAt(0),
@@ -138,7 +149,16 @@ namespace Compiler.ThreeAddrCode.Tests
             );
 
             foreach (var x in cfg.CFGNodes)
-                Assert.True(trueInOut[x].Item1.SetEquals(inout[x].Item1) && trueInOut[x].Item2.SetEquals(inout[x].Item2));
+            {
+                HashSet<Guid> toutItem1 = trueInOut[x].Item1;
+                HashSet<Guid> outItem1 = inout[x].Item1;
+                HashSet<Guid> toutItem2 = trueInOut[x].Item2;
+                HashSet<Guid> outItem2 = inout[x].Item2;
+
+                var inEq = toutItem1.SetEquals(outItem1);
+                var outEq = toutItem2.SetEquals(outItem2);
+                Assert.True(inEq && outEq);
+            }
         }
 
         [Test] //Рандомный пример который я дороботал
@@ -238,7 +258,19 @@ namespace Compiler.ThreeAddrCode.Tests
 
 
             var outset = tf.Transfer(cfg.CFGNodes.ElementAt(0), op.Lower, op);
-            var inout = (new IterativeAlgorithm()).Analyze(cfg, op, tf);
+            var inout = new GenericIterativeAlgorithm<HashSet<Guid>>()
+            {
+                Finish = (a, b) =>
+                {
+                    var (a1, a2) = a;
+                    var (b1, b2) = b;
+
+                    return !a2.Except(b2).Any();
+                },
+                Comparer = (x, y) => !x.Except(y).Any(),
+                Fill = () => (op.Lower, op.Lower),
+                DebugToString = (x) => x.Aggregate("", (s, y) => s + ", " + TACodeNameManager.Instance[y])
+            }.Analyze(cfg, op, tf);
 
             var trueInOut = new DFA.InOutData<HashSet<System.Guid>>();
             trueInOut.Add(cfg.CFGNodes.ElementAt(0), 
@@ -263,7 +295,16 @@ namespace Compiler.ThreeAddrCode.Tests
             );
 
             foreach (var x in cfg.CFGNodes)
-                Assert.True(trueInOut[x].Item1.SetEquals(inout[x].Item1) && trueInOut[x].Item2.SetEquals(inout[x].Item2));
+            {
+                HashSet<Guid> toutItem1 = trueInOut[x].Item1;
+                HashSet<Guid> outItem1 = inout[x].Item1;
+                HashSet<Guid> toutItem2 = trueInOut[x].Item2;
+                HashSet<Guid> outItem2 = inout[x].Item2;
+
+                var inEq = toutItem1.SetEquals(outItem1);
+                var outEq = toutItem2.SetEquals(outItem2);
+                Assert.True(inEq && outEq);
+            }
         }
 
         
@@ -369,7 +410,19 @@ namespace Compiler.ThreeAddrCode.Tests
             Assert.True(gen.SetEquals(new HashSet<Guid> { ass7.Label }));
             Assert.True(kill.SetEquals(new HashSet<Guid> { ass1.Label, ass4.Label }));
 
-            var inout = (new IterativeAlgorithm()).Analyze(cfg, op, tf);
+            var inout = new GenericIterativeAlgorithm<HashSet<Guid>>()
+            {
+                Finish = (a, b) =>
+                {
+                    var (a1, a2) = a;
+                    var (b1, b2) = b;
+
+                    return !a2.Except(b2).Any();
+                },
+                Comparer = (x, y) => !x.Except(y).Any(),
+                Fill = () => (op.Lower, op.Lower),
+                DebugToString = (x) => x.Aggregate("", (s, y) => s + ", " + TACodeNameManager.Instance[y])
+            }.Analyze(cfg, op, tf);
 
             var trueInOut = new DFA.InOutData<HashSet<System.Guid>>();
             trueInOut.Add(cfg.CFGNodes.ElementAt(0),
@@ -394,7 +447,16 @@ namespace Compiler.ThreeAddrCode.Tests
             );
 
             foreach (var x in cfg.CFGNodes)
-                Assert.True(trueInOut[x].Item1.SetEquals(inout[x].Item1) && trueInOut[x].Item2.SetEquals(inout[x].Item2));
+            {
+                HashSet<Guid> toutItem1 = trueInOut[x].Item1;
+                HashSet<Guid> outItem1 = inout[x].Item1;
+                HashSet<Guid> toutItem2 = trueInOut[x].Item2;
+                HashSet<Guid> outItem2 = inout[x].Item2;
+
+                var inEq = toutItem1.SetEquals(outItem1);
+                var outEq = toutItem2.SetEquals(outItem2);
+                Assert.True(inEq && outEq);
+            }
 
         }
     }

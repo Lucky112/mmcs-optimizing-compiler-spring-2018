@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using Compiler.Parser.AST;
 using Compiler.ILcodeGenerator;
+using System.Collections.Generic;
 
 namespace Compiler
 {
