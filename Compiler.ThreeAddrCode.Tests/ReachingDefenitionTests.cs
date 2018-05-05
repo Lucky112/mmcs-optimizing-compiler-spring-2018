@@ -240,19 +240,20 @@ namespace Compiler.ThreeAddrCode.Tests
             Assert.True(gen.SetEquals(new HashSet<Guid> { ass1.Label }));
             Assert.True(kill.SetEquals(new HashSet<Guid> { }));
 
-            (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(0), op);
+            (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(1), op);
+            var lName = TACodeNameManager.Instance[gen.ElementAt(0)];
             Assert.True(gen.SetEquals(new HashSet<Guid> {  ass2.Label}));
             Assert.True(kill.SetEquals(new HashSet<Guid> { }));
 
-            (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(0), op);
+            (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(2), op);
             Assert.True(gen.SetEquals(new HashSet<Guid> { ass3.Label  }));
             Assert.True(kill.SetEquals(new HashSet<Guid> {  }));
 
-            (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(0), op);
+            (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(3), op);
             Assert.True(gen.SetEquals(new HashSet<Guid> { ass4.Label  }));
             Assert.True(kill.SetEquals(new HashSet<Guid> {  }));
 
-            (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(0), op);
+            (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(4), op);
             Assert.True(gen.SetEquals(new HashSet<Guid> {  ass5.Label, ass6.Label }));
             Assert.True(kill.SetEquals(new HashSet<Guid> { }));
 
@@ -399,16 +400,23 @@ namespace Compiler.ThreeAddrCode.Tests
             Assert.True(kill.SetEquals(new HashSet<Guid> { ass4.Label, ass5.Label, ass6.Label, ass7.Label }));
 
             (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(1), op);
-            Assert.True(gen.SetEquals(new HashSet<Guid> { ass6.Label }));
+            Assert.True(gen.SetEquals(new HashSet<Guid> { ass4.Label }));
             Assert.True(kill.SetEquals(new HashSet<Guid> { ass3.Label }));
 
             (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(2), op);
-            Assert.True(gen.SetEquals(new HashSet<Guid> { ass4.Label, ass5.Label }));
+            Assert.True(gen.SetEquals(new HashSet<Guid> { ass5.Label, ass6.Label }));
             Assert.True(kill.SetEquals(new HashSet<Guid> { ass1.Label, ass2.Label, ass7.Label }));
 
             (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(3), op);
+
+            var genStr1 = TACodeNameManager.Instance[kill.ElementAt(0)];
+            var genStr2 = TACodeNameManager.Instance[kill.ElementAt(1)];
+
+            var real1 = TACodeNameManager.Instance[ass1.Label];
+            var real2 = TACodeNameManager.Instance[ass4.Label];
+
             Assert.True(gen.SetEquals(new HashSet<Guid> { ass7.Label }));
-            Assert.True(kill.SetEquals(new HashSet<Guid> { ass1.Label, ass4.Label }));
+            Assert.True(kill.SetEquals(new HashSet<Guid> { ass1.Label, ass5.Label }));
 
             var inout = new GenericIterativeAlgorithm<HashSet<Guid>>()
             {
