@@ -80,7 +80,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(618, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(549, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -134,7 +134,7 @@
             this.mainBox.Margin = new System.Windows.Forms.Padding(2);
             this.mainBox.Name = "mainBox";
             this.mainBox.Padding = new System.Windows.Forms.Padding(2);
-            this.mainBox.Size = new System.Drawing.Size(144, 324);
+            this.mainBox.Size = new System.Drawing.Size(144, 341);
             this.mainBox.TabIndex = 1;
             this.mainBox.TabStop = false;
             this.mainBox.Text = "Control Panel";
@@ -152,7 +152,7 @@
             // compileButton
             // 
             this.compileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.compileButton.Location = new System.Drawing.Point(3, 301);
+            this.compileButton.Location = new System.Drawing.Point(3, 318);
             this.compileButton.Margin = new System.Windows.Forms.Padding(2);
             this.compileButton.Name = "compileButton";
             this.compileButton.Size = new System.Drawing.Size(67, 20);
@@ -164,7 +164,7 @@
             // 
             this.runButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.runButton.Enabled = false;
-            this.runButton.Location = new System.Drawing.Point(74, 301);
+            this.runButton.Location = new System.Drawing.Point(74, 318);
             this.runButton.Margin = new System.Windows.Forms.Padding(2);
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(67, 20);
@@ -192,7 +192,7 @@
             this.optsList.Location = new System.Drawing.Point(3, 61);
             this.optsList.Margin = new System.Windows.Forms.Padding(2);
             this.optsList.Name = "optsList";
-            this.optsList.Size = new System.Drawing.Size(139, 229);
+            this.optsList.Size = new System.Drawing.Size(139, 244);
             this.optsList.TabIndex = 2;
             // 
             // outBox
@@ -205,7 +205,7 @@
             this.outBox.Margin = new System.Windows.Forms.Padding(2);
             this.outBox.Name = "outBox";
             this.outBox.Padding = new System.Windows.Forms.Padding(2);
-            this.outBox.Size = new System.Drawing.Size(449, 68);
+            this.outBox.Size = new System.Drawing.Size(380, 63);
             this.outBox.TabIndex = 2;
             this.outBox.TabStop = false;
             this.outBox.Text = "Output";
@@ -220,7 +220,7 @@
             this.outTextBox.Multiline = true;
             this.outTextBox.Name = "outTextBox";
             this.outTextBox.ReadOnly = true;
-            this.outTextBox.Size = new System.Drawing.Size(445, 51);
+            this.outTextBox.Size = new System.Drawing.Size(376, 44);
             this.outTextBox.TabIndex = 0;
             // 
             // tabsControl
@@ -237,7 +237,7 @@
             this.tabsControl.Margin = new System.Windows.Forms.Padding(2);
             this.tabsControl.Name = "tabsControl";
             this.tabsControl.SelectedIndex = 0;
-            this.tabsControl.Size = new System.Drawing.Size(454, 249);
+            this.tabsControl.Size = new System.Drawing.Size(385, 262);
             this.tabsControl.TabIndex = 3;
             // 
             // inputPage
@@ -307,43 +307,45 @@
             // 
             // CFGPage
             // 
+            this.CFGPage.AutoScroll = true;
             this.CFGPage.Controls.Add(this.CFGPictureBox);
             this.CFGPage.Location = new System.Drawing.Point(4, 22);
             this.CFGPage.Margin = new System.Windows.Forms.Padding(2);
             this.CFGPage.Name = "CFGPage";
             this.CFGPage.Padding = new System.Windows.Forms.Padding(2);
-            this.CFGPage.Size = new System.Drawing.Size(446, 223);
+            this.CFGPage.Size = new System.Drawing.Size(377, 236);
             this.CFGPage.TabIndex = 3;
             this.CFGPage.Text = "CFG";
             this.CFGPage.UseVisualStyleBackColor = true;
             // 
             // CFGPictureBox
             // 
-            this.CFGPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CFGPictureBox.Location = new System.Drawing.Point(2, 2);
+            this.CFGPictureBox.Location = new System.Drawing.Point(5, 5);
             this.CFGPictureBox.Name = "CFGPictureBox";
-            this.CFGPictureBox.Size = new System.Drawing.Size(442, 219);
+            this.CFGPictureBox.Size = new System.Drawing.Size(140, 72);
+            this.CFGPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.CFGPictureBox.TabIndex = 0;
             this.CFGPictureBox.TabStop = false;
             // 
             // ASTPage
             // 
+            this.ASTPage.AutoScroll = true;
             this.ASTPage.Controls.Add(this.ASTPictureBox);
             this.ASTPage.Location = new System.Drawing.Point(4, 22);
             this.ASTPage.Margin = new System.Windows.Forms.Padding(2);
             this.ASTPage.Name = "ASTPage";
             this.ASTPage.Padding = new System.Windows.Forms.Padding(2);
-            this.ASTPage.Size = new System.Drawing.Size(446, 223);
+            this.ASTPage.Size = new System.Drawing.Size(377, 236);
             this.ASTPage.TabIndex = 4;
             this.ASTPage.Text = "AST";
             this.ASTPage.UseVisualStyleBackColor = true;
             // 
             // ASTPictureBox
             // 
-            this.ASTPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ASTPictureBox.Location = new System.Drawing.Point(2, 2);
+            this.ASTPictureBox.Location = new System.Drawing.Point(5, 5);
             this.ASTPictureBox.Name = "ASTPictureBox";
-            this.ASTPictureBox.Size = new System.Drawing.Size(442, 219);
+            this.ASTPictureBox.Size = new System.Drawing.Size(99, 86);
+            this.ASTPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.ASTPictureBox.TabIndex = 0;
             this.ASTPictureBox.TabStop = false;
             // 
@@ -364,8 +366,8 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.outBox);
-            this.splitContainer.Size = new System.Drawing.Size(458, 324);
-            this.splitContainer.SplitterDistance = 251;
+            this.splitContainer.Size = new System.Drawing.Size(389, 341);
+            this.splitContainer.SplitterDistance = 264;
             this.splitContainer.SplitterWidth = 2;
             this.splitContainer.TabIndex = 4;
             // 
@@ -373,7 +375,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(618, 353);
+            this.ClientSize = new System.Drawing.Size(549, 370);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.mainBox);
             this.Controls.Add(this.menuStrip1);
@@ -391,8 +393,10 @@
             this.ILCodePage.ResumeLayout(false);
             this.threeAddrPage.ResumeLayout(false);
             this.CFGPage.ResumeLayout(false);
+            this.CFGPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CFGPictureBox)).EndInit();
             this.ASTPage.ResumeLayout(false);
+            this.ASTPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ASTPictureBox)).EndInit();
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);

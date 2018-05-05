@@ -13,6 +13,7 @@ namespace Compiler.IDE
 
         ParseHandler parseHandler = new ParseHandler();
         ThreeAddrCodeHandler threeCodeHandler = new ThreeAddrCodeHandler();
+        CFGHandler cfgHandler = new CFGHandler();
 
         public MainWindow()
         {
@@ -39,9 +40,12 @@ namespace Compiler.IDE
             parseHandler.ParsingLexErrored += (o, e) => outTextBox.AppendText($"Лексическая ошибка. {e.Message}\n");
 
             parseHandler.ParsingCompleted += (o, e) => runButton.Enabled = true;
-            parseHandler.ParsingCompleted += threeCodeHandler.GenerateThreeAddrCode;
 
-            threeCodeHandler.GenerationCompleted += (o, e) => threeAddrTextBox.Text = e;
+            parseHandler.ParsingCompleted += threeCodeHandler.GenerateThreeAddrCode;
+            threeCodeHandler.PrintableCodeGenerated += (o, e) => threeAddrTextBox.Text = e;
+
+            threeCodeHandler.GenerationCompleted += (o, e) => cfgHandler.GenerateCFGImage(e);
+            cfgHandler.GenerationCompleted += (o, e) => CFGPictureBox.Image = e;
         }
 
         private void ClearAll()

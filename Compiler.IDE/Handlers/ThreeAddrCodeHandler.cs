@@ -6,17 +6,23 @@ namespace Compiler.IDE.Handlers
 {
     class ThreeAddrCodeHandler
     {
-        public event EventHandler<String> GenerationCompleted;
+        public event EventHandler<ThreeAddrCode.TACode> GenerationCompleted;
+        public event EventHandler<string> PrintableCodeGenerated;
 
         public void GenerateThreeAddrCode(object sender, BlockNode e)
         {
             var visitor = new TACodeVisitor();
             e.Visit(visitor);
 
-            String code = visitor.Code.ToString();
-            String postProcessCode = code.Replace($"\"{Environment.NewLine}\"", "\"%NEW_LINE%\"");
+            GenerationCompleted(null, visitor.Code);
 
-            GenerationCompleted(null, postProcessCode);
+            PostProcess(visitor.Code);
+        }
+
+        private void PostProcess(ThreeAddrCode.TACode code)
+        {
+            String postProcessCode = code.ToString().Replace($"\"{Environment.NewLine}\"", "\"%NEW_LINE%\"");
+            PrintableCodeGenerated(null, postProcessCode);
         }
     }
 }
