@@ -40,7 +40,7 @@ namespace Compiler
             tacodeInstance = tacodeVisitor.Code;
 
             var allOpt = new AllOptimizations();
-            tacodeInstance.CodeList = allOpt.ApplyAllOptimizations(tacodeInstance.CodeList);
+            tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
 
             TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
 
@@ -396,7 +396,7 @@ namespace Compiler
 
 			Console.WriteLine($"Testing All Optimizations Together.\n Three Adress Code:\n {taCodeAllOptimizations}");
 			var allOptimizations = new AllOptimizations();
-			allOptimizations.ApplyAllOptimizations(taCodeAllOptimizations.CodeList.ToList());
+			allOptimizations.ApplyAllOptimizations(taCodeAllOptimizations);
 			Console.WriteLine($"Three Adress Code Code\n: {taCodeAllOptimizations}");
 			Console.WriteLine("-----------------------------------------");
 		}

@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Compiler.Optimizations;
+using Compiler.ThreeAddrCode;
 using Compiler.ThreeAddrCode.Nodes;
 
 namespace Compiler.Optimizations
 {
 	public class AllOptimizations
 	{
-		private List<IOptimization> CreateOptimizationList()
+		private List<IOptimization> BasicBlockOptimizationList()
 		{
 			List<IOptimization> optimizations = new List<IOptimization>();
 
@@ -28,22 +29,40 @@ namespace Compiler.Optimizations
 
             return optimizations;
 		}
-		public List<Node> ApplyAllOptimizations(List<Node> nodes)
+
+        private List<IOptimization> O2OptimizationList()
+        {
+            return new List<IOptimization>();
+        }
+
+
+        public TACode ApplyAllOptimizations(TACode code)
 		{
-			List<IOptimization> optimizations = CreateOptimizationList();
+			List<IOptimization> o1Optimizations = BasicBlockOptimizationList();
+            var canApplyAny = true;
 
-			for(int i = 0; i < optimizations.Count; i++)
-			{
-				int j = 0;
-				optimizations[i].Optimize(nodes, out var applied);
-				while(i > 0 && j != i)
-				{
-					optimizations[j].Optimize(nodes, out var applied2);
-					j++;
-				}
-			}
+            while (canApplyAny)
+            {
+                canApplyAny = false;
+                var blocks = code.CreateBasicBlockList().ToList();
+                var codeList = new List<Node>();
 
-			return nodes;
+                foreach (var b in blocks)
+                {
+                    var block = b.CodeList.ToList();
+                    for (int i = 0; i < o1Optimizations.Count; i++)
+                    {
+                        block = o1Optimizations[i].Optimize(block, out var applied);
+                        canApplyAny = canApplyAny || applied;
+                    }
+                    codeList.AddRange(block);
+                }
+
+                code = new TACode();
+                code.CodeList = codeList;
+            }
+
+			return code;
 		}
 	}
 }

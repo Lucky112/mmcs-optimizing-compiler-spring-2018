@@ -77,8 +77,8 @@ namespace Compiler.Optimizations
                             app = SetLeft(node, 1);
                         break;
                     
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    //default:
+                        //throw new ArgumentOutOfRangeException();
                 }
             }
 
