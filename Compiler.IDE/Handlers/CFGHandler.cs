@@ -39,7 +39,8 @@ namespace Compiler.IDE.Handlers
 
         private string GetNameForGuid(Guid guid)
         {
-            return "b" + guid.ToString().Substring(0, 3);
+            // добавляем какой-нибудь текстовый префикс
+            return "b" + guid.ToString().Substring(0, 4);
         }
 
         private string BuildDotGraph(ControlFlowGraph cfg)
@@ -52,7 +53,7 @@ namespace Compiler.IDE.Handlers
             {
                 string name = GetNameForGuid(node.BlockId);
                 
-                // [label = "<TEXT>\l<TEXT>"]
+                // <ИМЯ_УЗЛА> [label = "<TEXT>\l<TEXT>"]
                 sb.Append($"{name}  [label = \"");
                 foreach (var cmd in node.CodeList)
                 {
@@ -67,18 +68,12 @@ namespace Compiler.IDE.Handlers
             foreach (var node in cfg.CFGNodes)
             {
                 string name = GetNameForGuid(node.BlockId);
-
-                foreach (var p in node.Parents)
+                // строим по потомкам
+                foreach (var c in node.Children)
                 {
-                    string pName = GetNameForGuid(p.BlockId);
-                    sb.Append($"{name} -> {pName}[dir=both, arrowhead=none];\n");
+                    string cName = GetNameForGuid(c.BlockId);
+                    sb.Append($"{name} -> {cName};\n");
                 }
-
-                //foreach (var c in node.Parents)
-                //{
-                //    string cName = GetNameForGuid(c.BlockId);
-                //    sb.Append($"{name} -> {cName};\n");
-                //}
             }
 
             sb.Append("}");
