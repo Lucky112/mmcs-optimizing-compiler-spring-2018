@@ -12,11 +12,13 @@ namespace Compiler.IDE
         OpenFileDialog sourceDialog = new OpenFileDialog();
         SaveFileDialog saveGraphDialog = new SaveFileDialog();
         private Image cfgImage;
+        private Image astImage;
 
         ParseHandler parseHandler = new ParseHandler();
         ThreeAddrCodeHandler threeCodeHandler = new ThreeAddrCodeHandler();
         CFGHandler cfgHandler = new CFGHandler();
-        
+        ASTHandler astHandler = new ASTHandler();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -25,27 +27,44 @@ namespace Compiler.IDE
             InitOutputListeners();
             InitInputTabListeners();
             InitCfgTabListeners();
+            InitAstTabListeners();
         }
 
         private void InitCommonListeners()
         {
+            // open/exit
             exitToolStripMenuItem.Click += (o, e) => Application.Exit();
             openToolStripMenuItem.Click += (o, e) => OpenSourceFile();
 
+            // compile button
             compileButton.Click += (o, e) => ClearOutput();
             compileButton.Click += (o, e) => parseHandler.Parse(inputTextBox.Text);
 
+            // successful compilation
             parseHandler.ParsingCompleted += (o, e) =>
             {
                 runButton.Enabled = true;
 
                 cfgSaveButton.Enabled = true;
                 cfgScaleBar.Enabled = true;
+
+                astSaveButton.Enabled = true;
+                astTrackBar.Enabled = true;
             };
 
+            // AST
+            parseHandler.ParsingCompleted += (o, e) => astHandler.GenerateASTImage(e);
+            astHandler.GenerationCompleted += (o, e) =>
+            {
+                astImage = e;
+                ASTPictureBox.Image = astImage;
+            };
+
+            // 3-addr code
             parseHandler.ParsingCompleted += threeCodeHandler.GenerateThreeAddrCode;
             threeCodeHandler.PrintableCodeGenerated += (o, e) => threeAddrTextBox.Text = e;
 
+            // CFG
             threeCodeHandler.GenerationCompleted += (o, e) => cfgHandler.GenerateCFGImage(e);
             cfgHandler.GenerationCompleted += (o, e) =>
             {
@@ -63,12 +82,12 @@ namespace Compiler.IDE
             parseHandler.ParsingCompleted += (o, e) => outTextBox.AppendText("Синтаксическое дерево построено" + Environment.NewLine);
             threeCodeHandler.PrintableCodeGenerated += (o, e) => outTextBox.AppendText("Создание трехадресного кода завершено" + Environment.NewLine);
             cfgHandler.GenerationCompleted += (o, e) => outTextBox.AppendText("Граф потока управления построен" + Environment.NewLine);
+            astHandler.GenerationCompleted += (o, e) => outTextBox.AppendText("Граф AST построен" + Environment.NewLine);
         }
 
         private void InitInputTabListeners()
         {
             inputTextBox.TextChanged += (o, e) => runButton.Enabled = false;
-            inputTextBox.TextChanged += (o, e) => ClearAll();
         }
 
         private void InitCfgTabListeners()
@@ -78,11 +97,11 @@ namespace Compiler.IDE
             cfgSaveButton.Click += (o, e) => SaveGraphFile(CFGPictureBox);
         }
 
-        private void ClearAll()
+        private void InitAstTabListeners()
         {
-            ClearOutput();
-            ILCodeTextBox.Text = "";
-            threeAddrTextBox.Text = "";
+            astTrackBar.ValueChanged += (o, e) =>
+                    ASTPictureBox.Image = Utils.ScaleImage(astImage, Utils.TrackBarToScale(astTrackBar));
+            astSaveButton.Click += (o, e) => SaveGraphFile(ASTPictureBox);
         }
 
         private void ClearOutput()

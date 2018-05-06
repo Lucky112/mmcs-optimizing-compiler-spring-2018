@@ -47,8 +47,8 @@ namespace Compiler.IDE.Handlers
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("digraph CFG { \n");
-            sb.Append("node[shape = record]\n\n");
-            sb.Append("ordering=out\n");
+            sb.Append("node[shape = record];\n\n");
+            sb.Append("graph [splines=ortho, nodesep=1, overlap=false];\n");
             foreach (var node in cfg.CFGNodes)
             {
                 string name = GetNameForGuid(node.BlockId);
