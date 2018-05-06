@@ -1,6 +1,7 @@
 ﻿using Compiler.IDE.Handlers;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 
@@ -8,9 +9,8 @@ namespace Compiler.IDE
 {
     public partial class MainWindow : Form
     {
-        public event EventHandler<string> FileSelected;
-
-        OpenFileDialog fileDialog = new OpenFileDialog();
+        OpenFileDialog sourceDialog = new OpenFileDialog();
+        SaveFileDialog saveGraphDialog = new SaveFileDialog();
         private Image cfgImage;
 
         ParseHandler parseHandler = new ParseHandler();
@@ -30,8 +30,7 @@ namespace Compiler.IDE
         private void InitCommonListeners()
         {
             exitToolStripMenuItem.Click += (o, e) => Application.Exit();
-            openToolStripMenuItem.Click += (o, e) => SelectFile();
-            FileSelected += (o, e) => inputTextBox.Text = File.ReadAllText(fileDialog.FileName);
+            openToolStripMenuItem.Click += (o, e) => OpenSourceFile();
 
             compileButton.Click += (o, e) => ClearOutput();
             compileButton.Click += (o, e) => parseHandler.Parse(inputTextBox.Text);
@@ -76,6 +75,7 @@ namespace Compiler.IDE
         {
             cfgScaleBar.ValueChanged += (o, e) => 
                     CFGPictureBox.Image = Utils.ScaleImage(cfgImage, Utils.TrackBarToScale(cfgScaleBar));
+            cfgSaveButton.Click += (o, e) => SaveGraphFile(CFGPictureBox);
         }
 
         private void ClearAll()
@@ -90,17 +90,38 @@ namespace Compiler.IDE
             outTextBox.Text = "";
         }
 
-        private void SelectFile()
+        private void OpenSourceFile()
         {
-            fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-            fileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            fileDialog.FilterIndex = 2;
-            fileDialog.RestoreDirectory = true;
+            sourceDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            sourceDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            sourceDialog.FilterIndex = 2;
+            sourceDialog.RestoreDirectory = true;
 
-            if (fileDialog.ShowDialog() != DialogResult.OK)
+            if (sourceDialog.ShowDialog() != DialogResult.OK)
                 return;
 
-            FileSelected(null, fileDialog.FileName);
+            inputTextBox.Text = File.ReadAllText(sourceDialog.FileName);
+        }
+
+        private void SaveGraphFile(PictureBox picbox)
+        {
+            saveGraphDialog.Filter = "Images|*.png;*.bmp;*.jpg";
+            saveGraphDialog.RestoreDirectory = true;
+            ImageFormat format = ImageFormat.Png;
+            if (saveGraphDialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            string ext = Path.GetExtension(saveGraphDialog.FileName);
+            switch (ext)
+            {
+                case ".jpg":
+                    format = ImageFormat.Jpeg;
+                    break;
+                case ".bmp":
+                    format = ImageFormat.Bmp;
+                    break;
+            }
+            picbox.Image.Save(saveGraphDialog.FileName, format);
         }
     }
 }
