@@ -46,9 +46,9 @@ namespace Compiler.IDE.Handlers
         private string BuildDotGraph(ControlFlowGraph cfg)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("digraph CFG { \n");
-            sb.Append("node[shape = record];\n\n");
-            sb.Append("graph [splines=ortho, nodesep=1, overlap=false];\n");
+            sb.AppendLine("digraph CFG {");
+            sb.AppendLine("node[shape = record];\n");
+            sb.AppendLine("graph [splines=ortho, nodesep=1, overlap=false];");
             foreach (var node in cfg.CFGNodes)
             {
                 string name = GetNameForGuid(node.BlockId);
@@ -60,9 +60,9 @@ namespace Compiler.IDE.Handlers
                     string cmdText = OutputSanitizer.Sanitize(cmd.ToString(), OutputSanitizer.SanitizeLevel.DotFile);
                     sb.Append(cmdText + @"\l");
                 }
-                sb.Append("\"]\n");
+                sb.AppendLine("\"]");
             }
-            sb.Append("\n\n");
+            sb.AppendLine("\n");
 
             // генерируем дуги
             foreach (var node in cfg.CFGNodes)
@@ -72,11 +72,11 @@ namespace Compiler.IDE.Handlers
                 foreach (var c in node.Children)
                 {
                     string cName = GetNameForGuid(c.BlockId);
-                    sb.Append($"{name} -> {cName};\n");
+                    sb.AppendLine($"{name} -> {cName};");
                 }
             }
 
-            sb.Append("}");
+            sb.AppendLine("}");
 
             return sb.ToString();
         }
