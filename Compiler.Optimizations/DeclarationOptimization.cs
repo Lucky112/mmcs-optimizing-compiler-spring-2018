@@ -52,40 +52,60 @@ namespace Compiler.Optimizations
                             // If current result id in currentVariables, try to move it
                             if (currentVariables.Contains(id) && !iAssign.IsLabeled)
                             {
-                                for (int j = i + 1; j < currentIndex; j++)
+                                int j = i + 1;
+                                while (j < currentIndex)
                                 {
+                                    try
+                                    {
+                                        if (nodes[j + 1] is Assign nnAssign && nodes[j] is Assign nAssign)
+                                        {
+                                            if (nnAssign.Left is Var nnLeft && nnAssign.Right is Var nnRight)
+                                            {
+                                                if (nnLeft.Id == id && nnRight.Id == nAssign.Result.Id)
+                                                {
+                                                    break;
+                                                }
+                                                if (nnLeft.Id == nAssign.Result.Id && nnRight.Id == id)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
                                     if (nodes[j] is Assign jAssign)
                                     {
                                         // If left or right is Variable, stop moving
-                                        if (iAssign.Left is Var || iAssign.Right is Var)
+                                        if (jAssign.Left is Var || jAssign.Right is Var)
                                         {
-                                            if (iAssign.Left is Var iLeft)
+                                            if (jAssign.Left is Var jLeft)
                                             {
-                                                if (jAssign.Result.Id == iLeft.Id)
+                                                if (id == jLeft.Id)
                                                 {
                                                     break;
                                                 }
                                             }
                                             else
                                             {
-                                                if (jAssign.Result.Id == (iAssign.Right as Var).Id)
+                                                if (id == (jAssign.Right as Var).Id)
                                                 {
                                                     break;
                                                 }
                                             }
                                         }
-                                        // else move node
-                                        app = true;
-                                        var tmp = nodes[i];
-                                        nodes[i] = nodes[j];
-                                        nodes[j] = tmp;
-                                        i++;
                                     }
-
-                                    // remove from currentVariables and add to used variables
-                                    currentVariables.Remove(id);
-                                    usedVariables.Add(id);
+                                    // else move node
+                                    var tmp = nodes[i];
+                                    nodes[i] = nodes[j];
+                                    nodes[j] = tmp;
+                                    j++;
+                                    i++;
                                 }
+                                // remove from currentVariables and add to used variables
+                                currentVariables.Remove(id);
+                                usedVariables.Add(id);
                             }
                         }
                     }
