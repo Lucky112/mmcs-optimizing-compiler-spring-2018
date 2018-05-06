@@ -50,10 +50,18 @@
             this.threeAddrPage = new System.Windows.Forms.TabPage();
             this.threeAddrTextBox = new System.Windows.Forms.RichTextBox();
             this.CFGPage = new System.Windows.Forms.TabPage();
+            this.cfgScalePanel = new System.Windows.Forms.Panel();
+            this.cfgScaleBar = new System.Windows.Forms.TrackBar();
+            this.cfgSaveButton = new System.Windows.Forms.Button();
+            this.cfgPanel = new System.Windows.Forms.Panel();
             this.CFGPictureBox = new System.Windows.Forms.PictureBox();
-            this.ASTPage = new System.Windows.Forms.TabPage();
-            this.ASTPictureBox = new System.Windows.Forms.PictureBox();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.ASTPage = new System.Windows.Forms.TabPage();
+            this.astPanel = new System.Windows.Forms.Panel();
+            this.astTrackBar = new System.Windows.Forms.TrackBar();
+            this.astSaveButton = new System.Windows.Forms.Button();
+            this.astTabPanel = new System.Windows.Forms.Panel();
+            this.ASTPictureBox = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.mainBox.SuspendLayout();
             this.outBox.SuspendLayout();
@@ -62,13 +70,19 @@
             this.ILCodePage.SuspendLayout();
             this.threeAddrPage.SuspendLayout();
             this.CFGPage.SuspendLayout();
+            this.cfgScalePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cfgScaleBar)).BeginInit();
+            this.cfgPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CFGPictureBox)).BeginInit();
-            this.ASTPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ASTPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            this.ASTPage.SuspendLayout();
+            this.astPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.astTrackBar)).BeginInit();
+            this.astTabPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ASTPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -215,6 +229,7 @@
             this.outTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.outTextBox.BackColor = System.Drawing.Color.White;
             this.outTextBox.Location = new System.Drawing.Point(3, 15);
             this.outTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.outTextBox.Multiline = true;
@@ -247,7 +262,7 @@
             this.inputPage.Margin = new System.Windows.Forms.Padding(2);
             this.inputPage.Name = "inputPage";
             this.inputPage.Padding = new System.Windows.Forms.Padding(2);
-            this.inputPage.Size = new System.Drawing.Size(446, 223);
+            this.inputPage.Size = new System.Drawing.Size(377, 236);
             this.inputPage.TabIndex = 0;
             this.inputPage.Text = "Input";
             this.inputPage.UseVisualStyleBackColor = true;
@@ -257,7 +272,7 @@
             this.inputTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inputTextBox.Location = new System.Drawing.Point(2, 2);
             this.inputTextBox.Name = "inputTextBox";
-            this.inputTextBox.Size = new System.Drawing.Size(442, 219);
+            this.inputTextBox.Size = new System.Drawing.Size(373, 232);
             this.inputTextBox.TabIndex = 0;
             this.inputTextBox.Text = "";
             // 
@@ -268,18 +283,19 @@
             this.ILCodePage.Margin = new System.Windows.Forms.Padding(2);
             this.ILCodePage.Name = "ILCodePage";
             this.ILCodePage.Padding = new System.Windows.Forms.Padding(2);
-            this.ILCodePage.Size = new System.Drawing.Size(446, 223);
+            this.ILCodePage.Size = new System.Drawing.Size(377, 236);
             this.ILCodePage.TabIndex = 1;
             this.ILCodePage.Text = "IL-Code";
             this.ILCodePage.UseVisualStyleBackColor = true;
             // 
             // ILCodeTextBox
             // 
+            this.ILCodeTextBox.BackColor = System.Drawing.Color.White;
             this.ILCodeTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ILCodeTextBox.Location = new System.Drawing.Point(2, 2);
             this.ILCodeTextBox.Name = "ILCodeTextBox";
             this.ILCodeTextBox.ReadOnly = true;
-            this.ILCodeTextBox.Size = new System.Drawing.Size(442, 219);
+            this.ILCodeTextBox.Size = new System.Drawing.Size(373, 232);
             this.ILCodeTextBox.TabIndex = 0;
             this.ILCodeTextBox.Text = "";
             // 
@@ -290,25 +306,27 @@
             this.threeAddrPage.Margin = new System.Windows.Forms.Padding(2);
             this.threeAddrPage.Name = "threeAddrPage";
             this.threeAddrPage.Padding = new System.Windows.Forms.Padding(2);
-            this.threeAddrPage.Size = new System.Drawing.Size(446, 223);
+            this.threeAddrPage.Size = new System.Drawing.Size(377, 236);
             this.threeAddrPage.TabIndex = 2;
             this.threeAddrPage.Text = "3-Address Code";
             this.threeAddrPage.UseVisualStyleBackColor = true;
             // 
             // threeAddrTextBox
             // 
+            this.threeAddrTextBox.BackColor = System.Drawing.Color.White;
             this.threeAddrTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.threeAddrTextBox.Location = new System.Drawing.Point(2, 2);
             this.threeAddrTextBox.Name = "threeAddrTextBox";
             this.threeAddrTextBox.ReadOnly = true;
-            this.threeAddrTextBox.Size = new System.Drawing.Size(442, 219);
+            this.threeAddrTextBox.Size = new System.Drawing.Size(373, 232);
             this.threeAddrTextBox.TabIndex = 0;
             this.threeAddrTextBox.Text = "";
             // 
             // CFGPage
             // 
-            this.CFGPage.AutoScroll = true;
-            this.CFGPage.Controls.Add(this.CFGPictureBox);
+            this.CFGPage.Controls.Add(this.cfgScalePanel);
+            this.CFGPage.Controls.Add(this.cfgSaveButton);
+            this.CFGPage.Controls.Add(this.cfgPanel);
             this.CFGPage.Location = new System.Drawing.Point(4, 22);
             this.CFGPage.Margin = new System.Windows.Forms.Padding(2);
             this.CFGPage.Name = "CFGPage";
@@ -318,36 +336,62 @@
             this.CFGPage.Text = "CFG";
             this.CFGPage.UseVisualStyleBackColor = true;
             // 
+            // cfgScalePanel
+            // 
+            this.cfgScalePanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cfgScalePanel.Controls.Add(this.cfgScaleBar);
+            this.cfgScalePanel.Location = new System.Drawing.Point(5, 210);
+            this.cfgScalePanel.Name = "cfgScalePanel";
+            this.cfgScalePanel.Size = new System.Drawing.Size(286, 21);
+            this.cfgScalePanel.TabIndex = 5;
+            // 
+            // cfgScaleBar
+            // 
+            this.cfgScaleBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cfgScaleBar.BackColor = System.Drawing.Color.White;
+            this.cfgScaleBar.Enabled = false;
+            this.cfgScaleBar.Location = new System.Drawing.Point(5, -1);
+            this.cfgScaleBar.Maximum = 100;
+            this.cfgScaleBar.Name = "cfgScaleBar";
+            this.cfgScaleBar.Size = new System.Drawing.Size(277, 45);
+            this.cfgScaleBar.TabIndex = 2;
+            this.cfgScaleBar.TickFrequency = 10;
+            this.cfgScaleBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.cfgScaleBar.Value = 100;
+            // 
+            // cfgSaveButton
+            // 
+            this.cfgSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cfgSaveButton.Enabled = false;
+            this.cfgSaveButton.Location = new System.Drawing.Point(297, 208);
+            this.cfgSaveButton.Name = "cfgSaveButton";
+            this.cfgSaveButton.Size = new System.Drawing.Size(75, 23);
+            this.cfgSaveButton.TabIndex = 4;
+            this.cfgSaveButton.Text = "Save";
+            this.cfgSaveButton.UseVisualStyleBackColor = true;
+            // 
+            // cfgPanel
+            // 
+            this.cfgPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cfgPanel.AutoScroll = true;
+            this.cfgPanel.Controls.Add(this.CFGPictureBox);
+            this.cfgPanel.Location = new System.Drawing.Point(5, 5);
+            this.cfgPanel.Name = "cfgPanel";
+            this.cfgPanel.Size = new System.Drawing.Size(367, 198);
+            this.cfgPanel.TabIndex = 1;
+            // 
             // CFGPictureBox
             // 
-            this.CFGPictureBox.Location = new System.Drawing.Point(5, 5);
+            this.CFGPictureBox.Location = new System.Drawing.Point(3, 3);
             this.CFGPictureBox.Name = "CFGPictureBox";
             this.CFGPictureBox.Size = new System.Drawing.Size(140, 72);
             this.CFGPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.CFGPictureBox.TabIndex = 0;
             this.CFGPictureBox.TabStop = false;
-            // 
-            // ASTPage
-            // 
-            this.ASTPage.AutoScroll = true;
-            this.ASTPage.Controls.Add(this.ASTPictureBox);
-            this.ASTPage.Location = new System.Drawing.Point(4, 22);
-            this.ASTPage.Margin = new System.Windows.Forms.Padding(2);
-            this.ASTPage.Name = "ASTPage";
-            this.ASTPage.Padding = new System.Windows.Forms.Padding(2);
-            this.ASTPage.Size = new System.Drawing.Size(377, 236);
-            this.ASTPage.TabIndex = 4;
-            this.ASTPage.Text = "AST";
-            this.ASTPage.UseVisualStyleBackColor = true;
-            // 
-            // ASTPictureBox
-            // 
-            this.ASTPictureBox.Location = new System.Drawing.Point(5, 5);
-            this.ASTPictureBox.Name = "ASTPictureBox";
-            this.ASTPictureBox.Size = new System.Drawing.Size(99, 86);
-            this.ASTPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.ASTPictureBox.TabIndex = 0;
-            this.ASTPictureBox.TabStop = false;
             // 
             // splitContainer
             // 
@@ -371,6 +415,77 @@
             this.splitContainer.SplitterWidth = 2;
             this.splitContainer.TabIndex = 4;
             // 
+            // ASTPage
+            // 
+            this.ASTPage.Controls.Add(this.astPanel);
+            this.ASTPage.Controls.Add(this.astSaveButton);
+            this.ASTPage.Controls.Add(this.astTabPanel);
+            this.ASTPage.Location = new System.Drawing.Point(4, 22);
+            this.ASTPage.Margin = new System.Windows.Forms.Padding(2);
+            this.ASTPage.Name = "ASTPage";
+            this.ASTPage.Padding = new System.Windows.Forms.Padding(2);
+            this.ASTPage.Size = new System.Drawing.Size(377, 236);
+            this.ASTPage.TabIndex = 4;
+            this.ASTPage.Text = "AST";
+            this.ASTPage.UseVisualStyleBackColor = true;
+            // 
+            // astPanel
+            // 
+            this.astPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.astPanel.Controls.Add(this.astTrackBar);
+            this.astPanel.Location = new System.Drawing.Point(5, 210);
+            this.astPanel.Name = "astPanel";
+            this.astPanel.Size = new System.Drawing.Size(286, 21);
+            this.astPanel.TabIndex = 5;
+            // 
+            // astTrackBar
+            // 
+            this.astTrackBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.astTrackBar.BackColor = System.Drawing.Color.White;
+            this.astTrackBar.Enabled = false;
+            this.astTrackBar.Location = new System.Drawing.Point(5, -1);
+            this.astTrackBar.Maximum = 100;
+            this.astTrackBar.Name = "astTrackBar";
+            this.astTrackBar.Size = new System.Drawing.Size(277, 45);
+            this.astTrackBar.TabIndex = 2;
+            this.astTrackBar.TickFrequency = 10;
+            this.astTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.astTrackBar.Value = 100;
+            // 
+            // astSaveButton
+            // 
+            this.astSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.astSaveButton.Enabled = false;
+            this.astSaveButton.Location = new System.Drawing.Point(297, 208);
+            this.astSaveButton.Name = "astSaveButton";
+            this.astSaveButton.Size = new System.Drawing.Size(75, 23);
+            this.astSaveButton.TabIndex = 4;
+            this.astSaveButton.Text = "Save";
+            this.astSaveButton.UseVisualStyleBackColor = true;
+            // 
+            // astTabPanel
+            // 
+            this.astTabPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.astTabPanel.AutoScroll = true;
+            this.astTabPanel.Controls.Add(this.ASTPictureBox);
+            this.astTabPanel.Location = new System.Drawing.Point(5, 5);
+            this.astTabPanel.Name = "astTabPanel";
+            this.astTabPanel.Size = new System.Drawing.Size(367, 198);
+            this.astTabPanel.TabIndex = 1;
+            // 
+            // ASTPictureBox
+            // 
+            this.ASTPictureBox.Location = new System.Drawing.Point(3, 3);
+            this.ASTPictureBox.Name = "ASTPictureBox";
+            this.ASTPictureBox.Size = new System.Drawing.Size(140, 72);
+            this.ASTPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.ASTPictureBox.TabIndex = 0;
+            this.ASTPictureBox.TabStop = false;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -393,15 +508,23 @@
             this.ILCodePage.ResumeLayout(false);
             this.threeAddrPage.ResumeLayout(false);
             this.CFGPage.ResumeLayout(false);
-            this.CFGPage.PerformLayout();
+            this.cfgScalePanel.ResumeLayout(false);
+            this.cfgScalePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cfgScaleBar)).EndInit();
+            this.cfgPanel.ResumeLayout(false);
+            this.cfgPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CFGPictureBox)).EndInit();
-            this.ASTPage.ResumeLayout(false);
-            this.ASTPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ASTPictureBox)).EndInit();
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            this.ASTPage.ResumeLayout(false);
+            this.astPanel.ResumeLayout(false);
+            this.astPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.astTrackBar)).EndInit();
+            this.astTabPanel.ResumeLayout(false);
+            this.astTabPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ASTPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -425,7 +548,6 @@
         private System.Windows.Forms.TabPage ILCodePage;
         private System.Windows.Forms.TabPage threeAddrPage;
         private System.Windows.Forms.TabPage CFGPage;
-        private System.Windows.Forms.TabPage ASTPage;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Button runButton;
         private System.Windows.Forms.Button compileButton;
@@ -434,6 +556,15 @@
         private System.Windows.Forms.RichTextBox ILCodeTextBox;
         private System.Windows.Forms.RichTextBox threeAddrTextBox;
         private System.Windows.Forms.PictureBox CFGPictureBox;
+        private System.Windows.Forms.Button cfgSaveButton;
+        private System.Windows.Forms.TrackBar cfgScaleBar;
+        private System.Windows.Forms.Panel cfgPanel;
+        private System.Windows.Forms.Panel cfgScalePanel;
+        private System.Windows.Forms.TabPage ASTPage;
+        private System.Windows.Forms.Panel astPanel;
+        private System.Windows.Forms.TrackBar astTrackBar;
+        private System.Windows.Forms.Button astSaveButton;
+        private System.Windows.Forms.Panel astTabPanel;
         private System.Windows.Forms.PictureBox ASTPictureBox;
     }
 }
