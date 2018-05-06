@@ -37,7 +37,7 @@ namespace Compiler.IDE.Handlers
         private string BuildDotGraph(BlockNode root)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("digraph CFG {");
+            sb.AppendLine("digraph AST {");
             sb.AppendLine("node[shape = record]\n");
             sb.AppendLine("graph [splines=ortho, nodesep=1, overlap=false];");
             ASTGraphvizVisitor nodeVisitor = new ASTGraphvizVisitor();
