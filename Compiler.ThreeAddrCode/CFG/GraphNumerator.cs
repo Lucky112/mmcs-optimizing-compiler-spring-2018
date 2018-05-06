@@ -13,11 +13,13 @@ namespace Compiler.ThreeAddrCode.CFG
             var root = graph.CFGNodes.ElementAt(0);
             var num = new GraphNumerator();
             var index = 0;
+            var openSet = new HashSet<BasicBlock>();
 
             void Iter(BasicBlock node)
             {
+                openSet.Add(node);
                 var children = node.Children;
-                foreach(var c in children)
+                foreach(var c in children.Where(x => !openSet.Contains(x)))
                     Iter(node);
                 num._num[node] = index;
                 index++;
