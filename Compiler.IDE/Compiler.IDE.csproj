@@ -48,8 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Handlers\ASTGraphvizEdgeVisitor.cs" />
-    <Compile Include="Handlers\ASTGraphvizNodeVisitor.cs" />
+    <Compile Include="Handlers\ASTGraphvizVisitor.cs" />
     <Compile Include="Handlers\ASTHandler.cs" />
     <Compile Include="Handlers\CFGHandler.cs" />
     <Compile Include="Handlers\OutputSanitizer.cs" />

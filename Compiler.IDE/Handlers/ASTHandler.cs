@@ -37,17 +37,15 @@ namespace Compiler.IDE.Handlers
         private string BuildDotGraph(BlockNode root)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("digraph CFG { \n");
-            sb.Append("node[shape = record]\n\n");
-            sb.Append("graph [splines=ortho, nodesep=1, overlap=false];\n");
-            ASTGraphvizNodeVisitor nodeVisitor = new ASTGraphvizNodeVisitor();
+            sb.AppendLine("digraph CFG {");
+            sb.AppendLine("node[shape = record]\n");
+            sb.AppendLine("graph [splines=ortho, nodesep=1, overlap=false];");
+            ASTGraphvizVisitor nodeVisitor = new ASTGraphvizVisitor();
             root.Visit(nodeVisitor);
-            sb.Append(nodeVisitor.Text);
-
-            //ASTGraphvizEdgeVisitor edgeVisitor = new ASTGraphvizEdgeVisitor();
-            //root.Visit(edgeVisitor);
-            //sb.Append(edgeVisitor.Text);
-            sb.Append("}\n");
+            sb.AppendLine(nodeVisitor.Nodes);
+            sb.AppendLine("\n");
+            sb.AppendLine(nodeVisitor.Edges);
+            sb.AppendLine("}");
             return sb.ToString();
         }
     }
