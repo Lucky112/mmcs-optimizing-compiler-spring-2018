@@ -460,7 +460,7 @@ namespace Compiler.ThreeAddrCode.Tests
                 HashSet<Guid> outItem1 = inout[x].Item1;
                 HashSet<Guid> toutItem2 = trueInOut[x].Item2;
                 HashSet<Guid> outItem2 = inout[x].Item2;
-
+              
                 var inEq = toutItem1.SetEquals(outItem1);
                 var outEq = toutItem2.SetEquals(outItem2);
                 Assert.True(inEq && outEq);

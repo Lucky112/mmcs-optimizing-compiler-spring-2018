@@ -16,6 +16,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.Optimizations.Tests", "Compiler.Optimizations.Tests\Compiler.Optimizations.Tests.csproj", "{B13FFAAA-B6DB-407F-B96C-5A42005CFBE9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.ILcodeGenerator", "Compiler.ILcodeGenerator\Compiler.ILcodeGenerator.csproj", "{6BE788EE-6B8B-40F8-9423-5D71D99BD024}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.Parser.Tests", "Compiler.Parser.Tests\Compiler.Parser.Tests.csproj", "{0F0AE939-34EC-483E-AB90-F6D4A800EADC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.IDE", "Compiler.IDE\Compiler.IDE.csproj", "{A7CEA661-ABA3-462B-B18A-E3D7838517C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +54,14 @@ Global
 		{6BE788EE-6B8B-40F8-9423-5D71D99BD024}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BE788EE-6B8B-40F8-9423-5D71D99BD024}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BE788EE-6B8B-40F8-9423-5D71D99BD024}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F0AE939-34EC-483E-AB90-F6D4A800EADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F0AE939-34EC-483E-AB90-F6D4A800EADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F0AE939-34EC-483E-AB90-F6D4A800EADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F0AE939-34EC-483E-AB90-F6D4A800EADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7CEA661-ABA3-462B-B18A-E3D7838517C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7CEA661-ABA3-462B-B18A-E3D7838517C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7CEA661-ABA3-462B-B18A-E3D7838517C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7CEA661-ABA3-462B-B18A-E3D7838517C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

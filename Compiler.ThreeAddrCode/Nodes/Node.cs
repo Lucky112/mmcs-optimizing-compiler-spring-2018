@@ -11,7 +11,7 @@ namespace Compiler.ThreeAddrCode.Nodes
         /// <summary>
         ///     Уникальная метка-идентификатор
         /// </summary>
-        public Guid Label { get; set; }
+        public PrettyGuid Label { get; set; }
 
         /// <summary>
         ///     К какому базовому блоку принадлежит строка
@@ -23,7 +23,7 @@ namespace Compiler.ThreeAddrCode.Nodes
         /// </summary>
         public bool IsLabeled { get; set; }
         
-        public Node()
+        public Node(string name = "")
         {
             Label = Guid.NewGuid();
             TACodeNameManager.Instance.Label(Label);

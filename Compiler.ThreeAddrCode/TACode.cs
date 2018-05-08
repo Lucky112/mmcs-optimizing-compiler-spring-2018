@@ -77,6 +77,10 @@ namespace Compiler.ThreeAddrCode
             {
                 var node = commands[i];
 
+                // NOP'ы не участвуют в генерации ББл, сразу пропускаем
+                if (node is Empty)
+                    continue;
+
                 // если в узел есть переход по GoTo
                 if (node.IsLabeled)
                     leaders.Add(i);

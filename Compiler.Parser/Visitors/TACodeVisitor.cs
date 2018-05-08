@@ -369,9 +369,9 @@ namespace Compiler.Parser.Visitors
         /// <summary>
         ///     Создать новый пустой оператор - метку в ТА коде
         /// </summary>
-        private TACNodes.Empty GetEmptyLabeledNode()
+        private TACNodes.Empty GetEmptyLabeledNode(string name = "")
         {
-            var labeledNop = new TACNodes.Empty { IsLabeled = true };
+            var labeledNop = new TACNodes.Empty(name) { IsLabeled = true };
             code.AddNode(labeledNop);
             return labeledNop;
         }

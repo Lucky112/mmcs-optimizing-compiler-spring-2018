@@ -1,5 +1,6 @@
 ﻿using Compiler.ThreeAddrCode.Nodes;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Compiler.ThreeAddrCode.CFG
@@ -15,7 +16,7 @@ namespace Compiler.ThreeAddrCode.CFG
         ///     Список узлов потока управления;
         ///     <para>Первый узел -- входной</para>
         /// </summary>
-        public IEnumerable<BasicBlock> CFGNodes => _cfgNodes.AsReadOnly();
+        public ReadOnlyCollection<BasicBlock> CFGNodes => _cfgNodes.AsReadOnly();
         private readonly List<BasicBlock> _cfgNodes;
 
         /// <summary>
