@@ -21,10 +21,11 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressionsAlgo
 
         public Operations(TACode code)
         {
+            upper = new HashSet<Guid>();
             foreach (var node in code.CodeList)
             {
                 //Если узел - присваивание и хотя бы один операнд - это переменная, то добавляем его в верхнюю границу
-                if (node is Assign ass) 
+                if (node is Assign ass)
                 {
                     if (ass.Left is Var || ass.Right is Var)
                         upper.Add(ass.Label);

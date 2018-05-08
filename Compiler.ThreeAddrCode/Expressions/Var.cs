@@ -10,19 +10,25 @@ namespace Compiler.ThreeAddrCode.Expressions
     {        
         public PrettyGuid Id { get; set; }
         
-        public Var(string name = "")
+        public Var() : this(Guid.NewGuid())
         {
-            Id = new PrettyGuid(IDType.Var, name);
         }
 
-        //public Var(Guid id)
-        //{
-        //    Id = id;
-        //}
+        public Var(Guid id)
+        {
+            Id = id;
+            TACodeNameManager.Instance.TempVar(Id);
+        }
+
+        public Var(string name)
+        {
+            Id = Guid.NewGuid();
+            TACodeNameManager.Instance.Name(Id, name);
+        }
 
         public override string ToString()
         {
-            return Id.ToString();
+            return TACodeNameManager.Instance[Id];
         }
         
         public override bool Equals(object obj)
