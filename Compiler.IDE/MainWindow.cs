@@ -44,6 +44,17 @@ namespace Compiler.IDE
             compileButton.Click += (o, e) => ClearOutput();
             compileButton.Click += (o, e) => _parseHandler.Parse(inputTextBox.Text);
 
+            // toggle opts
+            toggleOptsButton.Click += (o, e) => {
+                bool allChecked = true;
+                for (int i = 0; i < optsList.Items.Count; ++i)
+                    allChecked &= optsList.GetItemChecked(i);
+
+                for (int i = 0; i < optsList.Items.Count; ++i)
+                    optsList.SetItemChecked(i, !allChecked);
+            };
+            optsList.SelectedIndexChanged += (o, e) => optsList.ClearSelected();
+
             // AST
             _parseHandler.ParsingCompleted += (o, e) => _astHandler.GenerateAstImage(e);
             _astHandler.GenerationCompleted += (o, e) =>

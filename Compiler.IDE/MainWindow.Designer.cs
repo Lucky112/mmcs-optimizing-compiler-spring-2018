@@ -94,7 +94,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(549, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(691, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -148,7 +148,7 @@
             this.mainBox.Margin = new System.Windows.Forms.Padding(2);
             this.mainBox.Name = "mainBox";
             this.mainBox.Padding = new System.Windows.Forms.Padding(2);
-            this.mainBox.Size = new System.Drawing.Size(144, 341);
+            this.mainBox.Size = new System.Drawing.Size(219, 358);
             this.mainBox.TabIndex = 1;
             this.mainBox.TabStop = false;
             this.mainBox.Text = "Control Panel";
@@ -166,7 +166,7 @@
             // compileButton
             // 
             this.compileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.compileButton.Location = new System.Drawing.Point(3, 318);
+            this.compileButton.Location = new System.Drawing.Point(3, 335);
             this.compileButton.Margin = new System.Windows.Forms.Padding(2);
             this.compileButton.Name = "compileButton";
             this.compileButton.Size = new System.Drawing.Size(67, 20);
@@ -178,7 +178,7 @@
             // 
             this.runButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.runButton.Enabled = false;
-            this.runButton.Location = new System.Drawing.Point(74, 318);
+            this.runButton.Location = new System.Drawing.Point(148, 334);
             this.runButton.Margin = new System.Windows.Forms.Padding(2);
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(67, 20);
@@ -193,7 +193,7 @@
             this.toggleOptsButton.Location = new System.Drawing.Point(3, 15);
             this.toggleOptsButton.Margin = new System.Windows.Forms.Padding(2);
             this.toggleOptsButton.Name = "toggleOptsButton";
-            this.toggleOptsButton.Size = new System.Drawing.Size(137, 22);
+            this.toggleOptsButton.Size = new System.Drawing.Size(212, 22);
             this.toggleOptsButton.TabIndex = 3;
             this.toggleOptsButton.Text = "Toggle All";
             this.toggleOptsButton.UseVisualStyleBackColor = true;
@@ -202,11 +202,20 @@
             // 
             this.optsList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.optsList.CheckOnClick = true;
             this.optsList.FormattingEnabled = true;
+            this.optsList.Items.AddRange(new object[] {
+            "Блочные: алгебраические",
+            "Блочные: объявления",
+            "Блочные: протяжка констант",
+            "Блочные: протяжка копий",
+            "Блочные: сворачивание констант",
+            "DFA: протяжка констант",
+            "DFA: достигающие определения"});
             this.optsList.Location = new System.Drawing.Point(3, 61);
             this.optsList.Margin = new System.Windows.Forms.Padding(2);
             this.optsList.Name = "optsList";
-            this.optsList.Size = new System.Drawing.Size(139, 244);
+            this.optsList.Size = new System.Drawing.Size(212, 259);
             this.optsList.TabIndex = 2;
             // 
             // outBox
@@ -219,7 +228,7 @@
             this.outBox.Margin = new System.Windows.Forms.Padding(2);
             this.outBox.Name = "outBox";
             this.outBox.Padding = new System.Windows.Forms.Padding(2);
-            this.outBox.Size = new System.Drawing.Size(380, 65);
+            this.outBox.Size = new System.Drawing.Size(446, 71);
             this.outBox.TabIndex = 2;
             this.outBox.TabStop = false;
             this.outBox.Text = "Output";
@@ -236,7 +245,7 @@
             this.outTextBox.Name = "outTextBox";
             this.outTextBox.ReadOnly = true;
             this.outTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.outTextBox.Size = new System.Drawing.Size(373, 46);
+            this.outTextBox.Size = new System.Drawing.Size(439, 52);
             this.outTextBox.TabIndex = 0;
             // 
             // tabsControl
@@ -253,7 +262,7 @@
             this.tabsControl.Margin = new System.Windows.Forms.Padding(2);
             this.tabsControl.Name = "tabsControl";
             this.tabsControl.SelectedIndex = 0;
-            this.tabsControl.Size = new System.Drawing.Size(385, 262);
+            this.tabsControl.Size = new System.Drawing.Size(451, 275);
             this.tabsControl.TabIndex = 3;
             // 
             // inputPage
@@ -263,7 +272,7 @@
             this.inputPage.Margin = new System.Windows.Forms.Padding(2);
             this.inputPage.Name = "inputPage";
             this.inputPage.Padding = new System.Windows.Forms.Padding(2);
-            this.inputPage.Size = new System.Drawing.Size(377, 236);
+            this.inputPage.Size = new System.Drawing.Size(443, 249);
             this.inputPage.TabIndex = 0;
             this.inputPage.Text = "Input";
             this.inputPage.UseVisualStyleBackColor = true;
@@ -273,7 +282,7 @@
             this.inputTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inputTextBox.Location = new System.Drawing.Point(2, 2);
             this.inputTextBox.Name = "inputTextBox";
-            this.inputTextBox.Size = new System.Drawing.Size(373, 232);
+            this.inputTextBox.Size = new System.Drawing.Size(439, 245);
             this.inputTextBox.TabIndex = 0;
             this.inputTextBox.Text = "";
             // 
@@ -470,7 +479,7 @@
             this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer.Location = new System.Drawing.Point(154, 22);
+            this.splitContainer.Location = new System.Drawing.Point(230, 22);
             this.splitContainer.Margin = new System.Windows.Forms.Padding(2);
             this.splitContainer.Name = "splitContainer";
             this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -482,8 +491,8 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.outBox);
-            this.splitContainer.Size = new System.Drawing.Size(389, 341);
-            this.splitContainer.SplitterDistance = 264;
+            this.splitContainer.Size = new System.Drawing.Size(455, 358);
+            this.splitContainer.SplitterDistance = 277;
             this.splitContainer.SplitterWidth = 2;
             this.splitContainer.TabIndex = 4;
             // 
@@ -491,7 +500,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(549, 370);
+            this.ClientSize = new System.Drawing.Size(691, 387);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.mainBox);
             this.Controls.Add(this.menuStrip1);
