@@ -27,7 +27,6 @@ namespace Compiler.IDE.Handlers
                 };
             byte[] output = wrapper.GenerateGraph(graph, Enums.GraphReturnType.Png);
             
-
             using (var stream = new MemoryStream(output))
             {
                 var image = Image.FromStream(stream);

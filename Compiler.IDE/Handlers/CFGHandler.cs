@@ -33,7 +33,6 @@ namespace Compiler.IDE.Handlers
                 };
             byte[] output = wrapper.GenerateGraph(graph, Enums.GraphReturnType.Png);
 
-
             using (var stream = new MemoryStream(output))
             {
                 var image = Image.FromStream(stream);
@@ -44,7 +43,7 @@ namespace Compiler.IDE.Handlers
         private static string GetNameForGuid(Guid guid)
         {
             // добавляем какой-нибудь текстовый префикс
-            return "b" + guid.ToString().Substring(0, 4);
+            return "b" + guid.ToString().Substring(0, 5);
         }
 
         private static string BuildDotGraph(ControlFlowGraph cfg)

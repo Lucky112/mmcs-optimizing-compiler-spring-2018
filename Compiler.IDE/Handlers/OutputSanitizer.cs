@@ -17,9 +17,9 @@ namespace Compiler.IDE.Handlers
             switch (level)
             {
                 case SanitizeLevel.TextBox:
-                    return input.Replace($"\"{Environment.NewLine}\"", "NEW_LINE");
+                    return input.Replace($"\"{Environment.NewLine}\"", "CLRF");
                 case SanitizeLevel.DotFile:
-                    return input.Replace($"\"{Environment.NewLine}\"", "NEW_LINE")
+                    return input.Replace($"\"{Environment.NewLine}\"", "CLRF")
                         .Replace("<", @"\<")
                         .Replace(">", @"\>")
                         .Replace("\"", "'");

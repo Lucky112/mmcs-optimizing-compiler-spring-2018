@@ -72,6 +72,7 @@ namespace Compiler.IDE
                 try
                 {
                     _ilCodeHandler.GenerateIlCode(e);
+                    runButton.Enabled = true;
                 }
                 catch (Exception ex)
                 {
@@ -107,8 +108,6 @@ namespace Compiler.IDE
             // enable UI after all build steps
             _cfgHandler.GenerationCompleted += (o, e) =>
             {
-                runButton.Enabled = true;
-
                 cfgSaveButton.Enabled = true;
                 cfgScaleBar.Enabled = true;
 
