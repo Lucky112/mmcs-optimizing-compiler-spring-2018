@@ -4,8 +4,12 @@ namespace Compiler.IDE.Handlers
 {
     internal static class OutputSanitizer
     {
+        public enum SanitizeLevel
+        {
+            TextBox,
+            DotFile
+        };
 
-        public enum SanitizeLevel { TextBox, DotFile };
         /// <summary>
         ///     Заменить недоспустимые последовательности на аналоги, например \n, " и т.п.
         /// </summary>

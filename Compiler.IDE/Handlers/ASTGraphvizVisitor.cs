@@ -130,8 +130,8 @@ namespace Compiler.IDE.Handlers
 
             string elsePresent = "present";
             if (a.ElseClause == null)
-                elsePresent.Insert(0, "not ");
-             _nodes.AppendLine($"{label}  [label = \"If: else is {elsePresent} \"]");
+                elsePresent = elsePresent.Insert(0, "not ");
+            _nodes.AppendLine($"{label}  [label = \"If: else is {elsePresent} \"]");
 
             a.Conditon.Visit(this);
             a.IfClause.Visit(this);

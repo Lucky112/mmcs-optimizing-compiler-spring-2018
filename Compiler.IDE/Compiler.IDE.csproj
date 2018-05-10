@@ -55,6 +55,7 @@
     <Compile Include="Handlers\ThreeAddrCodeHandler.cs" />
     <Compile Include="Handlers\ParseHandler.cs" />
     <Compile Include="Handlers\IlCodeHandler.cs" />
+    <Compile Include="Handlers\Optimizations.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +98,10 @@
     <ProjectReference Include="..\Compiler.ILcodeGenerator\Compiler.ILcodeGenerator.csproj">
       <Project>{6BE788EE-6B8B-40F8-9423-5D71D99BD024}</Project>
       <Name>Compiler.ILcodeGenerator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Compiler.Optimizations\Compiler.Optimizations.csproj">
+      <Project>{59559291-27B9-4124-8F46-50DA03ED3E44}</Project>
+      <Name>Compiler.Optimizations</Name>
     </ProjectReference>
     <ProjectReference Include="..\Compiler.Parser\Compiler.Parser.csproj">
       <Project>{1A72E236-90D3-4729-9571-FDD1711E4CA7}</Project>

@@ -20,7 +20,7 @@ namespace Compiler.IDE
 
         public static Image ScaleImage(Image original, double scaleValue)
         {
-            Size size = new Size((int)(original.Width * scaleValue), (int)(original.Height * scaleValue));
+            Size size = new Size((int) (original.Width * scaleValue), (int) (original.Height * scaleValue));
             return new Bitmap(original, size);
         }
     }

@@ -11,7 +11,7 @@ namespace Compiler.IDE.Handlers
 {
     internal class AstHandler
     {
-        public event EventHandler<Image> GenerationCompleted = delegate {};
+        public event EventHandler<Image> GenerationCompleted = delegate { };
 
         public void GenerateAstImage(BlockNode root)
         {
@@ -22,11 +22,11 @@ namespace Compiler.IDE.Handlers
             var processStartInfoQuery = new GetProcessStartInfoQuery();
             var registerLayout = new RegisterLayoutPluginCommand(processStartInfoQuery, processQuery);
             var wrapper = new GraphGeneration(processQuery, processStartInfoQuery, registerLayout)
-                {
-                    RenderingEngine = Enums.RenderingEngine.Dot
-                };
+            {
+                RenderingEngine = Enums.RenderingEngine.Dot
+            };
             byte[] output = wrapper.GenerateGraph(graph, Enums.GraphReturnType.Png);
-            
+
             using (var stream = new MemoryStream(output))
             {
                 var image = Image.FromStream(stream);

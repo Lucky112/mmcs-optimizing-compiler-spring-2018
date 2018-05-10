@@ -22,15 +22,13 @@ namespace Compiler.IDE.Handlers
             string graph = BuildDotGraph(cfg);
             File.WriteAllText(@"cfg_graph.txt", graph);
 
-            var getStartProcessQuery = new GetStartProcessQuery();
-            var getProcessStartInfoQuery = new GetProcessStartInfoQuery();
-            var registerLayoutPluginCommand =
-                new RegisterLayoutPluginCommand(getProcessStartInfoQuery, getStartProcessQuery);
-            var wrapper =
-                new GraphGeneration(getStartProcessQuery, getProcessStartInfoQuery, registerLayoutPluginCommand)
-                {
-                    RenderingEngine = Enums.RenderingEngine.Dot
-                };
+            var processQuery = new GetStartProcessQuery();
+            var processStartInfoQuery = new GetProcessStartInfoQuery();
+            var registerLayout = new RegisterLayoutPluginCommand(processStartInfoQuery, processQuery);
+            var wrapper = new GraphGeneration(processQuery, processStartInfoQuery, registerLayout)
+            {
+                RenderingEngine = Enums.RenderingEngine.Dot
+            };
             byte[] output = wrapper.GenerateGraph(graph, Enums.GraphReturnType.Png);
 
             using (var stream = new MemoryStream(output))

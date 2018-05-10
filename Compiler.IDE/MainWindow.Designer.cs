@@ -204,14 +204,6 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.optsList.CheckOnClick = true;
             this.optsList.FormattingEnabled = true;
-            this.optsList.Items.AddRange(new object[] {
-            "Блочные: алгебраические",
-            "Блочные: объявления",
-            "Блочные: протяжка констант",
-            "Блочные: протяжка копий",
-            "Блочные: сворачивание констант",
-            "DFA: протяжка констант",
-            "DFA: достигающие определения"});
             this.optsList.Location = new System.Drawing.Point(3, 61);
             this.optsList.Margin = new System.Windows.Forms.Padding(2);
             this.optsList.Name = "optsList";

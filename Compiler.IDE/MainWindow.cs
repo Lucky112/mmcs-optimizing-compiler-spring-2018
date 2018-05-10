@@ -27,11 +27,35 @@ namespace Compiler.IDE
         {
             InitializeComponent();
 
+            InitOptimizations();
+
             InitOutputListeners();
             InitCommonListeners();
             InitInputTabListeners();
             InitCfgTabListeners();
             InitAstTabListeners();
+        }
+
+        private void InitOptimizations()
+        {
+            // populate listbox with enums
+            foreach (ThreeAddrCodeHandler.Optimizations opt in Enum.GetValues(
+                typeof(ThreeAddrCodeHandler.Optimizations)))
+                optsList.Items.Add(opt);
+
+            // enable custom formatting for listbox
+            optsList.FormattingEnabled = true;
+            optsList.Format += (s, e) =>
+            {
+                e.Value = $"{((ThreeAddrCodeHandler.Optimizations) e.ListItem).GetString()}";
+            };
+
+            // on item click enable/disable optimization in three addr code hadler
+            optsList.ItemCheck += (o, e) =>
+            {
+                var opt = (ThreeAddrCodeHandler.Optimizations) optsList.Items[e.Index];
+                _threeCodeHandler.OptimizationList[opt] = e.NewValue == CheckState.Checked;
+            };
         }
 
         private void InitCommonListeners()
@@ -45,7 +69,8 @@ namespace Compiler.IDE
             compileButton.Click += (o, e) => _parseHandler.Parse(inputTextBox.Text);
 
             // toggle opts
-            toggleOptsButton.Click += (o, e) => {
+            toggleOptsButton.Click += (o, e) =>
+            {
                 bool allChecked = true;
                 for (int i = 0; i < optsList.Items.Count; ++i)
                     allChecked &= optsList.GetItemChecked(i);
@@ -87,7 +112,8 @@ namespace Compiler.IDE
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, $"Компиляция завершилась с ошибкой:{Environment.NewLine} {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, $@"Компиляция завершилась с ошибкой:{Environment.NewLine} {ex.Message}",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
             _ilCodeHandler.GenerationCompleted += (o, e) =>
@@ -111,7 +137,8 @@ namespace Compiler.IDE
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(this, $"Запуск завершился с ошибкой:{Environment.NewLine} {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, $@"Запуск завершился с ошибкой:{Environment.NewLine} {ex.Message}",
+                            @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             };
@@ -132,14 +159,21 @@ namespace Compiler.IDE
             // redirect console to textbox
             Console.SetOut(new TextBoxConsole(outTextBox));
 
-            _parseHandler.ParsingErrored += (o, e) => outTextBox.AppendText("Ошибка парсинга программы" + Environment.NewLine);
-            _parseHandler.ParsingSyntaxErrored += (o, e) => outTextBox.AppendText($"Синтаксическая ошибка. {e.Message}" + Environment.NewLine);
-            _parseHandler.ParsingLexErrored += (o, e) => outTextBox.AppendText($"Лексическая ошибка. {e.Message}" + Environment.NewLine);
+            _parseHandler.ParsingErrored += (o, e) =>
+                outTextBox.AppendText("Ошибка парсинга программы" + Environment.NewLine);
+            _parseHandler.ParsingSyntaxErrored += (o, e) =>
+                outTextBox.AppendText($"Синтаксическая ошибка. {e.Message}" + Environment.NewLine);
+            _parseHandler.ParsingLexErrored += (o, e) =>
+                outTextBox.AppendText($"Лексическая ошибка. {e.Message}" + Environment.NewLine);
 
-            _parseHandler.ParsingCompleted += (o, e) => outTextBox.AppendText("Синтаксическое дерево построено" + Environment.NewLine);
-            _threeCodeHandler.PrintableCodeGenerated += (o, e) => outTextBox.AppendText("Создание трехадресного кода завершено" + Environment.NewLine);
-            _cfgHandler.GenerationCompleted += (o, e) => outTextBox.AppendText("Граф потока управления построен" + Environment.NewLine);
-            _astHandler.GenerationCompleted += (o, e) => outTextBox.AppendText("Граф AST построен" + Environment.NewLine);
+            _parseHandler.ParsingCompleted += (o, e) =>
+                outTextBox.AppendText("Синтаксическое дерево построено" + Environment.NewLine);
+            _threeCodeHandler.PrintableCodeGenerated += (o, e) =>
+                outTextBox.AppendText("Создание трехадресного кода завершено" + Environment.NewLine);
+            _cfgHandler.GenerationCompleted += (o, e) =>
+                outTextBox.AppendText("Граф потока управления построен" + Environment.NewLine);
+            _astHandler.GenerationCompleted +=
+                (o, e) => outTextBox.AppendText("Граф AST построен" + Environment.NewLine);
         }
 
         private void InitInputTabListeners()
@@ -149,15 +183,15 @@ namespace Compiler.IDE
 
         private void InitCfgTabListeners()
         {
-            cfgScaleBar.ValueChanged += (o, e) => 
-                    CFGPictureBox.Image = Utils.ScaleImage(_cfgImage, Utils.TrackBarToScale(cfgScaleBar));
+            cfgScaleBar.ValueChanged += (o, e) =>
+                CFGPictureBox.Image = Utils.ScaleImage(_cfgImage, Utils.TrackBarToScale(cfgScaleBar));
             cfgSaveButton.Click += (o, e) => SaveGraphFile(CFGPictureBox);
         }
 
         private void InitAstTabListeners()
         {
             astTrackBar.ValueChanged += (o, e) =>
-                    ASTPictureBox.Image = Utils.ScaleImage(_astImage, Utils.TrackBarToScale(astTrackBar));
+                ASTPictureBox.Image = Utils.ScaleImage(_astImage, Utils.TrackBarToScale(astTrackBar));
             astSaveButton.Click += (o, e) => SaveGraphFile(ASTPictureBox);
         }
 
@@ -197,6 +231,7 @@ namespace Compiler.IDE
                     format = ImageFormat.Bmp;
                     break;
             }
+
             picbox.Image.Save(_saveGraphDialog.FileName, format);
         }
     }
