@@ -67,7 +67,17 @@ namespace Compiler.IDE
             };
 
             // IL-code
-            _threeCodeHandler.GenerationCompleted += (o, e) => _ilCodeHandler.GenerateIlCode(e);
+            _threeCodeHandler.GenerationCompleted += (o, e) =>
+            {
+                try
+                {
+                    _ilCodeHandler.GenerateIlCode(e);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, $"Компиляция завершилась с ошибкой:{Environment.NewLine} {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
             _ilCodeHandler.GenerationCompleted += (o, e) =>
             {
                 ILCodeTextBox.Text = e.PrintCommands();
@@ -83,7 +93,14 @@ namespace Compiler.IDE
                 }
                 else
                 {
-                    _ilProgram.RunProgram();
+                    try
+                    {
+                        _ilProgram.RunProgram();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, $"Запуск завершился с ошибкой:{Environment.NewLine} {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             };
 
