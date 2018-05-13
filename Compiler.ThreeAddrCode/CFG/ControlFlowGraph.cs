@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using QuickGraph;
 
 namespace Compiler.ThreeAddrCode.CFG
 {
@@ -17,6 +18,11 @@ namespace Compiler.ThreeAddrCode.CFG
         public TACode Code { get; }
 
         private readonly List<BasicBlock> _cfgNodes;
+
+        public BidirectionalGraph<BasicBlock, Edge<BasicBlock>> CFGAuxiliary =
+            new BidirectionalGraph<BasicBlock, Edge<BasicBlock>>();
+
+        public EdgeTypes EdgeTypes { get; set; }
 
         /// <summary>
         ///     Конструктор
@@ -37,7 +43,10 @@ namespace Compiler.ThreeAddrCode.CFG
         {
             // оборачиваем ББ в CFG
             foreach (var block in Code.CreateBasicBlockList())
+            {
                 _cfgNodes.Add(block);
+                CFGAuxiliary.AddVertex(block);
+            }
 
             foreach (var cfgNode in _cfgNodes)
             {
@@ -53,6 +62,8 @@ namespace Compiler.ThreeAddrCode.CFG
                     // устанавливаем связи cfgNode <-> targetNode
                     cfgNode.AddChild(targetNode);
                     targetNode.AddParent(cfgNode);
+
+                    CFGAuxiliary.AddEdge(new Edge<BasicBlock>(cfgNode, targetNode));
                 }
             }
 
@@ -68,7 +79,42 @@ namespace Compiler.ThreeAddrCode.CFG
 
                 cur.AddChild(next);
                 next.AddParent(cur);
+
+                CFGAuxiliary.AddEdge(new Edge<BasicBlock>(cur, next));
             }
+
+            EdgeTypes = new EdgeTypes();
+            ClassificateEdges();
+        }
+
+        private void ClassificateEdges()
+        {
+            var depthTree = new DepthSpanningTree(this);
+            foreach (var edge in CFGAuxiliary.Edges)
+            {
+                if (depthTree.SpanningTree.Edges.Any(e => e.Target.Equals(edge.Target) && e.Source.Equals(edge.Source)))
+                {
+                    EdgeTypes.Add(edge, EdgeType.Coming);
+                }
+                else if (depthTree.FindBackwardPath(edge.Source, edge.Target))
+                {
+                    EdgeTypes.Add(edge, EdgeType.Retreating);
+                }
+                else
+                {
+                    EdgeTypes.Add(edge, EdgeType.Cross);
+                }
+            }
+        }
+
+        public int NumberOfVertices()
+        {
+            return CFGNodes.Count;
+        }
+
+        public BasicBlock GetRoot()
+        {
+            return (NumberOfVertices() > 0) ? CFGNodes.ElementAt(0) : null;
         }
     }
 }
