@@ -366,12 +366,12 @@ namespace Compiler.Parser.Visitors
             }
         }
 
-
-        private TACNodes.Empty GetEmptyLabeledNode(String name = "")
+       
+        private TACNodes.Empty GetEmptyLabeledNode(String name = null)
         {
             var labeledNop = new TACNodes.Empty { IsLabeled = true };
             code.AddNode(labeledNop);
-            if (name == "")
+            if (name == null)
                 TACodeNameManager.Instance.Label(labeledNop.Label);
             else
                 TACodeNameManager.Instance.Name(labeledNop.Label, name);
