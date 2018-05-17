@@ -1,5 +1,4 @@
 ﻿using Compiler.IDE.Handlers;
-using Compiler.ILcodeGenerator;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -18,16 +17,18 @@ namespace Compiler.IDE
         private readonly ParseHandler _parseHandler = new ParseHandler();
         private readonly ThreeAddrCodeHandler _threeCodeHandler = new ThreeAddrCodeHandler();
         private readonly CfgHandler _cfgHandler = new CfgHandler();
+        private readonly IterativeAlgorithmHandler _algoHandler = new IterativeAlgorithmHandler();
         private readonly AstHandler _astHandler = new AstHandler();
 
         private readonly IlCodeHandler _ilCodeHandler = new IlCodeHandler();
-        private TAcode2ILcodeTranslator _ilProgram;
+
 
         public MainWindow()
         {
             InitializeComponent();
 
             InitOptimizations();
+            InitIterativeAlgorithms();
 
             InitOutputListeners();
             InitCommonListeners();
@@ -39,22 +40,41 @@ namespace Compiler.IDE
         private void InitOptimizations()
         {
             // populate listbox with enums
-            foreach (ThreeAddrCodeHandler.Optimizations opt in Enum.GetValues(
-                typeof(ThreeAddrCodeHandler.Optimizations)))
+            foreach (Optimizations opt in Enum.GetValues(
+                typeof(Optimizations)))
                 optsList.Items.Add(opt);
 
             // enable custom formatting for listbox
             optsList.FormattingEnabled = true;
-            optsList.Format += (s, e) =>
-            {
-                e.Value = $"{((ThreeAddrCodeHandler.Optimizations) e.ListItem).GetString()}";
-            };
+            optsList.Format += (s, e) => { e.Value = $"{((Optimizations) e.ListItem).GetString()}"; };
 
             // on item click enable/disable optimization in three addr code hadler
             optsList.ItemCheck += (o, e) =>
             {
-                var opt = (ThreeAddrCodeHandler.Optimizations) optsList.Items[e.Index];
+                var opt = (Optimizations) optsList.Items[e.Index];
                 _threeCodeHandler.OptimizationList[opt] = e.NewValue == CheckState.Checked;
+            };
+        }
+
+        private void InitIterativeAlgorithms()
+        {
+            // populate listbox with enums
+            foreach (IterativeAlgorithms opt in Enum.GetValues(
+                typeof(IterativeAlgorithms)))
+                iterativeAlgoList.Items.Add(opt);
+
+            // enable custom formatting
+            iterativeAlgoList.FormattingEnabled = true;
+            iterativeAlgoList.Format += (s, e) => { e.Value = $"{((IterativeAlgorithms) e.ListItem).GetString()}"; };
+
+            // on item click enable/disable algorithm
+            iterativeAlgoList.ItemCheck += (o, e) =>
+            {
+                // select algorithm from list
+                var algo = (IterativeAlgorithms) iterativeAlgoList.Items[e.Index];
+
+                // pass algorithm to handler
+                _algoHandler.IterativeAlgoList[algo] = e.NewValue == CheckState.Checked;
             };
         }
 
@@ -79,6 +99,7 @@ namespace Compiler.IDE
                     optsList.SetItemChecked(i, !allChecked);
             };
             optsList.SelectedIndexChanged += (o, e) => optsList.ClearSelected();
+            iterativeAlgoList.SelectedIndexChanged += (o, e) => iterativeAlgoList.ClearSelected();
 
             // AST
             _parseHandler.ParsingCompleted += (o, e) => _astHandler.GenerateAstImage(e);
@@ -102,6 +123,10 @@ namespace Compiler.IDE
                 cfgScaleBar.Value = cfgScaleBar.Maximum;
             };
 
+            // iterative algorithms
+            _cfgHandler.CfgGenerated += (o, e) => _algoHandler.CollectInOutData(e);
+            _algoHandler.PrintableInOutDataCollected += (o, e) => iterativeAlgoTextBox.Text = e;
+
             // IL-code
             _threeCodeHandler.GenerationCompleted += (o, e) =>
             {
@@ -116,31 +141,40 @@ namespace Compiler.IDE
                         @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
-            _ilCodeHandler.GenerationCompleted += (o, e) =>
-            {
-                ILCodeTextBox.Text = e.PrintCommands();
-                _ilProgram = e;
-            };
+            _ilCodeHandler.GenerationCompleted += (o, e) => { ILCodeTextBox.Text = e.PrintCommands(); };
 
-            runButton.Click += (o, e) =>
+            // run and stop
+            // no way to pass cancellation token inside DynMethod's Invoke, so doing it hard way =\
+            stopButton.Click += (o, e) => _ilCodeHandler.Abort();
+            runButton.Click += (o, e) => _ilCodeHandler.Run();
+
+            _ilCodeHandler.RuntimeStarted += (o, e) => ClearOutput();
+            _ilCodeHandler.Aborted += (o, e) =>
             {
-                ClearOutput();
-                if (_ilProgram == null)
+                if (InvokeRequired)
                 {
-                    outTextBox.Text += @"Объект с IL-кодом -- null, запуск невозможен";
+                    Invoke(new Action(() =>
+                    {
+                        MessageBox.Show(this, @"Запуск остановлен", @"Остановка", MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                        outTextBox.AppendText($"{Environment.NewLine}ОСТАНОВКА");
+                    }));
                 }
                 else
                 {
-                    try
-                    {
-                        _ilProgram.RunProgram();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(this, $@"Запуск завершился с ошибкой:{Environment.NewLine} {ex.Message}",
-                            @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show(this, @"Запуск остановлен", @"Остановка", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
+            };
+            _ilCodeHandler.AlreadyRunningErrored += (o, e) =>
+            {
+                MessageBox.Show(this, @"Программа уже запущена!", @"Ошибка", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            };
+            _ilCodeHandler.RuntimeErrored += (o, e) =>
+            {
+                MessageBox.Show(this, $@"Запуск завершился с ошибкой:{Environment.NewLine} {e.Message}",
+                    @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             };
 
             // enable UI after all build steps

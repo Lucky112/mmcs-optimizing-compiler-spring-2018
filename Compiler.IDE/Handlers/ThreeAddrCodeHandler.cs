@@ -8,7 +8,7 @@ using Compiler.ThreeAddrCode.Nodes;
 
 namespace Compiler.IDE.Handlers
 {
-    internal partial class ThreeAddrCodeHandler
+    internal class ThreeAddrCodeHandler
     {
         public readonly Dictionary<Optimizations, bool> OptimizationList = new Dictionary<Optimizations, bool>
         {
@@ -33,7 +33,7 @@ namespace Compiler.IDE.Handlers
             PostProcess(visitor.Code);
         }
 
-        private List<IOptimization> BasicBlockOptimizationList()
+        private List<IOptimization> BlockOptimizationList()
         {
             var optimizations = new List<IOptimization>();
 
@@ -72,32 +72,34 @@ namespace Compiler.IDE.Handlers
 
         private TACode ApplyOptimizations(TACode code)
         {
-            var o1Optimizations = BasicBlockOptimizationList();
+            var optList = BlockOptimizationList();
 
             bool canApplyAny = true;
+
+            TACode newCode = code;
             while (canApplyAny)
             {
                 canApplyAny = false;
-                var blocks = code.CreateBasicBlockList().ToList();
-                var codeList = new List<Node>();
-
-                foreach (var b in blocks)
+                var codeList = newCode.CreateBasicBlockList();
+                newCode = new TACode();
+                foreach (var b in codeList)
                 {
                     List<Node> block = b.CodeList.ToList();
 
-                    foreach (var opt in o1Optimizations)
+                    foreach (var opt in optList)
                     {
                         block = opt.Optimize(block, out var applied);
                         canApplyAny = canApplyAny || applied;
                     }
 
-                    codeList.AddRange(block);
+                    foreach (var node in block)
+                    {
+                        newCode.AddNode(node);
+                    }
                 }
-
-                code = new TACode {CodeList = codeList};
             }
 
-            return code;
+            return newCode;
         }
 
         private void PostProcess(TACode code)
@@ -107,4 +109,3 @@ namespace Compiler.IDE.Handlers
         }
     }
 }
-
