@@ -72,44 +72,17 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
                 node_index++;
             }
 
-            /*Console.WriteLine("E-Gen\n====================================");
-            foreach (var eg in e_gen)
-                Console.WriteLine(eg.ToString());
-            Console.WriteLine("E-Gen\n====================================");
-            */
-
-            //множество выражений, уничтожаемых блоком basicBlock
-            var e_kill = new HashSet<Guid>();
-
-            //Узлы-выражения для базового блока
-            List<Assign> bbl_assign_nodes = new List<Assign>();
+            //Все выражения-присвоения базового блока, 
+            //которые имеют вид: z = x + y
+            var all_assigns = new HashSet<Guid>();
             foreach (var n in basicBlock.CodeList)
             {
-                if (n is Assign ass)
-                    bbl_assign_nodes.Add(ass);
-            }
-            //метки результатов-присвоений выражений базового блока
-            List<Guid> marks_bbl_an = bbl_assign_nodes.Select(x => x.Result.Id).ToList();
-
-            //AssignNodes, в котором нет выражений базового блока
-            List<Assign> excepted_assign_nodes = AssignNodes.Except(bbl_assign_nodes).ToList();
-
-            foreach (var ean in excepted_assign_nodes)
-            {
-                bool contains = false;
-                if ((ean.Left is Var lv) && marks_bbl_an.Contains(lv.Id))
-                    contains = true;
-                if (!contains && (ean.Right is Var rv) && marks_bbl_an.Contains(rv.Id))
-                    contains = true;
-                if (contains)
-                    e_kill.Add(ean.Label);
+                if ((n is Assign ass) && (ass.Left is Var || ass.Right is Var))
+                    all_assigns.Add(ass.Label);
             }
 
-            /*Console.WriteLine("E-Kill\n====================================");
-            foreach (var eg in e_kill)
-                Console.WriteLine(eg.ToString());
-            Console.WriteLine("E-Kill\n====================================");
-            */
+            //множество выражений, уничтожаемых блоком basicBlock
+            var e_kill = (HashSet<Guid>)all_assigns.Except(e_gen);
 
             return (e_gen, e_kill);
         }
