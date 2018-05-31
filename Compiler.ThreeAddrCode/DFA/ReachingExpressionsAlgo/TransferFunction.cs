@@ -13,6 +13,7 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
     {
         /// <summary>
         /// Содержит узлы - выражения(присвоения), построенный по 3-х адрессному коду
+        /// Выражения вида: z = x + y
         /// </summary>
         private List<Assign> AssignNodes;
 
@@ -25,7 +26,7 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
             AssignNodes = new List<Assign>();
             foreach (var node in code.CodeList)
             {
-                if (node is Assign ass)
+                if ((node is Assign ass) && (ass.Left is Var || ass.Right is Var))
                 {
                     AssignNodes.Add(ass);
                 }
@@ -72,24 +73,53 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
                 node_index++;
             }
 
-            //Все выражения-присвоения базового блока, 
-            //которые имеют вид: z = x + y
-            var all_assigns = new HashSet<Guid>();
+            //множество выражений, уничтожаемых блоком basicBlock
+            var tmp_e_kill = new HashSet<Guid>();
+
+            /******************Поиск выражений, которые убивает базовый блок****************/
+            //Узлы-выражения для базового блока
+            List<Assign> bbl_assign_nodes = new List<Assign>();
             foreach (var n in basicBlock.CodeList)
             {
-                if ((n is Assign ass) && (ass.Left is Var || ass.Right is Var))
-                    all_assigns.Add(ass.Label);
+                if (n is Assign ass)
+                    bbl_assign_nodes.Add(ass);
             }
 
-            //множество выражений, уничтожаемых блоком basicBlock
-            var e_kill = (HashSet<Guid>)all_assigns.Except(e_gen);
+            //AssignNodes, в котором нет выражений базового блока
+            List<Assign> excepted_assign_nodes = AssignNodes.Except(bbl_assign_nodes).ToList();
+
+            //метки результатов-присвоений выражений базового блока
+            List<Guid> marks_bbl_an = bbl_assign_nodes.Select(x => x.Result.Id).ToList();
+
+            foreach (var ean in excepted_assign_nodes)
+            {
+                bool contains = false;
+                if ((ean.Left is Var lv) && marks_bbl_an.Contains(lv.Id))
+                    contains = true;
+                if (!contains && (ean.Right is Var rv) && marks_bbl_an.Contains(rv.Id))
+                    contains = true;
+                if (contains)
+                    tmp_e_kill.Add(ean.Label);
+            }
+
+            /***************Поиск e_kill множества в самом блоке************/
+            var all_bbl_assigns = new HashSet<Guid>();
+            foreach (var n in basicBlock.CodeList)
+                if ((n is Assign ass) && (ass.Left is Var || ass.Right is Var))
+                    all_bbl_assigns.Add(ass.Label);
+
+            //Множество e_kill в самом блоке
+            var local_e_kill = new HashSet<Guid>(all_bbl_assigns.Except(e_gen));
+
+            //Объединение локального e_kill и общего
+            var e_kill = new HashSet<Guid>(tmp_e_kill.Union(local_e_kill));
 
             return (e_gen, e_kill);
         }
 
         public HashSet<Guid> Transfer(BasicBlock basicBlock, HashSet<Guid> input, ILatticeOperations<HashSet<Guid>> ops)
         {
-            var (e_gen, e_kill) = GetEGenEKill(basicBlock);
+            var (e_gen, e_kill) = GetEGenEKill(basicBlock);         
             var inset = new HashSet<Guid>(input);
             return new HashSet<Guid>(inset.Except(e_kill).Union(e_gen));
         }
