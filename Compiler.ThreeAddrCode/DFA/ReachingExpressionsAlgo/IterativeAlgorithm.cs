@@ -24,12 +24,12 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
                 )
             };
 
-            //Инициализация всех блоков, кроме первого универсальным множеством
+            //Инициализация OUT-множества всех блоков, кроме первого универсальным множеством
             foreach (var node in graph.CFGNodes.Skip(1))
-                data[node] = (ops.Upper, ops.Upper);
+                data[node] = (ops.Lower, ops.Upper);
 
             var outChanged = true;
-
+            int iter_num = 0;
             while (outChanged)
             {
                 outChanged = false;
@@ -38,17 +38,18 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
                     //выполняем сбор выражений посредством операции пересечения 
                     var inset = block.Parents.Aggregate(ops.Upper, (x, y)
                         => ops.Operator(x, data[y].Item2));
-
+                    
                     //Выполнение передаточной функции
                     var outset = f.Transfer(block, inset, ops);
 
                     //Проверка на изменения в множестве outset
-                    if (outset.Except(data[block].Item2).Count() != 0)
+                    if (outset.Except(data[block].Item2).Any() || iter_num == 0)
                     {
                         outChanged = true;
                         data[block] = (inset, outset);
                     }
                 }
+                iter_num++;
             }
             return data;
         }
