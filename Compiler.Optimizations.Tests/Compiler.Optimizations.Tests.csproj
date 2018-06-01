@@ -86,6 +86,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Compiler.Optimizations\Compiler.Optimizations.csproj">
+      <Project>{59559291-27b9-4124-8f46-50da03ed3e44}</Project>
+      <Name>Compiler.Optimizations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Compiler.ThreeAddrCode\Compiler.ThreeAddrCode.csproj">
       <Project>{db2c1bc7-72b2-429f-9aa1-f364e11de437}</Project>
       <Name>Compiler.ThreeAddrCode</Name>
