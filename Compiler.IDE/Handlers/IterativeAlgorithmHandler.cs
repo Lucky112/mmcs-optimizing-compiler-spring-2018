@@ -1,7 +1,9 @@
 ﻿using Compiler.ThreeAddrCode.CFG;
 using Compiler.ThreeAddrCode.DFA;
+using Compiler.ThreeAddrCode.DFA.ReachingDefinitions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Compiler.IDE.Handlers
@@ -24,10 +26,23 @@ namespace Compiler.IDE.Handlers
 
             if (IterativeAlgoList[IterativeAlgorithms.ReachingDefs])
             {
-                var reachingDefs = new ThreeAddrCode.DFA.ReachingDefinitions.IterativeAlgorithm();
+                var op = new Operations(cfg.Code);
+                var tf = new TransferFunction(cfg.Code);
+                var reachingDefs = new GenericIterativeAlgorithm<HashSet<Guid>>()
+                {
+                    Finish = (a, b) =>
+                    {
+                        var (a1, a2) = a;
+                        var (b1, b2) = b;
+
+                        return !a2.Except(b2).Any();
+                    },
+                    Comparer = (x, y) => !x.Except(y).Any(),
+                    Fill = () => (op.Lower, op.Lower)
+                };
                 var output = reachingDefs.Analyze(cfg,
-                    new ThreeAddrCode.DFA.ReachingDefinitions.Operations(cfg.Code),
-                    new ThreeAddrCode.DFA.ReachingDefinitions.TransferFunction(cfg.Code));
+                    new Operations(cfg.Code),
+                    new TransferFunction(cfg.Code));
                 algorithms.Add(IterativeAlgorithms.ReachingDefs, output);
             }
 
