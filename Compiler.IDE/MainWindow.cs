@@ -132,6 +132,7 @@ namespace Compiler.IDE
 
             // iterative algorithms
             _cfgHandler.CfgGenerated += (o, e) => _algoHandler.CollectInOutData(e);
+            _cfgHandler.CfgGenerated += (o, e) => CFGEdgeClassificationTextBox.Text = _cfgHandler.PrintCFGEdgeClassification(e);
             _algoHandler.PrintableInOutDataCollected += (o, e) => iterativeAlgoTextBox.Text = e;
 
             // IL-code
