@@ -135,7 +135,8 @@ namespace Compiler.ThreeAddrCode.CFG
         /// </returns>
         public int GetDepth() {
             // Нужно убрать отсюда и добавить в вызов конструктора
-            ClassificateEdges();
+            if (EdgeTypes == null)
+                ClassificateEdges();
 
             List<BasicBlock> visitedNodes = new List<BasicBlock>();
             return GetDepthRecursive(GetRoot(), 0, ref visitedNodes);
@@ -218,33 +219,33 @@ namespace Compiler.ThreeAddrCode.CFG
             return childrenDepths.Count > 0 ? childrenDepths.Max() : 0;
         }
 
-    /// <summary>
+        /// <summary>
     /// Проверка CFG на приводимость
     /// </summary>
     /// <returns>Возвращает true, если CFG приводим, иначе - false</returns>
-    private bool isReducible()
-        {
-            //Если ребра не классифицированы
-            if (EdgeTypes.Count == 0)
-                this.ClassificateEdges();
-            //Отбираем все обратные дуги
-            var retreatiangEdges = EdgeTypes.Where(elem => elem.Value == EdgeType.Retreating).Select(pair => pair.Key);
-            var count = retreatiangEdges.Count();
-            //Если таковых нет - CFG приводим
-            if (retreatiangEdges.Count() == 0)
-                return true;
-            //Строим дерево доминанто
-            var domMatrix = new DominatorTree(this).Matrix;
-            //Проверяем каждую обратную дугу на обратимость(target доминирует на source в DominatorTree)
-            foreach (var edge in retreatiangEdges)
+        private bool isReducible()
             {
-                //DominatorTree.matrix(i, j).HasLine <=> j dom i. (c) Max
-                var rowWithSource = domMatrix.First(row => row.BasicBlock.BlockId == edge.Source.BlockId);
-                var edgeInDomTree = rowWithSource.ItemDoms.First(cell => cell.BasicBlock.BlockId == edge.Target.BlockId);
-                if (!edgeInDomTree.HasLine)
-                    return false;
+                //Если ребра не классифицированы
+                if (EdgeTypes.Count == 0)
+                    this.ClassificateEdges();
+                //Отбираем все обратные дуги
+                var retreatiangEdges = EdgeTypes.Where(elem => elem.Value == EdgeType.Retreating).Select(pair => pair.Key);
+                var count = retreatiangEdges.Count();
+                //Если таковых нет - CFG приводим
+                if (retreatiangEdges.Count() == 0)
+                    return true;
+                //Строим дерево доминанто
+                var domMatrix = new DominatorTree(this).Matrix;
+                //Проверяем каждую обратную дугу на обратимость(target доминирует на source в DominatorTree)
+                foreach (var edge in retreatiangEdges)
+                {
+                    //DominatorTree.matrix(i, j).HasLine <=> j dom i. (c) Max
+                    var rowWithSource = domMatrix.First(row => row.BasicBlock.BlockId == edge.Source.BlockId);
+                    var edgeInDomTree = rowWithSource.ItemDoms.First(cell => cell.BasicBlock.BlockId == edge.Target.BlockId);
+                    if (!edgeInDomTree.HasLine)
+                        return false;
+                }
+                return true;
             }
-            return true;
         }
-    }
 }
