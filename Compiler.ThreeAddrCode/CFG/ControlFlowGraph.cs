@@ -89,7 +89,7 @@ namespace Compiler.ThreeAddrCode.CFG
             }
 
             EdgeTypes = new EdgeTypes();
-            ClassificateEdges();
+            //ClassificateEdges();
         }
 
         public void ClassificateEdges()
