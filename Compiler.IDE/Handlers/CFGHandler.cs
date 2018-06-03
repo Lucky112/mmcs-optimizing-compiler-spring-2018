@@ -49,6 +49,7 @@ namespace Compiler.IDE.Handlers
             }
         }
 
+
         private static string GetNameForGuid(Guid guid)
         {
             // добавляем какой-нибудь текстовый префикс
@@ -93,6 +94,12 @@ namespace Compiler.IDE.Handlers
             sb.AppendLine("}");
 
             return sb.ToString();
+        }
+
+        public string PrintCFGEdgeClassification(ControlFlowGraph controlFlowGraph)
+        {
+            controlFlowGraph.ClassificateEdges();
+            return controlFlowGraph.EdgeTypes.ToString();
         }
     }
 }
