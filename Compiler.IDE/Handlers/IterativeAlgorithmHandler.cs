@@ -109,6 +109,29 @@ namespace Compiler.IDE.Handlers
                 }
             }
 
+            foreach (var kvp in dictResults)
+            {
+                sb.AppendLine($"Алгоритм: {kvp.Key.GetString()}\n");
+                foreach (var inout in kvp.Value)
+                {
+                    sb.AppendLine($"{inout.Key} = {{");
+
+                    sb.AppendLine("    IN = {");
+                    foreach (var val in inout.Value.Item1)
+                        sb.AppendLine($"        {cfg.Code.LabeledCode[val.Key]}");
+                    sb.AppendLine("    }");
+
+                    sb.AppendLine();
+
+                    sb.AppendLine("    OUT = {");
+                    foreach (var val in inout.Value.Item2)
+                        sb.AppendLine($"        {cfg.Code.LabeledCode[val.Key]}");
+                    sb.AppendLine("    }");
+
+                    sb.AppendLine("}\n");
+                }
+            }
+
             return sb.ToString();
         }
     }
