@@ -189,6 +189,7 @@ namespace Compiler.Parser.Visitors
             var assign = new TACNodes.Assign();
             assign.Result = counter;
             assign.Right = expr;
+            assign.Operation = OpCode.Copy;
 
             code.AddNode(assign);
 
