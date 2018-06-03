@@ -1,6 +1,5 @@
 ﻿using Compiler.ThreeAddrCode.CFG;
 using Compiler.ThreeAddrCode.DFA;
-using Compiler.ThreeAddrCode.DFA.ReachingDefinitions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,16 +17,17 @@ namespace Compiler.IDE.Handlers
             {
                 {IterativeAlgorithms.ReachingDefs, false},
                 {IterativeAlgorithms.ReachingExprs, false},
+                {IterativeAlgorithms.ConstantPropagation, false }
             };
 
-        private Dictionary<IterativeAlgorithms, InOutData<HashSet<Guid>>> AlgorithmResults(ControlFlowGraph cfg)
+        private Dictionary<IterativeAlgorithms, InOutData<HashSet<Guid>>> SetAlgorithmResults(ControlFlowGraph cfg)
         {
             var algorithms = new Dictionary<IterativeAlgorithms, InOutData<HashSet<Guid>>>();
 
             if (IterativeAlgoList[IterativeAlgorithms.ReachingDefs])
             {
-                var op = new Operations(cfg.Code);
-                var tf = new TransferFunction(cfg.Code);
+                var op = new ThreeAddrCode.DFA.ReachingDefinitions.Operations(cfg.Code);
+                var tf = new ThreeAddrCode.DFA.ReachingDefinitions.TransferFunction(cfg.Code);
                 var reachingDefs = new GenericIterativeAlgorithm<HashSet<Guid>>()
                 {
                     Finish = (a, b) =>
@@ -41,8 +41,8 @@ namespace Compiler.IDE.Handlers
                     Fill = () => (op.Lower, op.Lower)
                 };
                 var output = reachingDefs.Analyze(cfg,
-                    new Operations(cfg.Code),
-                    new TransferFunction(cfg.Code));
+                    new ThreeAddrCode.DFA.ReachingDefinitions.Operations(cfg.Code),
+                    new ThreeAddrCode.DFA.ReachingDefinitions.TransferFunction(cfg.Code));
                 algorithms.Add(IterativeAlgorithms.ReachingDefs, output);
             }
 
@@ -58,18 +58,35 @@ namespace Compiler.IDE.Handlers
             return algorithms;
         }
 
+        private Dictionary<IterativeAlgorithms, InOutData<Dictionary<Guid, ThreeAddrCode.DFA.ConstantPropagation.VarValue>>> DictAlgorithmResults(ControlFlowGraph cfg)
+        {
+            var algorithms = new Dictionary<IterativeAlgorithms, InOutData<Dictionary<Guid, ThreeAddrCode.DFA.ConstantPropagation.VarValue>>>();
+
+            if (IterativeAlgoList[IterativeAlgorithms.ConstantPropagation])
+            {
+                var constPropagation = new ThreeAddrCode.DFA.ConstantPropagation.IterativeAlgorithm();
+                var output = constPropagation.Analyze(cfg,
+                    new ThreeAddrCode.DFA.ConstantPropagation.Operations(cfg.Code),
+                    new ThreeAddrCode.DFA.ConstantPropagation.TransferFunction());
+                algorithms.Add(IterativeAlgorithms.ReachingExprs, output);
+            }
+
+            return algorithms;
+        }
+
         public void CollectInOutData(ControlFlowGraph cfg)
         {
-            var results = AlgorithmResults(cfg);
-            string output = ResultsToString(cfg, results);
+            var setResults = SetAlgorithmResults(cfg);
+            var dictResults = DictAlgorithmResults(cfg);
+            string output = ResultsToString(cfg, setResults, dictResults);
             PrintableInOutDataCollected(null, output);
         }
 
         private static string ResultsToString(ControlFlowGraph cfg,
-            Dictionary<IterativeAlgorithms, InOutData<HashSet<Guid>>> dictionary)
+            Dictionary<IterativeAlgorithms, InOutData<HashSet<Guid>>> setResults, Dictionary<IterativeAlgorithms, InOutData<Dictionary<Guid, ThreeAddrCode.DFA.ConstantPropagation.VarValue>>> dictResults)
         {
             var sb = new StringBuilder();
-            foreach (var kvp in dictionary)
+            foreach (var kvp in setResults)
             {
                 sb.AppendLine($"Алгоритм: {kvp.Key.GetString()}\n");
                 foreach (var data in kvp.Value)

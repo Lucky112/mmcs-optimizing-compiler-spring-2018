@@ -9,7 +9,7 @@ using Compiler.ThreeAddrCode.Expressions;
 
 namespace Compiler.ThreeAddrCode.DFA.ConstantPropagation
 {
-    public class TransferFunctions : ITransferFunction<Dictionary<Guid, VarValue>>
+    public class TransferFunction : ITransferFunction<Dictionary<Guid, VarValue>>
     {
         public Dictionary<Guid, VarValue> Transfer(BasicBlock basicBlock, Dictionary<Guid, VarValue> input, ILatticeOperations<Dictionary<Guid, VarValue>> ops)
         {
