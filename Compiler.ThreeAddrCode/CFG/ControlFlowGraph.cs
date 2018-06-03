@@ -134,6 +134,9 @@ namespace Compiler.ThreeAddrCode.CFG
         /// Возвращает глубину CFG
         /// </returns>
         public int GetDepth() {
+            // Нужно убрать отсюда и добавить в вызов конструктора
+            ClassificateEdges();
+
             List<BasicBlock> visitedNodes = new List<BasicBlock>();
             return GetDepthRecursive(GetRoot(), 0, ref visitedNodes);
         }
@@ -148,12 +151,15 @@ namespace Compiler.ThreeAddrCode.CFG
         /// Возвращает глубину CFG
         /// </returns>
         private int GetDepthRecursive(BasicBlock root, int depth, ref List<BasicBlock> visitedNodes) {
-            if (root.Children.Count() == 0) return depth;
+            if (
+                root.Children.Count() == 0 ||
+                visitedNodes.Contains(root)
+            ) return depth;
+
+            visitedNodes.Add(root);
 
             foreach (var children in root.Children) {
                 if (visitedNodes.Contains(children)) continue;
-
-                visitedNodes.Add(children);
 
                 if (EdgeTypes.First(edge =>
                                     edge.Key.Source.BlockId == root.BlockId &&
