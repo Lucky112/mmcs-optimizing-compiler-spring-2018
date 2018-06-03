@@ -11,6 +11,11 @@ namespace Compiler.IDE
     {
         private readonly OpenFileDialog _sourceDialog = new OpenFileDialog();
         private readonly SaveFileDialog _saveGraphDialog = new SaveFileDialog();
+        SaveFileDialog _saveFileDialog = new SaveFileDialog();
+
+        // from https://www.codeproject.com/Articles/7390/About-The-About-Box
+        AboutBox _aboutBox = new AboutBox();
+
         private Image _cfgImage;
         private Image _astImage;
 
@@ -89,6 +94,8 @@ namespace Compiler.IDE
             // open/exit
             exitToolStripMenuItem.Click += (o, e) => Application.Exit();
             openToolStripMenuItem.Click += (o, e) => OpenSourceFile();
+            saveToolStripMenuItem.Click += (o, e) => SaveSourceFile();
+            aboutToolStripMenuItem1.Click += (o, e) => _aboutBox.ShowDialog(this);
 
             // compile button
             compileButton.Click += (o, e) => _ilCodeHandler.Abort();
@@ -120,36 +127,48 @@ namespace Compiler.IDE
             // 3-addr code
             _parseHandler.ParsingCompleted += _threeCodeHandler.GenerateThreeAddrCode;
             _threeCodeHandler.PrintableCodeGenerated += (o, e) => threeAddrTextBox.Text = e;
+            _threeCodeHandler.GenerationErrored += (o, ex) =>
+            {
+                MessageBox.Show(this, $@"Построение трехадресного кода завершилось с ошибкой:{Environment.NewLine} {ex.Message}",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
 
             // CFG
-            _threeCodeHandler.GenerationCompleted += (o, e) => _cfgHandler.GenerateCfgImage(e);
+            _threeCodeHandler.GenerationCompleted += (o, e) => _cfgHandler.GenerateCFG(e);
             _cfgHandler.GenerationCompleted += (o, e) =>
             {
                 _cfgImage = e;
                 CFGPictureBox.Image = _cfgImage;
                 cfgScaleBar.Value = cfgScaleBar.Maximum;
             };
+            _cfgHandler.GenerationErrored += (o, ex) =>
+            {
+                MessageBox.Show(this, $@"Построение CFG завершилось с ошибкой:{Environment.NewLine} {ex.Message}",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
 
             // iterative algorithms
             _cfgHandler.CfgGenerated += (o, e) => _algoHandler.CollectInOutData(e);
             _cfgHandler.CfgGenerated += (o, e) => CFGEdgeClassificationTextBox.Text = _cfgHandler.PrintCFGEdgeClassification(e);
             _algoHandler.PrintableInOutDataCollected += (o, e) => iterativeAlgoTextBox.Text = e;
+            _algoHandler.GenerationErrored += (o, ex) =>
+            {
+                MessageBox.Show(this, $@"Выполнение итеративных алгоритмов завершилось с ошибкой:{Environment.NewLine} {ex.Message}",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
 
             // IL-code
-            _threeCodeHandler.GenerationCompleted += (o, e) =>
+            _threeCodeHandler.GenerationCompleted += (o, e) => _ilCodeHandler.GenerateIlCode(e);
+            _ilCodeHandler.GenerationCompleted += (o, e) => 
             {
-                try
-                {
-                    _ilCodeHandler.GenerateIlCode(e);
-                    runButton.Enabled = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, $@"Компиляция завершилась с ошибкой:{Environment.NewLine} {ex.Message}",
-                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                ILCodeTextBox.Text = e.PrintCommands();
+                runButton.Enabled = true;
             };
-            _ilCodeHandler.GenerationCompleted += (o, e) => { ILCodeTextBox.Text = e.PrintCommands(); };
+            _ilCodeHandler.GenerationErrored += (o, ex) =>
+            {
+                MessageBox.Show(this, $@"Генерация IL кода завершилась с ошибкой:{Environment.NewLine} {ex.Message}",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
 
             // run and stop
             // no way to pass cancellation token inside DynMethod's Invoke, so doing it hard way =\
@@ -239,6 +258,19 @@ namespace Compiler.IDE
         private void ClearOutput()
         {
             outTextBox.Text = "";
+        }
+
+        private void SaveSourceFile()
+        {
+            _saveFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            _saveFileDialog.Filter = @"txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            _saveFileDialog.FilterIndex = 2;
+            _saveFileDialog.RestoreDirectory = true;
+
+            if (_saveFileDialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            File.WriteAllText(_saveFileDialog.FileName, inputTextBox.Text);
         }
 
         private void OpenSourceFile()

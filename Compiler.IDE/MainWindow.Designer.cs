@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,6 +72,7 @@
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.CFGEdgeClassificationPage = new System.Windows.Forms.TabPage();
             this.CFGEdgeClassificationTextBox = new System.Windows.Forms.RichTextBox();
+
             this.menuStrip1.SuspendLayout();
             this.mainBox.SuspendLayout();
             this.outBox.SuspendLayout();
@@ -112,23 +115,31 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
+            this.saveToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(48, 22);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(83, 38);
             this.fileToolStripMenuItem.Text = "Файл";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(326, 38);
             this.openToolStripMenuItem.Text = "Открыть...";
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(326, 38);
+            this.saveToolStripMenuItem.Text = "Сохранить...";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(326, 38);
             this.exitToolStripMenuItem.Text = "Выход";
             // 
             // aboutToolStripMenuItem
@@ -136,13 +147,13 @@
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem1});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(65, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(119, 38);
             this.aboutToolStripMenuItem.Text = "Справка";
             // 
             // aboutToolStripMenuItem1
             // 
             this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
-            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(149, 22);
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(324, 38);
             this.aboutToolStripMenuItem1.Text = "О программе";
             // 
             // mainBox
@@ -171,10 +182,9 @@
             // 
             this.removeDeadVarsCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.removeDeadVarsCheckBox.AutoSize = true;
-            this.removeDeadVarsCheckBox.Location = new System.Drawing.Point(4, 151);
-            this.removeDeadVarsCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.removeDeadVarsCheckBox.Location = new System.Drawing.Point(7, 294);
             this.removeDeadVarsCheckBox.Name = "removeDeadVarsCheckBox";
-            this.removeDeadVarsCheckBox.Size = new System.Drawing.Size(199, 17);
+            this.removeDeadVarsCheckBox.Size = new System.Drawing.Size(378, 29);
             this.removeDeadVarsCheckBox.TabIndex = 10;
             this.removeDeadVarsCheckBox.Text = "Удаление \"мертвых\" переменных";
             this.removeDeadVarsCheckBox.UseVisualStyleBackColor = true;
@@ -345,8 +355,8 @@
             this.ILCodePage.Location = new System.Drawing.Point(4, 22);
             this.ILCodePage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ILCodePage.Name = "ILCodePage";
-            this.ILCodePage.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.ILCodePage.Size = new System.Drawing.Size(400, 254);
+            this.ILCodePage.Padding = new System.Windows.Forms.Padding(4);
+            this.ILCodePage.Size = new System.Drawing.Size(800, 491);
             this.ILCodePage.TabIndex = 1;
             this.ILCodePage.Text = "IL-код";
             this.ILCodePage.UseVisualStyleBackColor = true;
@@ -358,7 +368,7 @@
             this.ILCodeTextBox.Location = new System.Drawing.Point(2, 2);
             this.ILCodeTextBox.Name = "ILCodeTextBox";
             this.ILCodeTextBox.ReadOnly = true;
-            this.ILCodeTextBox.Size = new System.Drawing.Size(396, 250);
+            this.ILCodeTextBox.Size = new System.Drawing.Size(792, 483);
             this.ILCodeTextBox.TabIndex = 0;
             this.ILCodeTextBox.Text = "";
             // 
@@ -368,8 +378,8 @@
             this.threeAddrPage.Location = new System.Drawing.Point(4, 22);
             this.threeAddrPage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.threeAddrPage.Name = "threeAddrPage";
-            this.threeAddrPage.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.threeAddrPage.Size = new System.Drawing.Size(400, 254);
+            this.threeAddrPage.Padding = new System.Windows.Forms.Padding(4);
+            this.threeAddrPage.Size = new System.Drawing.Size(800, 491);
             this.threeAddrPage.TabIndex = 2;
             this.threeAddrPage.Text = "Трехадресный код";
             this.threeAddrPage.UseVisualStyleBackColor = true;
@@ -381,7 +391,7 @@
             this.threeAddrTextBox.Location = new System.Drawing.Point(2, 2);
             this.threeAddrTextBox.Name = "threeAddrTextBox";
             this.threeAddrTextBox.ReadOnly = true;
-            this.threeAddrTextBox.Size = new System.Drawing.Size(396, 250);
+            this.threeAddrTextBox.Size = new System.Drawing.Size(792, 483);
             this.threeAddrTextBox.TabIndex = 0;
             this.threeAddrTextBox.Text = "";
             // 
@@ -393,8 +403,8 @@
             this.CFGPage.Location = new System.Drawing.Point(4, 22);
             this.CFGPage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.CFGPage.Name = "CFGPage";
-            this.CFGPage.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.CFGPage.Size = new System.Drawing.Size(400, 254);
+            this.CFGPage.Padding = new System.Windows.Forms.Padding(4);
+            this.CFGPage.Size = new System.Drawing.Size(800, 491);
             this.CFGPage.TabIndex = 3;
             this.CFGPage.Text = "CFG";
             this.CFGPage.UseVisualStyleBackColor = true;
@@ -404,9 +414,10 @@
             this.cfgScalePanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cfgScalePanel.Controls.Add(this.cfgScaleBar);
-            this.cfgScalePanel.Location = new System.Drawing.Point(5, 217);
+            this.cfgScalePanel.Location = new System.Drawing.Point(10, 397);
+            this.cfgScalePanel.Margin = new System.Windows.Forms.Padding(6);
             this.cfgScalePanel.Name = "cfgScalePanel";
-            this.cfgScalePanel.Size = new System.Drawing.Size(305, 21);
+            this.cfgScalePanel.Size = new System.Drawing.Size(602, 40);
             this.cfgScalePanel.TabIndex = 5;
             // 
             // cfgScaleBar
@@ -418,7 +429,7 @@
             this.cfgScaleBar.Location = new System.Drawing.Point(5, -1);
             this.cfgScaleBar.Maximum = 100;
             this.cfgScaleBar.Name = "cfgScaleBar";
-            this.cfgScaleBar.Size = new System.Drawing.Size(296, 45);
+            this.cfgScaleBar.Size = new System.Drawing.Size(584, 90);
             this.cfgScaleBar.TabIndex = 2;
             this.cfgScaleBar.TickFrequency = 10;
             this.cfgScaleBar.TickStyle = System.Windows.Forms.TickStyle.None;
@@ -428,7 +439,8 @@
             // 
             this.cfgSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cfgSaveButton.Enabled = false;
-            this.cfgSaveButton.Location = new System.Drawing.Point(316, 216);
+            this.cfgSaveButton.Location = new System.Drawing.Point(624, 394);
+            this.cfgSaveButton.Margin = new System.Windows.Forms.Padding(6);
             this.cfgSaveButton.Name = "cfgSaveButton";
             this.cfgSaveButton.Size = new System.Drawing.Size(75, 23);
             this.cfgSaveButton.TabIndex = 4;
@@ -444,7 +456,7 @@
             this.cfgPanel.Controls.Add(this.CFGPictureBox);
             this.cfgPanel.Location = new System.Drawing.Point(5, 5);
             this.cfgPanel.Name = "cfgPanel";
-            this.cfgPanel.Size = new System.Drawing.Size(386, 205);
+            this.cfgPanel.Size = new System.Drawing.Size(764, 374);
             this.cfgPanel.TabIndex = 1;
             // 
             // CFGPictureBox
@@ -464,8 +476,8 @@
             this.ASTPage.Location = new System.Drawing.Point(4, 22);
             this.ASTPage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ASTPage.Name = "ASTPage";
-            this.ASTPage.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.ASTPage.Size = new System.Drawing.Size(400, 254);
+            this.ASTPage.Padding = new System.Windows.Forms.Padding(4);
+            this.ASTPage.Size = new System.Drawing.Size(800, 491);
             this.ASTPage.TabIndex = 4;
             this.ASTPage.Text = "AST";
             this.ASTPage.UseVisualStyleBackColor = true;
@@ -475,9 +487,10 @@
             this.astPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.astPanel.Controls.Add(this.astTrackBar);
-            this.astPanel.Location = new System.Drawing.Point(5, 217);
+            this.astPanel.Location = new System.Drawing.Point(10, 397);
+            this.astPanel.Margin = new System.Windows.Forms.Padding(6);
             this.astPanel.Name = "astPanel";
-            this.astPanel.Size = new System.Drawing.Size(305, 21);
+            this.astPanel.Size = new System.Drawing.Size(602, 40);
             this.astPanel.TabIndex = 5;
             // 
             // astTrackBar
@@ -489,7 +502,7 @@
             this.astTrackBar.Location = new System.Drawing.Point(5, -1);
             this.astTrackBar.Maximum = 100;
             this.astTrackBar.Name = "astTrackBar";
-            this.astTrackBar.Size = new System.Drawing.Size(296, 45);
+            this.astTrackBar.Size = new System.Drawing.Size(584, 90);
             this.astTrackBar.TabIndex = 2;
             this.astTrackBar.TickFrequency = 10;
             this.astTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
@@ -499,7 +512,8 @@
             // 
             this.astSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.astSaveButton.Enabled = false;
-            this.astSaveButton.Location = new System.Drawing.Point(316, 216);
+            this.astSaveButton.Location = new System.Drawing.Point(624, 394);
+            this.astSaveButton.Margin = new System.Windows.Forms.Padding(6);
             this.astSaveButton.Name = "astSaveButton";
             this.astSaveButton.Size = new System.Drawing.Size(75, 23);
             this.astSaveButton.TabIndex = 4;
@@ -515,7 +529,7 @@
             this.astTabPanel.Controls.Add(this.ASTPictureBox);
             this.astTabPanel.Location = new System.Drawing.Point(5, 5);
             this.astTabPanel.Name = "astTabPanel";
-            this.astTabPanel.Size = new System.Drawing.Size(386, 205);
+            this.astTabPanel.Size = new System.Drawing.Size(764, 374);
             this.astTabPanel.TabIndex = 1;
             // 
             // ASTPictureBox
@@ -532,8 +546,8 @@
             this.iterativeAlgoPage.Controls.Add(this.iterativeAlgoTextBox);
             this.iterativeAlgoPage.Location = new System.Drawing.Point(4, 22);
             this.iterativeAlgoPage.Name = "iterativeAlgoPage";
-            this.iterativeAlgoPage.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.iterativeAlgoPage.Size = new System.Drawing.Size(400, 254);
+            this.iterativeAlgoPage.Padding = new System.Windows.Forms.Padding(6);
+            this.iterativeAlgoPage.Size = new System.Drawing.Size(800, 491);
             this.iterativeAlgoPage.TabIndex = 5;
             this.iterativeAlgoPage.Text = "Итер. алгоритм";
             this.iterativeAlgoPage.UseVisualStyleBackColor = true;
@@ -545,7 +559,7 @@
             this.iterativeAlgoTextBox.Location = new System.Drawing.Point(3, 3);
             this.iterativeAlgoTextBox.Name = "iterativeAlgoTextBox";
             this.iterativeAlgoTextBox.ReadOnly = true;
-            this.iterativeAlgoTextBox.Size = new System.Drawing.Size(394, 248);
+            this.iterativeAlgoTextBox.Size = new System.Drawing.Size(788, 479);
             this.iterativeAlgoTextBox.TabIndex = 1;
             this.iterativeAlgoTextBox.Text = "";
             // 
@@ -597,7 +611,8 @@
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.mainBox);
             this.Controls.Add(this.menuStrip1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainWindow";
             this.Text = "Среда разработки";
             this.menuStrip1.ResumeLayout(false);
@@ -679,5 +694,6 @@
         private System.Windows.Forms.CheckBox removeDeadVarsCheckBox;
         private System.Windows.Forms.TabPage CFGEdgeClassificationPage;
         private System.Windows.Forms.RichTextBox CFGEdgeClassificationTextBox;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
     }
 }
