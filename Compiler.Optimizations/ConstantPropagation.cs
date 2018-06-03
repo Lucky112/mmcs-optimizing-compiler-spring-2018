@@ -36,6 +36,15 @@ namespace Compiler.Optimizations
 								app = true;
 							}
 						}
+						if (nodes[j] is Print printNode)
+						{
+							//Если Result равна тому, что находится в Print и левый операнд node пустой
+							if (node.Left is null && node.Result.Equals(printNode.Data))
+							{
+								printNode.Data = node.Right;
+								app = true;
+							}
+						}
 					}
 				}
 			}
