@@ -89,7 +89,7 @@ namespace Compiler.ThreeAddrCode.CFG
             }
 
             EdgeTypes = new EdgeTypes();
-            //ClassificateEdges();
+            ClassificateEdges();
         }
 
         public void ClassificateEdges()
@@ -126,6 +126,50 @@ namespace Compiler.ThreeAddrCode.CFG
         /// Возвращает true, если CFG приводим, иначе - false
         /// </summary>
         public bool IsReducible { get => isReducible(); }
+
+        /// <summary>
+        /// Вычисление глубины CFG
+        /// </summary>
+        /// <returns>
+        /// Возвращает глубину CFG
+        /// </returns>
+        public int GetDepth() {
+            List<BasicBlock> visitedNodes = new List<BasicBlock>();
+            return GetDepthRecursive(GetRoot(), 0, ref visitedNodes);
+        }
+
+        /// <summary>
+        /// Вычисление глубины CFG
+        /// </summary>
+        /// <param name="root">текущий узел</param>
+        /// <param name="depth">текущая максимальная глубина</param>
+        /// <param name="visitedNodes">список посещенных вершин</param>
+        /// <returns>
+        /// Возвращает глубину CFG
+        /// </returns>
+        private int GetDepthRecursive(BasicBlock root, int depth, ref List<BasicBlock> visitedNodes) {
+            if (root.Children.Count() == 0) return depth;
+
+            foreach (var children in root.Children) {
+                if (visitedNodes.Contains(children)) continue;
+
+                visitedNodes.Add(children);
+
+                if (EdgeTypes.First(edge =>
+                                    edge.Key.Source.BlockId == root.BlockId &&
+                                    edge.Key.Target.BlockId == children.BlockId)
+                             .Value == EdgeType.Retreating)
+                {
+                    depth = GetDepthRecursive(children, depth + 1, ref visitedNodes);
+                }
+                else
+                {
+                    depth = GetDepthRecursive(children, depth, ref visitedNodes);
+                }
+            }
+
+            return depth;
+        }
 
         /// <summary>
         /// Проверка CFG на приводимость
