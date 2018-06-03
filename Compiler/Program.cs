@@ -31,7 +31,7 @@ namespace Compiler
             //sTest.SubexpressionOptimizationTest();
 
             //APC
-            //CFGReducibility_DominatorTree_PrettyPrinter_Demonstration();
+            CFGReducibility_DominatorTree_PrettyPrinter_Demonstration();
 
             string fileName = @"..\..\sample.txt";
 
@@ -77,6 +77,8 @@ namespace Compiler
             Console.WriteLine("###### Dominator Tree Matrix:");
             Console.WriteLine(domTree.ToString());
             Console.WriteLine($"###### CFG is reducible: {cfg.IsReducible}");
+            Console.WriteLine($"###### CFG depth is: {cfg.Depth}");
+
 
             fpath = @"..\..\..\CodeSamples\reducibilityGoodSample.txt";
             astRoot = null;
