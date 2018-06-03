@@ -26,7 +26,9 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
             AssignNodes = new List<Assign>();
             foreach (var node in code.CodeList)
             {
-                if ((node is Assign ass) && (ass.Left is Var || ass.Right is Var))
+                if ((node is Assign ass) 
+                    && (!(ass.Left is null) && !(ass.Right is null))
+                    && (ass.Left is Var || ass.Right is Var))
                 {
                     AssignNodes.Add(ass);
                 }
@@ -45,7 +47,9 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
             int node_index = 0;
             foreach (var n in basicBlock.CodeList)
             {
-                if ((n is Assign ass) && ((ass.Left is Var) || (ass.Right is Var)))
+                if ((n is Assign ass) 
+                    && (!(ass.Left is null) && !(ass.Right is null))
+                    && ((ass.Left is Var) || (ass.Right is Var)))
                 {
                     bool redefinition_exists = false;
                     //пропускаем node_index + 1 элементов и просматриваем до конца блока
@@ -105,7 +109,9 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
             /***************Поиск e_kill множества в самом блоке************/
             var all_bbl_assigns = new HashSet<Guid>();
             foreach (var n in basicBlock.CodeList)
-                if ((n is Assign ass) && (ass.Left is Var || ass.Right is Var))
+                if ((n is Assign ass) 
+                    && (!(ass.Left is null) && !(ass.Right is null))
+                    && (ass.Left is Var || ass.Right is Var))
                     all_bbl_assigns.Add(ass.Label);
 
             //Множество e_kill в самом блоке
