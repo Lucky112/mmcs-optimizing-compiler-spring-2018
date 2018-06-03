@@ -9,12 +9,12 @@
 - Все реализованные оптимизации для базового блока
 
 #### Теоретическая часть задачи
-Требуется реализовать алгоритм, который применил бы к базовому блоку все имеющиеся оптимизации. Также необходимо, чтобы легко можно было добавить новые оптимизации.
+Требуется реализовать алгоритм, который применил бы к базовому блоку все имеющиеся оптимизации до тех пор, пока это возможно делать.
 
 #### Практическая часть задачи (реализация)
 Был реализован класс `AllOptimizations` и функция `ApplyAllOptimizations`, применяющая все оптимизации к трехадресному коду.
 ```
-public class AllOptimizations
+	public class AllOptimizations
 	{
 		private List<IOptimization> BasicBlockOptimizationList()
 		{
@@ -60,6 +60,10 @@ public class AllOptimizations
 
                 code = new TACode();
                 code.CodeList = codeList;
+
+
+                foreach (var line in code.CodeList)
+                    code.LabeledCode[line.Label] = line;
             }
 
 			return code;
@@ -68,7 +72,65 @@ public class AllOptimizations
 
 ```
 #### Тесты
-Короткие примеры, демонстрирующие правильность.
-
+```
+	a = b
+	c = b - a   -----> c = 0
+	n = 20
+	c = 20 * 3  -----> c = 60
+	d = 10 + n  -----> d = 30
+```
 #### Пример работы.
-Большой пример, демонстрирующий алгоритм.
+```
+		public void Test1()
+		{
+			var taCodeAllOptimizations = new TACode();
+			var assgn1 = new Assign()
+			{
+				Left = null,
+				Operation = OpCode.Copy,
+				Right = new Var(),
+				Result = new Var()
+			};
+			var assgn2 = new Assign()
+			{
+				Left = assgn1.Right,
+				Operation = OpCode.Minus,
+				Right = assgn1.Result,
+				Result = new Var()
+			};
+			var assgn3 = new Assign()
+			{
+				Left = null,
+				Operation = OpCode.Copy,
+				Right = new IntConst(20),
+				Result = new Var()
+			};
+			var assgn4 = new Assign()
+			{
+				Left = new IntConst(20),
+				Operation = OpCode.Mul,
+				Right = new IntConst(3),
+				Result = new Var()
+			};
+			var assgn5 = new Assign()
+			{
+				Left = new IntConst(10),
+				Operation = OpCode.Plus,
+				Right = assgn3.Result,
+				Result = new Var()
+			};
+			taCodeAllOptimizations.AddNode(assgn1);
+			taCodeAllOptimizations.AddNode(assgn2);
+			taCodeAllOptimizations.AddNode(assgn3);
+			taCodeAllOptimizations.AddNode(assgn4);
+			taCodeAllOptimizations.AddNode(assgn5);
+
+			var allOptimizations = new AllOptimizations();
+			allOptimizations.ApplyAllOptimizations(taCodeAllOptimizations);
+
+			Assert.AreEqual(assgn2.Right, 0);
+			Assert.AreEqual(assgn4.Right, 60);
+			Assert.AreEqual(assgn5.Right, 30);
+			Assert.True(true);
+		}
+```      
