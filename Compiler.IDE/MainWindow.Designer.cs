@@ -100,7 +100,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1734, 40);
+            this.menuStrip1.Size = new System.Drawing.Size(1296, 40);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -158,7 +158,7 @@
             this.mainBox.Margin = new System.Windows.Forms.Padding(4);
             this.mainBox.Name = "mainBox";
             this.mainBox.Padding = new System.Windows.Forms.Padding(4);
-            this.mainBox.Size = new System.Drawing.Size(438, 873);
+            this.mainBox.Size = new System.Drawing.Size(438, 701);
             this.mainBox.TabIndex = 1;
             this.mainBox.TabStop = false;
             this.mainBox.Text = "Панель управления";
@@ -166,7 +166,7 @@
             // stopButton
             // 
             this.stopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.stopButton.Location = new System.Drawing.Point(150, 823);
+            this.stopButton.Location = new System.Drawing.Point(150, 651);
             this.stopButton.Margin = new System.Windows.Forms.Padding(4);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(134, 38);
@@ -178,7 +178,7 @@
             // 
             this.iterativeAlgoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.iterativeAlgoLabel.AutoSize = true;
-            this.iterativeAlgoLabel.Location = new System.Drawing.Point(8, 518);
+            this.iterativeAlgoLabel.Location = new System.Drawing.Point(8, 346);
             this.iterativeAlgoLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.iterativeAlgoLabel.Name = "iterativeAlgoLabel";
             this.iterativeAlgoLabel.Size = new System.Drawing.Size(274, 25);
@@ -190,7 +190,7 @@
             this.iterativeAlgoList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.iterativeAlgoList.CheckOnClick = true;
             this.iterativeAlgoList.FormattingEnabled = true;
-            this.iterativeAlgoList.Location = new System.Drawing.Point(6, 547);
+            this.iterativeAlgoList.Location = new System.Drawing.Point(6, 375);
             this.iterativeAlgoList.Margin = new System.Windows.Forms.Padding(4);
             this.iterativeAlgoList.Name = "iterativeAlgoList";
             this.iterativeAlgoList.Size = new System.Drawing.Size(420, 238);
@@ -209,7 +209,7 @@
             // compileButton
             // 
             this.compileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.compileButton.Location = new System.Drawing.Point(6, 823);
+            this.compileButton.Location = new System.Drawing.Point(6, 651);
             this.compileButton.Margin = new System.Windows.Forms.Padding(4);
             this.compileButton.Name = "compileButton";
             this.compileButton.Size = new System.Drawing.Size(134, 38);
@@ -221,7 +221,7 @@
             // 
             this.runButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.runButton.Enabled = false;
-            this.runButton.Location = new System.Drawing.Point(294, 823);
+            this.runButton.Location = new System.Drawing.Point(294, 651);
             this.runButton.Margin = new System.Windows.Forms.Padding(4);
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(134, 38);
@@ -250,7 +250,7 @@
             this.optsList.Location = new System.Drawing.Point(6, 117);
             this.optsList.Margin = new System.Windows.Forms.Padding(4);
             this.optsList.Name = "optsList";
-            this.optsList.Size = new System.Drawing.Size(420, 342);
+            this.optsList.Size = new System.Drawing.Size(420, 160);
             this.optsList.TabIndex = 2;
             // 
             // outBox
@@ -263,7 +263,7 @@
             this.outBox.Margin = new System.Windows.Forms.Padding(4);
             this.outBox.Name = "outBox";
             this.outBox.Padding = new System.Windows.Forms.Padding(4);
-            this.outBox.Size = new System.Drawing.Size(1244, 175);
+            this.outBox.Size = new System.Drawing.Size(806, 136);
             this.outBox.TabIndex = 2;
             this.outBox.TabStop = false;
             this.outBox.Text = "Вывод";
@@ -280,7 +280,7 @@
             this.outTextBox.Name = "outTextBox";
             this.outTextBox.ReadOnly = true;
             this.outTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.outTextBox.Size = new System.Drawing.Size(1226, 138);
+            this.outTextBox.Size = new System.Drawing.Size(788, 99);
             this.outTextBox.TabIndex = 0;
             // 
             // tabsControl
@@ -298,7 +298,7 @@
             this.tabsControl.Margin = new System.Windows.Forms.Padding(4);
             this.tabsControl.Name = "tabsControl";
             this.tabsControl.SelectedIndex = 0;
-            this.tabsControl.Size = new System.Drawing.Size(1254, 671);
+            this.tabsControl.Size = new System.Drawing.Size(816, 538);
             this.tabsControl.TabIndex = 3;
             // 
             // inputPage
@@ -308,7 +308,7 @@
             this.inputPage.Margin = new System.Windows.Forms.Padding(4);
             this.inputPage.Name = "inputPage";
             this.inputPage.Padding = new System.Windows.Forms.Padding(4);
-            this.inputPage.Size = new System.Drawing.Size(1238, 624);
+            this.inputPage.Size = new System.Drawing.Size(800, 491);
             this.inputPage.TabIndex = 0;
             this.inputPage.Text = "Исходный код";
             this.inputPage.UseVisualStyleBackColor = true;
@@ -319,7 +319,7 @@
             this.inputTextBox.Location = new System.Drawing.Point(4, 4);
             this.inputTextBox.Margin = new System.Windows.Forms.Padding(6);
             this.inputTextBox.Name = "inputTextBox";
-            this.inputTextBox.Size = new System.Drawing.Size(1230, 616);
+            this.inputTextBox.Size = new System.Drawing.Size(792, 483);
             this.inputTextBox.TabIndex = 0;
             this.inputTextBox.Text = "";
             // 
@@ -564,15 +564,15 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.outBox);
-            this.splitContainer.Size = new System.Drawing.Size(1262, 873);
-            this.splitContainer.SplitterDistance = 675;
+            this.splitContainer.Size = new System.Drawing.Size(824, 701);
+            this.splitContainer.SplitterDistance = 542;
             this.splitContainer.TabIndex = 4;
             // 
             // removeDeadVarsCheckBox
             // 
             this.removeDeadVarsCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.removeDeadVarsCheckBox.AutoSize = true;
-            this.removeDeadVarsCheckBox.Location = new System.Drawing.Point(7, 466);
+            this.removeDeadVarsCheckBox.Location = new System.Drawing.Point(7, 294);
             this.removeDeadVarsCheckBox.Name = "removeDeadVarsCheckBox";
             this.removeDeadVarsCheckBox.Size = new System.Drawing.Size(378, 29);
             this.removeDeadVarsCheckBox.TabIndex = 10;
@@ -583,7 +583,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1734, 929);
+            this.ClientSize = new System.Drawing.Size(1296, 757);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.mainBox);
             this.Controls.Add(this.menuStrip1);
