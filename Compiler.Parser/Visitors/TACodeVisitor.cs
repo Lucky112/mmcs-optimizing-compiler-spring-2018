@@ -182,7 +182,7 @@ namespace Compiler.Parser.Visitors
         public override void VisitForNode(ForNode f)
         {
             // Значение счетчика цикла и инкремента при инициализации
-            var counter = new TACExpr.Var(f.Assign.Id.Name); 
+            var counter = GetVarByName(f.Assign.Id.Name);
             var inc = RecAssign(f.Inc);
 
             var init = new TACNodes.Assign()
