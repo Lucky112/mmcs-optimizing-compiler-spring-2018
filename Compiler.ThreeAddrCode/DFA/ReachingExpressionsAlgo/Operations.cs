@@ -25,7 +25,7 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
             foreach (var node in code.CodeList)
             {
                 //Если узел - присваивание и хотя бы один операнд - это переменная, то добавляем его в верхнюю границу
-                if (node is Assign ass)
+                if (node is Assign ass && (!(ass.Left is null) && !(ass.Right is null)))
                 {
                     if (ass.Left is Var || ass.Right is Var)
                         upper.Add(ass.Label);
