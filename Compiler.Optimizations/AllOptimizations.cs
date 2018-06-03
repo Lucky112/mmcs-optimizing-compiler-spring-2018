@@ -62,7 +62,7 @@ namespace Compiler.Optimizations
 
 			return code;
 		}
-		public TACode LabelCode(TACode code)
+		public static TACode LabelCode(TACode code)
 		{
 			foreach (var l in code.CodeList.ToList())
 			{

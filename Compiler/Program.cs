@@ -30,7 +30,7 @@ namespace Compiler
             //var sTest = new SubexprTest();
             //sTest.SubexpressionOptimizationTest();
 
-            string fileName = @"..\..\sample.txt";
+            string fileName = @"F:\mmcs-optimizing-compiler-spring-2018\CodeSamples\sample.txt";
 
             astRoot = AST(fileName);
             if (astRoot == null)
@@ -43,19 +43,36 @@ namespace Compiler
 			Console.WriteLine(tacodeInstance.ToString());
 
 			var allOpt = new AllOptimizations();
-			tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
-			tacodeInstance = allOpt.LabelCode(tacodeInstance);
+			//tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
+			//tacodeInstance = allOpt.LabelCode(tacodeInstance);
 
-			var GlobConstProp = new GlobalConstantPropagation();
-			tacodeInstance = GlobConstProp.Optimize(tacodeInstance, out var appl);
+            var cfg = new ControlFlowGraph(tacodeInstance);
 
-            //TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
+            //tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
+            //tacodeInstance = AllOptimizations.LabelCode(tacodeInstance);
+
+            var opt = new GlobalConstantPropogationAlt(tacodeInstance);
+            tacodeInstance = opt.Optimize();
 
             Console.WriteLine(tacodeInstance.ToString());
 
-            //trans.Translate(tacodeInstance);
-            //var temp = trans.PrintCommands();
-            //trans.RunProgram();
+            //var ops = new ThreeAddrCode.DFA.ConstantPropogationAlt.Operations(tacodeInstance);
+            //var tf = new Compiler.ThreeAddrCode.DFA.ConstantPropogationAlt.TransferFunction(tacodeInstance);
+            //var alg = new Compiler.ThreeAddrCode.DFA.ConstantPropogationAlt.IterativeAlgorithm(ops);
+
+            //Console.WriteLine("--------------");
+            //Console.WriteLine(tacodeInstance.ToString());
+            //Console.WriteLine("--------------");
+            //Console.WriteLine(alg.Analyze(cfg, ops, tf));
+            //Console.WriteLine("--------------");
+
+            TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
+
+            
+
+            trans.Translate(tacodeInstance);
+            var temp = trans.PrintCommands();
+            trans.RunProgram();
         }
 
         private static BlockNode astRoot;
