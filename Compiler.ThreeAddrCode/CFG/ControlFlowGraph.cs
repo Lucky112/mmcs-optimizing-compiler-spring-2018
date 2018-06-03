@@ -172,10 +172,51 @@ namespace Compiler.ThreeAddrCode.CFG
         }
 
         /// <summary>
-        /// Проверка CFG на приводимость
+        /// Возвращает глубину (by rphaet0n)
         /// </summary>
-        /// <returns>Возвращает true, если CFG приводим, иначе - false</returns>
-        private bool isReducible()
+        public uint Depth { get => getDepth(); }
+
+        private List<BasicBlock> visitedNodes;
+
+        private BasicBlock getCFGEntry()
+        {
+            return _cfgNodes[0];
+        }
+
+        private uint getDepth()
+        {
+            if (EdgeTypes == null)
+                ClassificateEdges();
+            visitedNodes = new List<BasicBlock>();
+            var cfgEntry = getCFGEntry();
+            return CalcCFGDepth(cfgEntry);
+        }
+
+        private uint CalcCFGDepth(BasicBlock cfgEntry)
+        {
+            visitedNodes.Add(cfgEntry);
+            var childrenDepths = new List<uint>();
+            foreach (var child in cfgEntry.Children)
+            {
+                if (!visitedNodes.Contains(child))
+                {
+                    if (EdgeTypes.First(edge => edge.Key.Source.BlockId == cfgEntry.BlockId &&
+                                                edge.Key.Target.BlockId == child.BlockId)
+                        .Value == EdgeType.Retreating)
+                        childrenDepths.Add(1 + CalcCFGDepth(child));
+                    else
+                        childrenDepths.Add(CalcCFGDepth(child));
+                }
+            }
+            visitedNodes.Remove(cfgEntry);
+            return childrenDepths.Count > 0 ? childrenDepths.Max() : 0;
+        }
+
+    /// <summary>
+    /// Проверка CFG на приводимость
+    /// </summary>
+    /// <returns>Возвращает true, если CFG приводим, иначе - false</returns>
+    private bool isReducible()
         {
             //Если ребра не классифицированы
             if (EdgeTypes.Count == 0)
