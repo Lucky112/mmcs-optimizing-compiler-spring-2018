@@ -18,6 +18,7 @@ namespace Compiler.IDE.Handlers
             {Optimizations.CopyProp, false},
             {Optimizations.ConstFold, false},
             {Optimizations.Subexpr, false},
+            {Optimizations.GlobalConstProp,false}
         };
 
         public bool RemoveDeadVariables = false;
@@ -108,6 +109,13 @@ namespace Compiler.IDE.Handlers
                 }
                 foreach (var line in newCode.CodeList)
                     newCode.LabeledCode[line.Label] = line;
+            }
+
+            if(OptimizationList[Optimizations.GlobalConstProp])
+            {
+                var opt = new GlobalConstantPropogationAlt(newCode);
+                newCode = opt.Optimize();
+                AllOptimizations.LabelCode(newCode);
             }
 
             if (RemoveDeadVariables)
