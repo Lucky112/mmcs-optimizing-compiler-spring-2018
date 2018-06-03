@@ -35,6 +35,11 @@ namespace Compiler.ThreeAddrCode.DFA.ConstantPropogationAlt
             return false;
         }
 
+        public override int GetHashCode()
+        {
+            return (int)Type.GetHashCode() ^ Value.GetHashCode();
+        }
+
         public int? Compare(VarInfo other)
         {
             if (Type == other.Type)

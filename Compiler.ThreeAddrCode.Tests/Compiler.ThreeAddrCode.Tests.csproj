@@ -58,6 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlFlowGraphTests.cs" />
+    <Compile Include="LiveVariableAnalysisTest.cs" />    
+    <Compile Include="GraphNumeratorTest.cs" />
     <Compile Include="NumeratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReachingDefenitionTests.cs" />

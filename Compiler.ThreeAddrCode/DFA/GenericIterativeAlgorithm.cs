@@ -12,8 +12,9 @@ namespace Compiler.ThreeAddrCode.DFA
         public Func<T, T, bool> Comparer { get; set; }
         public Func<(T, T)> Fill { get; set; }
         public Func<T, string> DebugToString { get; set; }
-        public Func<(T, T), (T, T), bool> Finish { get; set; }
-        public int CountOfDoneIterations { get; private set; } = 0;
+        public Func<(T,T), (T,T), bool> Finish { get; set; }
+        public bool Reverse { get; set; } = false;
+
         public InOutData<T> Analyze(
             ControlFlowGraph graph,
             ILatticeOperations<T> ops,
@@ -26,18 +27,28 @@ namespace Compiler.ThreeAddrCode.DFA
                 data[node] = Fill();
 
             var outChanged = true;
-            CountOfDoneIterations = 0;
             while (outChanged)
             {
-                CountOfDoneIterations++;
                 outChanged = false;
                 foreach (var block in graph.CFGNodes)
                 {
-                    var inset = block.Parents.Aggregate(Fill().Item1, (x, y)
-                        => ops.Operator(x, data[y].Item2));
-                    var outset = f.Transfer(block, inset, ops);
+                    T inset;
+                    T outset;
 
-                    if (!Finish((inset, outset), data[block]))
+                    if (!Reverse)
+                    {
+                        inset = block.Parents.Aggregate(Fill().Item1, (x, y)
+                            => ops.Operator(x, data[y].Item2));
+                        outset = f.Transfer(block, inset, ops);
+                    }
+                    else
+                    {
+                        outset = block.Parents.Aggregate(Fill().Item2, (x, y)
+                            => ops.Operator(x, data[y].Item1));
+                        inset = f.Transfer(block, outset, ops);
+                    }
+                    
+                    if (!Finish((inset,outset), data[block]))
                     {
                         outChanged = true;
                     }

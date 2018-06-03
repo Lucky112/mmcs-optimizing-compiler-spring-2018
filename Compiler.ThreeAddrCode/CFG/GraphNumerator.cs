@@ -53,7 +53,7 @@ namespace Compiler.ThreeAddrCode.CFG
         {
             var root = graph.CFGNodes.ElementAt(0);
             var num = new GraphNumerator();
-            var index = 0;
+            var index = graph.CFGNodes.Count;
             var openSet = new HashSet<BasicBlock>();
 
             void Iter(BasicBlock node)
@@ -62,7 +62,7 @@ namespace Compiler.ThreeAddrCode.CFG
                 var children = node.Children;
                 foreach(var c in children.Where(x => !openSet.Contains(x)))
                     Iter(c);
-                num._num[node] = index++;
+                num._num[node] = --index;
             }
 
             Iter(root);

@@ -58,17 +58,18 @@ namespace Compiler.IDE.Handlers
             return algorithms;
         }
 
-        private Dictionary<IterativeAlgorithms, InOutData<Dictionary<Guid, ThreeAddrCode.DFA.ConstantPropagation.VarValue>>> DictAlgorithmResults(ControlFlowGraph cfg)
+        private Dictionary<IterativeAlgorithms, InOutData<ThreeAddrCode.DFA.ConstantPropogationAlt.VarInfoTable>> DictAlgorithmResults(ControlFlowGraph cfg)
         {
-            var algorithms = new Dictionary<IterativeAlgorithms, InOutData<Dictionary<Guid, ThreeAddrCode.DFA.ConstantPropagation.VarValue>>>();
+            var algorithms = new Dictionary<IterativeAlgorithms, InOutData<ThreeAddrCode.DFA.ConstantPropogationAlt.VarInfoTable>>();
 
             if (IterativeAlgoList[IterativeAlgorithms.ConstantPropagation])
             {
-                var constPropagation = new ThreeAddrCode.DFA.ConstantPropagation.IterativeAlgorithm();
-                var output = constPropagation.Analyze(cfg,
-                    new ThreeAddrCode.DFA.ConstantPropagation.Operations(cfg.Code),
-                    new ThreeAddrCode.DFA.ConstantPropagation.TransferFunction());
-                algorithms.Add(IterativeAlgorithms.ReachingExprs, output);
+                var ops = new ThreeAddrCode.DFA.ConstantPropogationAlt.Operations(cfg.Code);
+                var tf = new ThreeAddrCode.DFA.ConstantPropogationAlt.TransferFunction(cfg.Code);
+
+                var constPropagation = new ThreeAddrCode.DFA.ConstantPropogationAlt.IterativeAlgorithm(ops);
+                var output = constPropagation.Analyze(cfg,ops,tf);
+                algorithms.Add(IterativeAlgorithms.ConstantPropagation, output);
             }
 
             return algorithms;
@@ -83,7 +84,7 @@ namespace Compiler.IDE.Handlers
         }
 
         private static string ResultsToString(ControlFlowGraph cfg,
-            Dictionary<IterativeAlgorithms, InOutData<HashSet<Guid>>> setResults, Dictionary<IterativeAlgorithms, InOutData<Dictionary<Guid, ThreeAddrCode.DFA.ConstantPropagation.VarValue>>> dictResults)
+            Dictionary<IterativeAlgorithms, InOutData<HashSet<Guid>>> setResults, Dictionary<IterativeAlgorithms, InOutData<ThreeAddrCode.DFA.ConstantPropogationAlt.VarInfoTable>> dictResults)
         {
             var sb = new StringBuilder();
             foreach (var kvp in setResults)
@@ -112,24 +113,7 @@ namespace Compiler.IDE.Handlers
             foreach (var kvp in dictResults)
             {
                 sb.AppendLine($"Алгоритм: {kvp.Key.GetString()}\n");
-                foreach (var inout in kvp.Value)
-                {
-                    sb.AppendLine($"{inout.Key} = {{");
-
-                    sb.AppendLine("    IN = {");
-                    foreach (var val in inout.Value.Item1)
-                        sb.AppendLine($"        {cfg.Code.LabeledCode[val.Key]}");
-                    sb.AppendLine("    }");
-
-                    sb.AppendLine();
-
-                    sb.AppendLine("    OUT = {");
-                    foreach (var val in inout.Value.Item2)
-                        sb.AppendLine($"        {cfg.Code.LabeledCode[val.Key]}");
-                    sb.AppendLine("    }");
-
-                    sb.AppendLine("}\n");
-                }
+                sb.AppendLine(kvp.Value.ToString());
             }
 
             return sb.ToString();

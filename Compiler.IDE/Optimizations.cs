@@ -10,6 +10,7 @@ namespace Compiler.IDE
         CopyProp = 3,
         ConstFold = 4,
         Subexpr = 5,
+        GlobalConstProp = 6
     }
 
     internal static class OptsExt
@@ -30,6 +31,8 @@ namespace Compiler.IDE
                     return "Блочные: сворачивание констант";
                 case Optimizations.Subexpr:
                     return "Блочные: общие подвыражения";
+                case Optimizations.GlobalConstProp:
+                    return "Глобальная: протяжка констант";
                 default:
                     throw new NotImplementedException($"key {opt} is missing");
             }
