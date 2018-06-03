@@ -54,6 +54,12 @@ namespace Compiler.IDE
                 var opt = (Optimizations) optsList.Items[e.Index];
                 _threeCodeHandler.OptimizationList[opt] = e.NewValue == CheckState.Checked;
             };
+
+            // remove dead variables
+            removeDeadVarsCheckBox.CheckedChanged += (o, e) =>
+            {
+                _threeCodeHandler.RemoveDeadVariables = removeDeadVarsCheckBox.Checked;
+            };
         }
 
         private void InitIterativeAlgorithms()
