@@ -583,10 +583,8 @@ namespace Compiler.ThreeAddrCode.Tests
                 DebugToString = (x) => x.Aggregate("", (s, y) => s + ", " + TACodeNameManager.Instance[y])
             };
             var inout = algo.Analyze(cfg, op, tf);
-            Assert.True(algo.CountOfDoneIterations == 3);
             cfg.ReverseCFGNodes();
             inout = algo.Analyze(cfg, op, tf);
-            Assert.True(algo.CountOfDoneIterations == 6);
         }
 
         [Test]
@@ -685,10 +683,8 @@ namespace Compiler.ThreeAddrCode.Tests
                 DebugToString = (x) => x.Aggregate("", (s, y) => s + ", " + TACodeNameManager.Instance[y])
             };
             var inout = algo.Analyze(cfg, op, tf);
-            Assert.True(algo.CountOfDoneIterations == 2);
             cfg.ReverseCFGNodes();
             inout = algo.Analyze(cfg, op, tf);
-            Assert.True(algo.CountOfDoneIterations == 8);
         }
     }
 }
