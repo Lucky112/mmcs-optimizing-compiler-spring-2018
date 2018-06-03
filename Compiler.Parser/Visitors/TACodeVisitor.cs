@@ -93,7 +93,7 @@ namespace Compiler.Parser.Visitors
             var assign = new TACNodes.Assign
             {
                 Left = null,
-                Right = RecAssign(a.Expr),
+                Right = TryGetExpr(a.Expr),
                 Result = GetVarByName(a.Id.Name),
                 Operation = OpCode.Copy
             };
@@ -107,7 +107,7 @@ namespace Compiler.Parser.Visitors
             var cycleLabel = GetEmptyLabeledNode();
 
             // Результат вычисления логического выражения
-            var cond = RecAssign(c.Condition);
+            var cond = TryGetExpr(c.Condition);
 
             // При истинности условия, переходим к телу цикла
             var ifGotoBody = new TACNodes.IfGoto { Condition = cond };
@@ -140,7 +140,7 @@ namespace Compiler.Parser.Visitors
             {
                 print = new TACNodes.Print
                 {
-                    Data = RecAssign(expr),
+                    Data = TryGetExpr(expr),
                     Sep = " "
                 };
                 code.AddNode(print);
@@ -155,7 +155,7 @@ namespace Compiler.Parser.Visitors
             var ifGoto = new TACNodes.IfGoto();
 
             // Результат вычисления логического выражения
-            var cond1 = RecAssign(iif.Conditon);
+            var cond1 = TryGetExpr(iif.Conditon);
             ifGoto.Condition = cond1;
 
             code.AddNode(ifGoto);
@@ -182,8 +182,17 @@ namespace Compiler.Parser.Visitors
         public override void VisitForNode(ForNode f)
         {
             // Значение счетчика цикла и инкремента при инициализации
-            var counter = RecAssign(f.Assign.Expr);
-            var inc = RecAssign(f.Inc);
+            if (!(f.Assign is AssignNode asn)) throw new Exception("Неверный индекс");
+            var counter = TryGetVar(asn.Id);
+            var expr = RecAssign(asn.Expr);
+
+            var assign = new TACNodes.Assign();
+            assign.Result = counter;
+            assign.Right = expr;
+
+            code.AddNode(assign);
+
+            var inc = TryGetExpr(f.Inc);
 
             // Метка начала цикла
             var cycle = GetEmptyLabeledNode();
@@ -208,7 +217,7 @@ namespace Compiler.Parser.Visitors
             {
                 Result = new TACExpr.Var(),
                 Left = counter,
-                Right = RecAssign(f.Border),
+                Right = TryGetExpr(f.Border),
                 Operation = OpCode.LessEq
             };
             code.AddNode(initialBackwardCondition);
@@ -232,7 +241,7 @@ namespace Compiler.Parser.Visitors
             {
                 Result = new TACExpr.Var(),
                 Left = counter,
-                Right = RecAssign(f.Border),
+                Right = TryGetExpr(f.Border),
                 Operation = OpCode.GreaterEq
             };
             code.AddNode(initialForwardCondition);
@@ -250,7 +259,7 @@ namespace Compiler.Parser.Visitors
             f.Body.Visit(this);
 
             // Пересчет инкремента
-            inc = RecAssign(f.Inc);
+            inc = TryGetExpr(f.Inc);
 
             // Создаем строку с увеличением счетчика
             var ass1 = new TACNodes.Assign
@@ -277,6 +286,19 @@ namespace Compiler.Parser.Visitors
             code.AddNode(new TACNodes.Empty());
         }
 
+        private TACExpr.Var TryGetVar(ExprNode node)
+        {
+            if (node is IdNode id) return GetVarByName(id.Name);
+            return RecAssign(node);
+        }
+
+        private TACExpr.Expr TryGetExpr(ExprNode node)
+        {
+            if (node is IntNumNode num) return GetConst(num.Num);
+            if (node is IdNode id) return GetVarByName(id.Name);
+            return RecAssign(node);
+        }
+
         /// <summary>
         /// Рекурсивный разбор выражений и генерация их кода
         /// </summary>
@@ -290,26 +312,24 @@ namespace Compiler.Parser.Visitors
             switch (ex)
             {
                 case IdNode tmp1:
-                    assign.Left = null;
-                assign.Right = GetVarByName(tmp1.Name);
-                assign.Operation = OpCode.Copy;
-                break;
+                return GetVarByName(tmp1.Name);
 
                 case IntNumNode tmp2:
-                    assign.Left = null;
+                assign.Left = null;
                 assign.Right = GetConst(tmp2.Num);
+                    
                 assign.Operation = OpCode.Copy;
                 break;
 
                 case BinaryNode tmp3:
-                    assign.Left = RecAssign(tmp3.Left);
-                assign.Right = RecAssign(tmp3.Right);
-                assign.Operation = ConvertOp(tmp3.Operation);
+                     assign.Left = TryGetExpr(tmp3.Left);
+                    assign.Right = TryGetExpr(tmp3.Right);
+                    assign.Operation = ConvertOp(tmp3.Operation);
                 break;
 
                 case UnaryNode tmp4:
                     assign.Left = null;
-                assign.Right = RecAssign(tmp4.Num);
+                assign.Right = TryGetExpr(tmp4.Num);
                 assign.Operation = ConvertOp(tmp4.Operation);
                 break;
             }

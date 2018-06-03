@@ -1,0 +1,10 @@
+a = 0;
+b = 1;
+c = 0;
+if(a == 0) b = 3 / b - c;
+else b = 2;
+for(i = 0, 10, 1) a = a + 1;
+if(c == 0)
+   if(c == 0) c = 1;
+print(a);
+print(c); 
