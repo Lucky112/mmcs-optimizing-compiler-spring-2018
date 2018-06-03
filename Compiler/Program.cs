@@ -30,7 +30,10 @@ namespace Compiler
             //var sTest = new SubexprTest();
             //sTest.SubexpressionOptimizationTest();
 
-            string fileName = @"F:\mmcs-optimizing-compiler-spring-2018\CodeSamples\sample.txt";
+            //APC
+            //CFGReducibility_DominatorTree_PrettyPrinter_Demonstration();
+
+            string fileName = @"..\..\sample.txt";
 
             astRoot = AST(fileName);
             if (astRoot == null)
@@ -40,35 +43,12 @@ namespace Compiler
             astRoot.Visit(tacodeVisitor);
             tacodeInstance = tacodeVisitor.Code;
 
-			Console.WriteLine(tacodeInstance.ToString());
-
-			var allOpt = new AllOptimizations();
-			//tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
-			//tacodeInstance = allOpt.LabelCode(tacodeInstance);
-
-            var cfg = new ControlFlowGraph(tacodeInstance);
-
-            //tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
-            //tacodeInstance = AllOptimizations.LabelCode(tacodeInstance);
-
-            var opt = new GlobalConstantPropogationAlt(tacodeInstance);
-            tacodeInstance = opt.Optimize();
-
-            Console.WriteLine(tacodeInstance.ToString());
-
-            //var ops = new ThreeAddrCode.DFA.ConstantPropogationAlt.Operations(tacodeInstance);
-            //var tf = new Compiler.ThreeAddrCode.DFA.ConstantPropogationAlt.TransferFunction(tacodeInstance);
-            //var alg = new Compiler.ThreeAddrCode.DFA.ConstantPropogationAlt.IterativeAlgorithm(ops);
-
-            //Console.WriteLine("--------------");
-            //Console.WriteLine(tacodeInstance.ToString());
-            //Console.WriteLine("--------------");
-            //Console.WriteLine(alg.Analyze(cfg, ops, tf));
-            //Console.WriteLine("--------------");
+            var allOpt = new AllOptimizations();
+            tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
 
             TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
 
-            
+            Console.WriteLine(tacodeInstance.ToString());
 
             trans.Translate(tacodeInstance);
             var temp = trans.PrintCommands();
@@ -77,6 +57,47 @@ namespace Compiler
 
         private static BlockNode astRoot;
         private static TACode tacodeInstance;
+
+        private static void CFGReducibility_DominatorTree_PrettyPrinter_Demonstration()
+        {
+            string fpath = @"..\..\..\CodeSamples\reducibilityBadSample.txt";
+            astRoot = AST(fpath);
+            if (astRoot == null)
+                return;
+            var tacodeVisitor = new TACodeVisitor();
+            astRoot.Visit(tacodeVisitor);
+            var prettyPrinter = new PrettyPrintVisitor();
+            astRoot.Visit(prettyPrinter);
+            var cfg = new ControlFlowGraph(tacodeVisitor.Code);
+            var domTree = new DominatorTree(cfg);
+            Console.WriteLine("###### CFG Reducibility(#59 by APC TEAM) based on DominatorTree(#56 by ДВП)");
+            Console.WriteLine("###### and PrettyPrinter(#5 by APC TEAM) DEMONSTARTION:");
+            Console.WriteLine("######       Sample 1:");
+            Console.WriteLine(prettyPrinter.Text);
+            Console.WriteLine("###### Dominator Tree Matrix:");
+            Console.WriteLine(domTree.ToString());
+            Console.WriteLine($"###### CFG is reducible: {cfg.IsReducible}");
+
+            fpath = @"..\..\..\CodeSamples\reducibilityGoodSample.txt";
+            astRoot = null;
+            astRoot = AST(fpath);
+            if (astRoot == null)
+                return;
+            tacodeVisitor = new TACodeVisitor();
+            astRoot.Visit(tacodeVisitor);
+            prettyPrinter = new PrettyPrintVisitor();
+            astRoot.Visit(prettyPrinter);
+            cfg = new ControlFlowGraph(tacodeVisitor.Code);
+            domTree = new DominatorTree(cfg);
+            Console.WriteLine("###### CFG Reducibility(#59 by APC TEAM) based on DominatorTree(#56 by ДВП)");
+            Console.WriteLine("###### and PrettyPrinter(#5 by APC TEAM) DEMONSTARTION:");
+            Console.WriteLine("######       Sample 2:");
+            Console.WriteLine("###### Program text from PrettyPrinter:\n");
+            Console.WriteLine(prettyPrinter.Text);
+            Console.WriteLine("###### Dominator Tree Matrix:");
+            Console.WriteLine(domTree.ToString());
+            Console.WriteLine($"###### CFG is reducible: {cfg.IsReducible}");
+        }
 
         private static BlockNode AST(string fileName)
         {
