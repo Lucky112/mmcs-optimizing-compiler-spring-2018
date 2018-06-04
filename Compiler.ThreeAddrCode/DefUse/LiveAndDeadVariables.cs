@@ -36,6 +36,12 @@ namespace Compiler.ThreeAddrCode
         /// Список живых переменных
         /// </summary>
         public LVars LiveVars { get; }
+        /// <summary>
+        /// Use переменные, которые не определены в блоке
+        /// </summary>
+        public List<DUVar> UListNotValid { get; }
+
+        private List<Guid> removeVars;
 
         /// <summary>
         /// Конструктор для класса определения
@@ -46,8 +52,10 @@ namespace Compiler.ThreeAddrCode
         public LiveAndDeadVariables(BasicBlock block)
         {
             this.Block = block;
+            this.UListNotValid = (new DULists(block)).UListNotValid;
             DeadVars = new DVars();
             LiveVars = new LVars();
+            removeVars = new List<Guid>();
             DefineLDVars(Block.CodeList.ToList(), DeadVars, LiveVars);
         }
 
@@ -71,6 +79,7 @@ namespace Compiler.ThreeAddrCode
 
             // Обход Def цепочки
             foreach (var dVar in dList)
+            { 
                 // Мертвая переменная (нигде не используется)
                 if (dVar.UseVariables.Count == 0)
                     DeadVars.Add(dVar.DefVariable);
@@ -81,7 +90,17 @@ namespace Compiler.ThreeAddrCode
 
                     foreach (var uVar in dVar.UseVariables)
                         LiveVars.Add(uVar);
-                }                
+                }
+            }
+        }
+
+        /// <summary>
+        /// Делает мертвыми не определенные use-переменные 
+        /// </summary>
+        private void DefineUnDefVariables(List<Node> nodes)
+        {
+            foreach (var unDefV in this.UListNotValid)
+                DeadVars.Add(unDefV);
         }
 
         /// <summary>
@@ -90,21 +109,31 @@ namespace Compiler.ThreeAddrCode
         public BasicBlock RemoveDeadCode()
         {
             var listNode = Block.CodeList.ToList();
+            DefineUnDefVariables(listNode);
             var deadVars = DeadVars;
             var liveVars = LiveVars;
 
             // Пока мы не удалим все мертвые переменные
             while (deadVars.Count != 0)
             {
-                var i = 0;
-                foreach (var dV in deadVars)
-                    listNode.RemoveAt(dV.StringId - i++);
+                foreach (var dV in removeVars)
+                {
+                    var ind = listNode.FindIndex(x => x.Label == dV);
+                    listNode.RemoveAt(ind);
+                }
 
                 deadVars.Clear();
                 liveVars.Clear();
+                removeVars.Clear();
 
                 // Определение живости/мертвости переменных
                 DefineLDVars(listNode, deadVars, liveVars);
+                DefineUnDefVariables(listNode);
+
+                foreach (var dV in deadVars)
+                    removeVars.Add(dV.StringId);
+
+                removeVars = removeVars.Distinct().ToList();
             }
             
             return new BasicBlock(listNode.ToList());
