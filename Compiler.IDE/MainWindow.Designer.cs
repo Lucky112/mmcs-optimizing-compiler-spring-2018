@@ -105,7 +105,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1507, 40);
+            this.menuStrip1.Size = new System.Drawing.Size(1568, 40);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -171,7 +171,7 @@
             this.mainBox.Margin = new System.Windows.Forms.Padding(4);
             this.mainBox.Name = "mainBox";
             this.mainBox.Padding = new System.Windows.Forms.Padding(4);
-            this.mainBox.Size = new System.Drawing.Size(438, 822);
+            this.mainBox.Size = new System.Drawing.Size(438, 831);
             this.mainBox.TabIndex = 1;
             this.mainBox.TabStop = false;
             this.mainBox.Text = "Панель управления";
@@ -180,7 +180,7 @@
             // 
             this.removeDeadVarsCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.removeDeadVarsCheckBox.AutoSize = true;
-            this.removeDeadVarsCheckBox.Location = new System.Drawing.Point(13, 365);
+            this.removeDeadVarsCheckBox.Location = new System.Drawing.Point(13, 374);
             this.removeDeadVarsCheckBox.Margin = new System.Windows.Forms.Padding(6);
             this.removeDeadVarsCheckBox.Name = "removeDeadVarsCheckBox";
             this.removeDeadVarsCheckBox.Size = new System.Drawing.Size(378, 29);
@@ -191,7 +191,7 @@
             // stopButton
             // 
             this.stopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.stopButton.Location = new System.Drawing.Point(150, 772);
+            this.stopButton.Location = new System.Drawing.Point(150, 781);
             this.stopButton.Margin = new System.Windows.Forms.Padding(4);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(134, 38);
@@ -203,7 +203,7 @@
             // 
             this.iterativeAlgoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.iterativeAlgoLabel.AutoSize = true;
-            this.iterativeAlgoLabel.Location = new System.Drawing.Point(8, 400);
+            this.iterativeAlgoLabel.Location = new System.Drawing.Point(8, 409);
             this.iterativeAlgoLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.iterativeAlgoLabel.Name = "iterativeAlgoLabel";
             this.iterativeAlgoLabel.Size = new System.Drawing.Size(274, 25);
@@ -215,7 +215,7 @@
             this.iterativeAlgoList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.iterativeAlgoList.CheckOnClick = true;
             this.iterativeAlgoList.FormattingEnabled = true;
-            this.iterativeAlgoList.Location = new System.Drawing.Point(13, 443);
+            this.iterativeAlgoList.Location = new System.Drawing.Point(13, 452);
             this.iterativeAlgoList.Margin = new System.Windows.Forms.Padding(4);
             this.iterativeAlgoList.Name = "iterativeAlgoList";
             this.iterativeAlgoList.Size = new System.Drawing.Size(417, 316);
@@ -234,7 +234,7 @@
             // compileButton
             // 
             this.compileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.compileButton.Location = new System.Drawing.Point(6, 772);
+            this.compileButton.Location = new System.Drawing.Point(6, 781);
             this.compileButton.Margin = new System.Windows.Forms.Padding(4);
             this.compileButton.Name = "compileButton";
             this.compileButton.Size = new System.Drawing.Size(134, 38);
@@ -246,7 +246,7 @@
             // 
             this.runButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.runButton.Enabled = false;
-            this.runButton.Location = new System.Drawing.Point(294, 772);
+            this.runButton.Location = new System.Drawing.Point(294, 781);
             this.runButton.Margin = new System.Windows.Forms.Padding(4);
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(134, 38);
@@ -275,7 +275,7 @@
             this.optsList.Location = new System.Drawing.Point(13, 117);
             this.optsList.Margin = new System.Windows.Forms.Padding(4);
             this.optsList.Name = "optsList";
-            this.optsList.Size = new System.Drawing.Size(417, 238);
+            this.optsList.Size = new System.Drawing.Size(417, 212);
             this.optsList.TabIndex = 2;
             // 
             // outBox
@@ -288,7 +288,7 @@
             this.outBox.Margin = new System.Windows.Forms.Padding(4);
             this.outBox.Name = "outBox";
             this.outBox.Padding = new System.Windows.Forms.Padding(4);
-            this.outBox.Size = new System.Drawing.Size(1017, 168);
+            this.outBox.Size = new System.Drawing.Size(1077, 170);
             this.outBox.TabIndex = 2;
             this.outBox.TabStop = false;
             this.outBox.Text = "Вывод";
@@ -305,7 +305,7 @@
             this.outTextBox.Name = "outTextBox";
             this.outTextBox.ReadOnly = true;
             this.outTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.outTextBox.Size = new System.Drawing.Size(999, 127);
+            this.outTextBox.Size = new System.Drawing.Size(1059, 129);
             this.outTextBox.TabIndex = 0;
             // 
             // tabsControl
@@ -324,7 +324,7 @@
             this.tabsControl.Margin = new System.Windows.Forms.Padding(4);
             this.tabsControl.Name = "tabsControl";
             this.tabsControl.SelectedIndex = 0;
-            this.tabsControl.Size = new System.Drawing.Size(1027, 631);
+            this.tabsControl.Size = new System.Drawing.Size(1087, 633);
             this.tabsControl.TabIndex = 3;
             // 
             // inputPage
@@ -334,7 +334,7 @@
             this.inputPage.Margin = new System.Windows.Forms.Padding(4);
             this.inputPage.Name = "inputPage";
             this.inputPage.Padding = new System.Windows.Forms.Padding(4);
-            this.inputPage.Size = new System.Drawing.Size(1011, 584);
+            this.inputPage.Size = new System.Drawing.Size(1214, 540);
             this.inputPage.TabIndex = 0;
             this.inputPage.Text = "Исходный код";
             this.inputPage.UseVisualStyleBackColor = true;
@@ -345,7 +345,7 @@
             this.inputTextBox.Location = new System.Drawing.Point(4, 4);
             this.inputTextBox.Margin = new System.Windows.Forms.Padding(6);
             this.inputTextBox.Name = "inputTextBox";
-            this.inputTextBox.Size = new System.Drawing.Size(1003, 576);
+            this.inputTextBox.Size = new System.Drawing.Size(1206, 532);
             this.inputTextBox.TabIndex = 0;
             this.inputTextBox.Text = "";
             // 
@@ -406,7 +406,7 @@
             this.CFGPage.Margin = new System.Windows.Forms.Padding(4);
             this.CFGPage.Name = "CFGPage";
             this.CFGPage.Padding = new System.Windows.Forms.Padding(8);
-            this.CFGPage.Size = new System.Drawing.Size(1011, 584);
+            this.CFGPage.Size = new System.Drawing.Size(1071, 586);
             this.CFGPage.TabIndex = 3;
             this.CFGPage.Text = "CFG";
             this.CFGPage.UseVisualStyleBackColor = true;
@@ -416,10 +416,10 @@
             this.cfgScalePanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cfgScalePanel.Controls.Add(this.cfgScaleBar);
-            this.cfgScalePanel.Location = new System.Drawing.Point(10, 528);
+            this.cfgScalePanel.Location = new System.Drawing.Point(10, 530);
             this.cfgScalePanel.Margin = new System.Windows.Forms.Padding(12);
             this.cfgScalePanel.Name = "cfgScalePanel";
-            this.cfgScalePanel.Size = new System.Drawing.Size(817, 44);
+            this.cfgScalePanel.Size = new System.Drawing.Size(877, 44);
             this.cfgScalePanel.TabIndex = 5;
             // 
             // cfgScaleBar
@@ -428,11 +428,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cfgScaleBar.BackColor = System.Drawing.Color.White;
             this.cfgScaleBar.Enabled = false;
-            this.cfgScaleBar.Location = new System.Drawing.Point(6, 3);
+            this.cfgScaleBar.Location = new System.Drawing.Point(6, 1);
             this.cfgScaleBar.Margin = new System.Windows.Forms.Padding(6);
             this.cfgScaleBar.Maximum = 100;
             this.cfgScaleBar.Name = "cfgScaleBar";
-            this.cfgScaleBar.Size = new System.Drawing.Size(805, 90);
+            this.cfgScaleBar.Size = new System.Drawing.Size(865, 90);
             this.cfgScaleBar.TabIndex = 2;
             this.cfgScaleBar.TickFrequency = 10;
             this.cfgScaleBar.TickStyle = System.Windows.Forms.TickStyle.None;
@@ -442,7 +442,7 @@
             // 
             this.cfgSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cfgSaveButton.Enabled = false;
-            this.cfgSaveButton.Location = new System.Drawing.Point(851, 528);
+            this.cfgSaveButton.Location = new System.Drawing.Point(911, 530);
             this.cfgSaveButton.Margin = new System.Windows.Forms.Padding(12);
             this.cfgSaveButton.Name = "cfgSaveButton";
             this.cfgSaveButton.Size = new System.Drawing.Size(150, 44);
@@ -460,7 +460,7 @@
             this.cfgPanel.Location = new System.Drawing.Point(10, 10);
             this.cfgPanel.Margin = new System.Windows.Forms.Padding(6);
             this.cfgPanel.Name = "cfgPanel";
-            this.cfgPanel.Size = new System.Drawing.Size(987, 500);
+            this.cfgPanel.Size = new System.Drawing.Size(1047, 502);
             this.cfgPanel.TabIndex = 1;
             // 
             // CFGPictureBox
@@ -482,7 +482,7 @@
             this.ASTPage.Margin = new System.Windows.Forms.Padding(4);
             this.ASTPage.Name = "ASTPage";
             this.ASTPage.Padding = new System.Windows.Forms.Padding(8);
-            this.ASTPage.Size = new System.Drawing.Size(1011, 584);
+            this.ASTPage.Size = new System.Drawing.Size(1071, 586);
             this.ASTPage.TabIndex = 4;
             this.ASTPage.Text = "AST";
             this.ASTPage.UseVisualStyleBackColor = true;
@@ -492,10 +492,10 @@
             this.astPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.astPanel.Controls.Add(this.astTrackBar);
-            this.astPanel.Location = new System.Drawing.Point(10, 528);
+            this.astPanel.Location = new System.Drawing.Point(10, 530);
             this.astPanel.Margin = new System.Windows.Forms.Padding(12);
             this.astPanel.Name = "astPanel";
-            this.astPanel.Size = new System.Drawing.Size(817, 44);
+            this.astPanel.Size = new System.Drawing.Size(877, 44);
             this.astPanel.TabIndex = 5;
             // 
             // astTrackBar
@@ -504,11 +504,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.astTrackBar.BackColor = System.Drawing.Color.White;
             this.astTrackBar.Enabled = false;
-            this.astTrackBar.Location = new System.Drawing.Point(6, 3);
+            this.astTrackBar.Location = new System.Drawing.Point(6, 1);
             this.astTrackBar.Margin = new System.Windows.Forms.Padding(6);
             this.astTrackBar.Maximum = 100;
             this.astTrackBar.Name = "astTrackBar";
-            this.astTrackBar.Size = new System.Drawing.Size(805, 90);
+            this.astTrackBar.Size = new System.Drawing.Size(865, 90);
             this.astTrackBar.TabIndex = 2;
             this.astTrackBar.TickFrequency = 10;
             this.astTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
@@ -518,7 +518,7 @@
             // 
             this.astSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.astSaveButton.Enabled = false;
-            this.astSaveButton.Location = new System.Drawing.Point(851, 528);
+            this.astSaveButton.Location = new System.Drawing.Point(911, 530);
             this.astSaveButton.Margin = new System.Windows.Forms.Padding(12);
             this.astSaveButton.Name = "astSaveButton";
             this.astSaveButton.Size = new System.Drawing.Size(150, 44);
@@ -536,7 +536,7 @@
             this.astTabPanel.Location = new System.Drawing.Point(10, 10);
             this.astTabPanel.Margin = new System.Windows.Forms.Padding(6);
             this.astTabPanel.Name = "astTabPanel";
-            this.astTabPanel.Size = new System.Drawing.Size(987, 500);
+            this.astTabPanel.Size = new System.Drawing.Size(1047, 502);
             this.astTabPanel.TabIndex = 1;
             // 
             // ASTPictureBox
@@ -612,15 +612,15 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.outBox);
-            this.splitContainer.Size = new System.Drawing.Size(1035, 823);
-            this.splitContainer.SplitterDistance = 635;
+            this.splitContainer.Size = new System.Drawing.Size(1095, 831);
+            this.splitContainer.SplitterDistance = 641;
             this.splitContainer.TabIndex = 4;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1507, 869);
+            this.ClientSize = new System.Drawing.Size(1568, 878);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.mainBox);
             this.Controls.Add(this.menuStrip1);
