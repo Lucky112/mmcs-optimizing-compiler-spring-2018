@@ -128,32 +128,124 @@ namespace Compiler.ThreeAddrCode.CFG
         public bool IsReducible { get => isReducible(); }
 
         /// <summary>
-        /// Проверка CFG на приводимость
+        /// Вычисление глубины CFG
         /// </summary>
-        /// <returns>Возвращает true, если CFG приводим, иначе - false</returns>
-        private bool isReducible()
-        {
-            //Если ребра не классифицированы
-            if (EdgeTypes.Count == 0)
-                this.ClassificateEdges();
-            //Отбираем все обратные дуги
-            var retreatiangEdges = EdgeTypes.Where(elem => elem.Value == EdgeType.Retreating).Select(pair => pair.Key);
-            var count = retreatiangEdges.Count();
-            //Если таковых нет - CFG приводим
-            if (retreatiangEdges.Count() == 0)
-                return true;
-            //Строим дерево доминанто
-            var domMatrix = new DominatorTree(this).Matrix;
-            //Проверяем каждую обратную дугу на обратимость(target доминирует на source в DominatorTree)
-            foreach (var edge in retreatiangEdges)
-            {
-                //DominatorTree.matrix(i, j).HasLine <=> j dom i. (c) Max
-                var rowWithSource = domMatrix.First(row => row.BasicBlock.BlockId == edge.Source.BlockId);
-                var edgeInDomTree = rowWithSource.ItemDoms.First(cell => cell.BasicBlock.BlockId == edge.Target.BlockId);
-                if (!edgeInDomTree.HasLine)
-                    return false;
-            }
-            return true;
+        /// <returns>
+        /// Возвращает глубину CFG
+        /// </returns>
+        public int GetDepth() {
+            // Нужно убрать отсюда и добавить в вызов конструктора
+            if (EdgeTypes == null)
+                ClassificateEdges();
+
+            List<BasicBlock> visitedNodes = new List<BasicBlock>();
+            return GetDepthRecursive(GetRoot(), 0, ref visitedNodes);
         }
-    }
+
+        /// <summary>
+        /// Вычисление глубины CFG
+        /// </summary>
+        /// <param name="root">текущий узел</param>
+        /// <param name="depth">текущая максимальная глубина</param>
+        /// <param name="visitedNodes">список посещенных вершин</param>
+        /// <returns>
+        /// Возвращает глубину CFG
+        /// </returns>
+        private int GetDepthRecursive(BasicBlock root, int depth, ref List<BasicBlock> visitedNodes) {
+            if (
+                root.Children.Count() == 0 ||
+                visitedNodes.Contains(root)
+            ) return depth;
+
+            visitedNodes.Add(root);
+
+            foreach (var children in root.Children) {
+                if (visitedNodes.Contains(children)) continue;
+
+                if (EdgeTypes.First(edge =>
+                                    edge.Key.Source.BlockId == root.BlockId &&
+                                    edge.Key.Target.BlockId == children.BlockId)
+                             .Value == EdgeType.Retreating)
+                {
+                    depth = GetDepthRecursive(children, depth + 1, ref visitedNodes);
+                }
+                else
+                {
+                    depth = GetDepthRecursive(children, depth, ref visitedNodes);
+                }
+            }
+
+            return depth;
+        }
+
+        /// <summary>
+        /// Возвращает глубину (by rphaet0n)
+        /// </summary>
+        public uint Depth { get => getDepth(); }
+
+        private List<BasicBlock> visitedNodes;
+
+        private BasicBlock getCFGEntry()
+        {
+            return _cfgNodes[0];
+        }
+
+        private uint getDepth()
+        {
+            if (EdgeTypes == null)
+                ClassificateEdges();
+            visitedNodes = new List<BasicBlock>();
+            var cfgEntry = getCFGEntry();
+            return CalcCFGDepth(cfgEntry);
+        }
+
+        private uint CalcCFGDepth(BasicBlock cfgEntry)
+        {
+            visitedNodes.Add(cfgEntry);
+            var childrenDepths = new List<uint>();
+            foreach (var child in cfgEntry.Children)
+            {
+                if (!visitedNodes.Contains(child))
+                {
+                    if (EdgeTypes.First(edge => edge.Key.Source.BlockId == cfgEntry.BlockId &&
+                                                edge.Key.Target.BlockId == child.BlockId)
+                        .Value == EdgeType.Retreating)
+                        childrenDepths.Add(1 + CalcCFGDepth(child));
+                    else
+                        childrenDepths.Add(CalcCFGDepth(child));
+                }
+            }
+            visitedNodes.Remove(cfgEntry);
+            return childrenDepths.Count > 0 ? childrenDepths.Max() : 0;
+        }
+
+        /// <summary>
+    /// Проверка CFG на приводимость
+    /// </summary>
+    /// <returns>Возвращает true, если CFG приводим, иначе - false</returns>
+        private bool isReducible()
+            {
+                //Если ребра не классифицированы
+                if (EdgeTypes.Count == 0)
+                    this.ClassificateEdges();
+                //Отбираем все обратные дуги
+                var retreatiangEdges = EdgeTypes.Where(elem => elem.Value == EdgeType.Retreating).Select(pair => pair.Key);
+                var count = retreatiangEdges.Count();
+                //Если таковых нет - CFG приводим
+                if (retreatiangEdges.Count() == 0)
+                    return true;
+                //Строим дерево доминанто
+                var domMatrix = new DominatorTree(this).Matrix;
+                //Проверяем каждую обратную дугу на обратимость(target доминирует на source в DominatorTree)
+                foreach (var edge in retreatiangEdges)
+                {
+                    //DominatorTree.matrix(i, j).HasLine <=> j dom i. (c) Max
+                    var rowWithSource = domMatrix.First(row => row.BasicBlock.BlockId == edge.Source.BlockId);
+                    var edgeInDomTree = rowWithSource.ItemDoms.First(cell => cell.BasicBlock.BlockId == edge.Target.BlockId);
+                    if (!edgeInDomTree.HasLine)
+                        return false;
+                }
+                return true;
+            }
+        }
 }

@@ -77,6 +77,8 @@ namespace Compiler
             Console.WriteLine("###### Dominator Tree Matrix:");
             Console.WriteLine(domTree.ToString());
             Console.WriteLine($"###### CFG is reducible: {cfg.IsReducible}");
+            Console.WriteLine($"###### CFG depth is: {cfg.Depth}");
+
 
             fpath = @"..\..\..\CodeSamples\reducibilityGoodSample.txt";
             astRoot = null;
@@ -89,14 +91,14 @@ namespace Compiler
             astRoot.Visit(prettyPrinter);
             cfg = new ControlFlowGraph(tacodeVisitor.Code);
             domTree = new DominatorTree(cfg);
-            Console.WriteLine("###### CFG Reducibility(#59 by APC TEAM) based on DominatorTree(#56 by ДВП)");
-            Console.WriteLine("###### and PrettyPrinter(#5 by APC TEAM) DEMONSTARTION:");
+            Console.WriteLine("###########################################");
             Console.WriteLine("######       Sample 2:");
             Console.WriteLine("###### Program text from PrettyPrinter:\n");
             Console.WriteLine(prettyPrinter.Text);
             Console.WriteLine("###### Dominator Tree Matrix:");
             Console.WriteLine(domTree.ToString());
             Console.WriteLine($"###### CFG is reducible: {cfg.IsReducible}");
+
         }
 
         private static BlockNode AST(string fileName)
