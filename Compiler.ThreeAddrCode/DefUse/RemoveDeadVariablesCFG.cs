@@ -92,7 +92,7 @@ namespace Compiler.ThreeAddrCode
 
                     if (curCountRem != 0)
                     {
-                        var idxStart = CalculateIdxStart(cfg, cfg.IndexOf(B).Value) - countRemove;
+                        var idxStart = CalculateIdxStart(B, code.CodeList);
                         var len = B.CodeList.Count();
                         code = ReplaceCode(code, newB.CodeList.ToList(), idxStart, len);
                         countRemove += curCountRem;
@@ -108,15 +108,10 @@ namespace Compiler.ThreeAddrCode
         /// Вычисляет индекс в исходном коде
         /// </summary>
         /// <returns></returns>
-        private int CalculateIdxStart(NumeratedGraph cfg, int idxB)
+        private int CalculateIdxStart(BasicBlock Block, List<Node> listNode)
         {
-            var idxStart = 0;
-
-            foreach (var B in cfg.CFGNodes)
-                if (cfg.IndexOf(B).Value < idxB)
-                    idxStart += B.CodeList.Count();
-
-            return idxStart;
+            var label = Block.CodeList.First().Label;
+            return listNode.FindIndex(x => x.Label == label);
         }
 
         /// <summary>
