@@ -33,11 +33,7 @@ namespace Compiler.ThreeAddrCode
         /// <summary>
         /// Список мертвых переменных
         /// </summary>
-        private DVars deadVars;
-        /// <summary>
-        /// Список живых переменных
-        /// </summary>
-        private LVars liveVars;
+        private List<Guid> removeVars;
         /// <summary>
         /// Список активных переменных на выходе
         /// для каждого блока в CFG
@@ -52,16 +48,8 @@ namespace Compiler.ThreeAddrCode
         public RemoveDeadVariablesCFG(TACode code)
         {
             this.CodeIN = code;
-            this.deadVars = new DVars();
-            this.liveVars = new LVars();
+            this.removeVars = new List<Guid>();
             this.CodeNew = RemoveDeadCodeInCFG();
-        }
-
-        private NumeratedGraph CreateCFG(TACode code)
-        {
-            var cfg = new NumeratedGraph(code, null);
-            cfg.Numerator = GraphNumerator.BackOrder(cfg).Reverse(cfg);
-            return cfg;
         }
 
         /// <summary>
@@ -72,14 +60,14 @@ namespace Compiler.ThreeAddrCode
         {
             var code = new TACode();
             code.CodeList = CodeIN.CodeList.ToList();
-            NumeratedGraph cfg;
+            ControlFlowGraph cfg;
             int countRemove;
 
             do
             {
                 // Вычисляем CFG
-                cfg = CreateCFG(code);
-                // Вычисляем OUT переменные для всех блоков в CFG
+                cfg = new ControlFlowGraph(code);
+                // Вычисляем IN и OUT переменные для всех блоков в CFG
                 this.OUT = (new IterativeAlgorithmAV(cfg)).OUT;
                 countRemove = 0;
 
@@ -136,12 +124,12 @@ namespace Compiler.ThreeAddrCode
         /// Определение живых/мертвых переменных для участка кода
         /// </summary>
         /// <param name="listNode"></param>
-        private void DetectionLiveAndDeadVariables(List<Node> listNode, Guid idx)
+        private void DetectionLiveAndDeadVariables(List<Node> listNode, Guid idx, IEnumerable<BasicBlock> parents)
         {
             // Определение живых мертвых переменных для блока
             var LDV = new LiveAndDeadVariables(listNode);
-            this.deadVars = LDV.DeadVars;
-            this.liveVars = LDV.LiveVars;
+            var deadVars = LDV.DeadVars;
+            var liveVars = LDV.LiveVars;
             ActiveVar vars = OUT[idx];
 
             // Для каждой out переменной 
@@ -160,6 +148,29 @@ namespace Compiler.ThreeAddrCode
                     deadVars.RemoveAt(j);
                 }                
             }
+
+            // Для каждой in переменной
+            foreach (var v in LDV.UListNotValid)
+            {
+                var IsExist = false;
+
+                // Если существует определение переменной в родительском блоке
+                foreach (var p in parents)
+                    IsExist |= OUT[p.BlockId].Contains(v.Name);
+
+                // Если она есть в списке неопределенных переменных
+                if (IsExist)
+                    // Добавляем переменнцю в списко живых
+                    liveVars.Add(new DUVar(v.Name, v.StringId));
+                else
+                    // Добавляем переменнцю в списко мертвых
+                    deadVars.Add(new DUVar(v.Name, v.StringId));
+            }
+
+            foreach (var dV in deadVars)
+                removeVars.Add(dV.StringId);
+
+            removeVars = removeVars.Distinct().ToList();
         }
 
         /// <summary>
@@ -169,22 +180,28 @@ namespace Compiler.ThreeAddrCode
         {
             var listNode = Block.CodeList.ToList();
             var idx = Block.BlockId;
+            var inds = new Dictionary<int, Guid>();
+
+            var i = 0;
+            foreach (var node in listNode)
+                inds.Add(i++, node.Label);
 
             // Определяем живые/мертвые переменные
-            DetectionLiveAndDeadVariables(listNode, idx);
+            DetectionLiveAndDeadVariables(listNode, idx, Block.Parents.ToList());
 
             // Пока мы не удалим все мертвые переменные
-            while (deadVars.Count != 0)
+            while (removeVars.Count != 0)
             {
-                var i = 0;
-                foreach (var dV in deadVars)
-                    listNode.RemoveAt(dV.StringId - i++);
+                foreach (var rV in removeVars)
+                {
+                    var ind = listNode.FindIndex(x => x.Label == rV);
+                    listNode.RemoveAt(ind);
+                }
 
-                deadVars.Clear();
-                liveVars.Clear();
+                removeVars.Clear();
 
                 // Определяем живые/мертвые переменные
-                DetectionLiveAndDeadVariables(listNode, idx);
+                DetectionLiveAndDeadVariables(listNode, idx, Block.Parents.ToList());
             }
 
             return new BasicBlock(listNode.ToList());

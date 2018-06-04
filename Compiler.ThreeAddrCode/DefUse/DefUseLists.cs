@@ -36,10 +36,6 @@ namespace Compiler.ThreeAddrCode
         /// Use переменные, которые не определены в блоке
         /// </summary>
         public List<DUVar> UListNotValid { get; }
-        /// <summary>
-        /// Нумерация строк блока
-        /// </summary>
-        public Dictionary<Guid, int> N { get; }
 
         /// <summary>
         /// Конструктор для класса, генерирующий
@@ -52,8 +48,6 @@ namespace Compiler.ThreeAddrCode
             DList = new DList();
             UList = new UList();
             UListNotValid = new List<DUVar>();
-            N = new Dictionary<Guid, int>();
-            NumberOfStringInBlock();
             BuildDULists();
         }
 
@@ -75,16 +69,6 @@ namespace Compiler.ThreeAddrCode
         }
 
         /// <summary>
-        /// Нумерация строк блока
-        /// </summary>
-        private void NumberOfStringInBlock()
-        {
-            var i = 0;
-            foreach (var command in Block.CodeList)
-                N.Add(command.Label, i++);
-        }
-
-        /// <summary>
         /// Создает Def цепочку для базового блока
         /// </summary>
         private void BuildDList()
@@ -103,7 +87,7 @@ namespace Compiler.ThreeAddrCode
                     AddUseVariable(comA.Right, comA.Label);
 
                     // Добавление нового Def узла
-                    DList.Add(new DNode(comA.Result, N[comA.Label]));
+                    DList.Add(new DNode(comA.Result, comA.Label));
                 }
                 else if (command is IfGoto)
                 {
@@ -135,7 +119,7 @@ namespace Compiler.ThreeAddrCode
                     return v.DefVariable.Name.Id == variable.Id;
                 });
 
-                var UVar = new DUVar(variable, N[strId]);
+                var UVar = new DUVar(variable, strId);
 
                 // Добавление Use переменной
                 if (index != -1)
@@ -210,7 +194,7 @@ namespace Compiler.ThreeAddrCode
         /// </summary>
         /// <param name="Name">Имя переменной</param>
         /// <param name="StringId">Идентификатор строки в блоке</param>
-        public DNode(Var Name, int StringId)
+        public DNode(Var Name, Guid StringId)
         {
             this.DefVariable = new DUVar(Name, StringId);
             this.UseVariables = new List<DUVar>();
@@ -334,14 +318,14 @@ namespace Compiler.ThreeAddrCode
         /// <summary>
         /// Идентификатор строки в блоке
         /// </summary>
-		public int StringId { get; }
+		public Guid StringId { get; }
 
         /// <summary>
         /// Конструктор DefUse переменной
         /// </summary>
         /// <param name="Name">Имя переменной</param>
         /// <param name="StringId">Идентификатор строки в блоке</param>
-        public DUVar(Var Name, int StringId) 
+        public DUVar(Var Name, Guid StringId) 
         {
             this.Name = Name;
             this.StringId = StringId;

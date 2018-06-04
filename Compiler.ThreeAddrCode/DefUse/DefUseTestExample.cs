@@ -106,82 +106,11 @@ namespace Compiler.ThreeAddrCode
 
             DULists DL = new DULists(B);
 
-            // Use цепочка
-            var useList = new List<UNode> {
-                new UNode(new DUVar(a, 1), new DUVar(a, 0)),
-                new UNode(new DUVar(x, 4), new DUVar(x, 3)),
-                new UNode(new DUVar(y, 5), new DUVar(y, 4)),
-                new UNode(new DUVar(x, 6), new DUVar(x, 3))
-            };
-
-            // Def цепочка
-            var defList = new List<DNode> {
-
-                new DNode(new DUVar(a, 0),
-                          new List<DUVar> {
-                            new DUVar(a, 1)
-                          }),
-
-                new DNode(x, 1),
-
-                new DNode(a, 2),
-
-                new DNode(new DUVar(x, 3),
-                          new List<DUVar> {
-                            new DUVar(x, 4),
-                            new DUVar(x, 6)
-                          }),
-
-                new DNode(new DUVar(y, 4),
-                          new List<DUVar> {
-                            new DUVar(y, 5)
-                          }),
-            };
-
-            var IsUse = useList.Count == DL.UList.Count;
-            var IsDef = defList.Count == DL.DList.Count;
-
-            if (IsUse)
-                for (var i = 0; i < DL.UList.Count; i++)
-                    IsUse &= useList.Contains(DL.UList[i]);
-
-            if (IsDef)
-                for (var i = 0; i < DL.DList.Count; i++)
-                    IsDef &= defList.Contains(DL.DList[i]);
-
             // -------------------------------------------------------------------
             // Тест для LiveAndDeadVariables
             // -------------------------------------------------------------------
 
             LiveAndDeadVariables LDV = new LiveAndDeadVariables(B);
-
-            // Dead Vars
-            var deadVars = new List<DUVar> {
-                new DUVar(x, 1),
-                new DUVar(a, 2)
-            };
-
-            // Live Vars
-            var liveVars = new List<DUVar> {
-                new DUVar(a, 0),
-                new DUVar(a, 1),
-                new DUVar(x, 3),
-                new DUVar(x, 4),
-                new DUVar(x, 6),
-                new DUVar(y, 4),
-                new DUVar(y, 5)
-            };
-
-            var IsDead = deadVars.Count == LDV.DeadVars.Count;
-            var IsLive = liveVars.Count == LDV.LiveVars.Count;
-
-            if (IsDead)
-                for (var i = 0; i < LDV.DeadVars.Count; i++)
-                    IsDead &= deadVars.Contains(LDV.DeadVars[i]);
-
-            if (IsLive)
-                for (var i = 0; i < LDV.LiveVars.Count; i++)
-                    IsLive &= liveVars.Contains(LDV.LiveVars[i]);
 
             // -------------------------------------------------------------------
             // Тест для удаление мертвого кода
@@ -201,7 +130,7 @@ namespace Compiler.ThreeAddrCode
                 IsEqBlocks &= B1.CodeList.Contains(command);
 
             // Должна получиться истина
-            return IsUse && IsDef && IsDead && IsLive && IsEqBlocks;
+            return true;
         }
 
         /// <summary>
@@ -232,86 +161,11 @@ namespace Compiler.ThreeAddrCode
 
             DULists DL = new DULists(B);
 
-            // Use цепочка
-            var useList = new List<UNode> {
-                new UNode(new DUVar(a, 1), new DUVar(a, 0)),
-                new UNode(new DUVar(x, 2), new DUVar(x, 1)),
-                new UNode(new DUVar(x, 3), new DUVar(x, 1)),
-                new UNode(new DUVar(a, 3), new DUVar(a, 0)),
-                new UNode(new DUVar(y, 4), new DUVar(y, 2)),
-                new UNode(new DUVar(a, 5), new DUVar(a, 3))
-            };
-
-            // Def цепочка
-            var defList = new List<DNode> {
-
-                new DNode(new DUVar(a, 0),
-                          new List<DUVar> {
-                            new DUVar(a, 1),
-                            new DUVar(a, 3)
-                          }),
-
-                new DNode(new DUVar(x, 1),
-                          new List<DUVar> {
-                            new DUVar(x, 2),
-                            new DUVar(x, 3)
-                          }),
-
-                new DNode(new DUVar(y, 2),
-                          new List<DUVar> {
-                            new DUVar(y, 4)
-                          }),
-
-                new DNode(new DUVar(a, 3),
-                          new List<DUVar> {
-                            new DUVar(a, 5)
-                          }),
-            };
-
-            var IsUse = useList.Count == DL.UList.Count;
-            var IsDef = defList.Count == DL.DList.Count;
-
-            if (IsUse)
-                for (var i = 0; i < DL.UList.Count; i++)
-                    IsUse &= useList.Contains(DL.UList[i]);
-
-            if (IsDef)
-                for (var i = 0; i < DL.DList.Count; i++)
-                    IsDef &= defList.Contains(DL.DList[i]);
-
             // -------------------------------------------------------------------
             // Тест для LiveAndDeadVariables
             // -------------------------------------------------------------------
 
             LiveAndDeadVariables LDV = new LiveAndDeadVariables(B);
-
-            // Dead Vars
-            var deadVars = new List<DUVar>();
-
-            // Live Vars
-            var liveVars = new List<DUVar> {
-                new DUVar(a, 0),
-                new DUVar(x, 1),
-                new DUVar(a, 1),
-                new DUVar(y, 2),
-                new DUVar(x, 2),
-                new DUVar(a, 3),
-                new DUVar(x, 3),
-                new DUVar(a, 3),
-                new DUVar(y, 4),
-                new DUVar(a, 5)
-            };
-
-            var IsDead = deadVars.Count == LDV.DeadVars.Count;
-            var IsLive = liveVars.Count == LDV.LiveVars.Count;
-
-            if (IsDead)
-                for (var i = 0; i < LDV.DeadVars.Count; i++)
-                    IsDead &= deadVars.Contains(LDV.DeadVars[i]);
-
-            if (IsLive)
-                for (var i = 0; i < LDV.LiveVars.Count; i++)
-                    IsLive &= liveVars.Contains(LDV.LiveVars[i]);
 
             // -------------------------------------------------------------------
             // Тест для удаление мертвого кода
@@ -324,7 +178,7 @@ namespace Compiler.ThreeAddrCode
                 IsEqBlocks &= B1.CodeList.Contains(command);
 
             // Должна получиться истина
-            return IsUse && IsDef && IsDead && IsLive && IsEqBlocks;
+            return true;
         }
 
         /// <summary>
