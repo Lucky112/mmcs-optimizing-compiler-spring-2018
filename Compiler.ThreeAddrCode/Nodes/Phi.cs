@@ -17,7 +17,7 @@ namespace Compiler.ThreeAddrCode.Nodes
 
         public override string ToString()
         {
-            return DefenitionList.Aggregate($"{TACodeNameManager.Instance[Label]} : {Result} = Ф(", (s, d) => s = s + $"{d.Result},") + ")";            
+            return DefenitionList.Aggregate($"{TACodeNameManager.Instance[Label]} : {Result} = Ф(", (s, d) => s = s + $"{d.Result}, ") + ")";            
         }
     }
 }
