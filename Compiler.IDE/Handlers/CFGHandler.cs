@@ -23,6 +23,9 @@ namespace Compiler.IDE.Handlers
             {
                 var cfg = new ControlFlowGraph(code);
 
+                Compiler.Optimizations.SSA.Apply(cfg);
+                cfg = new ControlFlowGraph(cfg.Code);
+
                 string graph = BuildDotGraph(cfg);
                 File.WriteAllText(@"cfg_graph.txt", graph);
 
@@ -40,7 +43,7 @@ namespace Compiler.IDE.Handlers
                     var image = Image.FromStream(stream);
                     GenerationCompleted(null, image);
                 }
-
+                
                 CfgGenerated(null, cfg);
             }
             catch (Exception ex)

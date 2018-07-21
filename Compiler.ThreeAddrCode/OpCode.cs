@@ -19,6 +19,8 @@
         LessEq,
         Equal,
         NotEqual,
-        Not
+        Not,
+
+        Phi
     }
 }

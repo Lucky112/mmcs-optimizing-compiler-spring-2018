@@ -120,6 +120,9 @@ namespace Compiler.ILcodeGenerator
                                     gen.Emit(OpCodes.Ldc_I4_0);
                                     gen.Emit(OpCodes.Ceq);
                                     break;
+
+                                case ThreeAddrCode.OpCode.Phi:
+                                    break;
                             };
                             gen.Emit(OpCodes.Stloc, vars[assignNode.Result.Id.ToString()]);
                         }

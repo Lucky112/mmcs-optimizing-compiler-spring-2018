@@ -32,6 +32,7 @@ namespace Compiler.ThreeAddrCode.Nodes
         {
             if (Left == null)
                 return $"{TACodeNameManager.Instance[Label]} : {Result} = {Operation.GetSymbol()}{Right}";
+
             return $"{TACodeNameManager.Instance[Label]} : {Result} = {Left} {Operation.GetSymbol()} {Right}";
         }
     }

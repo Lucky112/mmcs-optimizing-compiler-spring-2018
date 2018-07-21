@@ -36,6 +36,12 @@ namespace Compiler.ThreeAddrCode
         /// </summary>
         public Dictionary<Guid, Node> LabeledCode { get; }
 
+
+        /// <summary>
+        ///     Словарь переменных в коде
+        /// </summary>
+        public Dictionary<Guid, Expressions.Var> UsedVars { get; }
+
         /// <summary>
         ///     Конструктор программы в формате трехадресного кода
         /// </summary>
@@ -43,6 +49,7 @@ namespace Compiler.ThreeAddrCode
         {
             CodeList = new List<Node>();
             LabeledCode = new Dictionary<Guid, Node>();
+            UsedVars = new Dictionary<Guid, Expressions.Var>();
         }
 
         /// <summary>
@@ -52,6 +59,21 @@ namespace Compiler.ThreeAddrCode
         {
             CodeList.Add(node);
             LabeledCode.Add(node.Label, node);
+
+            AddUsedVars(node);
+        }
+
+        /// <summary>
+        ///    Вставить оператор
+        /// </summary>
+        public void InsertNode(Node node, Guid nextLabel)
+        {
+            int index = CodeList.FindIndex(nd => nd.Label == nextLabel);
+
+            CodeList.Insert(index, node);
+            LabeledCode.Add(node.Label, node);
+
+            AddUsedVars(node);
         }
 
         /// <summary>
@@ -115,6 +137,27 @@ namespace Compiler.ThreeAddrCode
             }
 
             return basicBlockList;
+        }
+
+
+
+        private void AddUsedVars(Node node)
+        {
+            // Если переменная ни разу не встретилась в левой части оператора присваивания, это семантическая ошибка
+            if (node is Assign ass && !UsedVars.ContainsKey(ass.Result.Id))
+                UsedVars.Add(ass.Result.Id, ass.Result);
+
+            //switch (node)
+            //{
+            //    case Assign ass:
+            //        UsedVars.Add(ass.Result.Id, ass.Result);
+            //        if (ass.Left != null && ass.Left is Expressions.Var v)
+            //            UsedVars.Add(v.Id, v);
+            //        if (ass.Right is Expressions.Var v2)
+            //            UsedVars.Add(v2.Id, v2);
+            //        break;
+            //    case If
+            //}
         }
 
         public override string ToString()
