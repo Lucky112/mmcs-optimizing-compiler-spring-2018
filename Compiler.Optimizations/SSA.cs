@@ -24,22 +24,22 @@ namespace Compiler.Optimizations
             var counter = cfg.Code.CodeList.Where(node => node is Phi).Cast<Phi>().GroupBy(phi => phi.Result).ToDictionary(gr => gr.Key, gr => 0);
 
             List<Guid> UsedDefs = new List<Guid>();
-            
-            foreach (var node in cfg.Code.CodeList)
-                if (node is Phi phi)
-                {
-                    foreach (var def in phi.DefenitionList)
-                        if (!UsedDefs.Contains(def.Label))
-                        {
-                            def.Result = new ThreeAddrCode.Expressions.Var($"{def.Result}_{counter[phi.Result]++}");
-                            UsedDefs.Add(def.Label);
-                        }
-                }
+                        
+            dfs_visit(cfg.GetRoot(), new List<Guid>(), new Dictionary<Var, Var>(), counter);
 
-            dfs_visit(cfg.GetRoot(), new List<Guid>(), null, null, counter);
+            //foreach (var node in cfg.Code.CodeList)
+            //    if (node is Phi phi)
+            //    {
+            //        foreach (var def in phi.DefenitionList)
+            //            if (!UsedDefs.Contains(def.Label))
+            //            {
+            //                def.Result = new ThreeAddrCode.Expressions.Var($"{def.Result}_{counter[phi.Result]++}");
+            //                UsedDefs.Add(def.Label);
+            //            }
+            //    }
         }
 
-        private static void dfs_visit(BasicBlock curBlock, List<Guid> usedBlocks, ThreeAddrCode.Expressions.Var oldVar, ThreeAddrCode.Expressions.Var newVar, Dictionary<Var, int> counter)
+        private static void dfs_visit(BasicBlock curBlock, List<Guid> usedBlocks, Dictionary<Var, Var> varSubstitution, Dictionary<Var, int> counter)
         {
             usedBlocks.Add(curBlock.BlockId);
 
@@ -47,32 +47,35 @@ namespace Compiler.Optimizations
                 switch (node)
                 {
                     case Phi phi:
-                        oldVar = phi.Result;
+                        var old = phi.Result;
                         phi.Result = new Var($"{phi.Result}_{counter[phi.Result]++}");
-                        newVar = phi.Result;
+                        if (varSubstitution.ContainsKey(old))
+                            varSubstitution[old] = phi.Result;
+                        else
+                            varSubstitution.Add(old, phi.Result);
                         break;
 
                     case Assign ass:
-                        if (ass.Left == oldVar)
-                            ass.Left = newVar;
-                        if (ass.Right == oldVar)
-                            ass.Right = newVar;
+                        if (ass.Left is Var vL && varSubstitution.ContainsKey(vL))
+                            ass.Left = varSubstitution[vL];
+                        if (ass.Right is Var vR && varSubstitution.ContainsKey(vR))
+                            ass.Right = varSubstitution[vR];
                         break;
 
                     case IfGoto ifgoto:
-                        if (ifgoto.Condition == oldVar)
-                            ifgoto.Condition = newVar;
+                        if (ifgoto.Condition is Var vC && varSubstitution.ContainsKey(vC))
+                            ifgoto.Condition = varSubstitution[vC];
                         break;
 
                     case Print print:
-                        if (print.Data == oldVar)
-                            print.Data = newVar;
+                        if (print.Data is Var v && varSubstitution.ContainsKey(v))
+                            print.Data = varSubstitution[v];
                         break;                    
                 }
 
             foreach (var block in curBlock.Children)
                 if (!usedBlocks.Contains(block.BlockId))
-                    dfs_visit(block, usedBlocks, oldVar, newVar, counter);
+                    dfs_visit(block, usedBlocks, varSubstitution, counter);
         }
 
         private static InOutData<HashSet<Guid>> Analyze(ControlFlowGraph cfg)
