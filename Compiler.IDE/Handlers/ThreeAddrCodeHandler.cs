@@ -22,6 +22,7 @@ namespace Compiler.IDE.Handlers
         };
 
         public bool RemoveDeadVariables = false;
+        public bool SSA = false;
 
         public event EventHandler<TACode> GenerationCompleted = delegate { };
         public event EventHandler<string> PrintableCodeGenerated = delegate { };
@@ -129,6 +130,12 @@ namespace Compiler.IDE.Handlers
             {
                 var rmOpt = new RemoveDeadVariablesCFG(newCode);
                 newCode = rmOpt.CodeNew;
+            }
+
+            if (SSA)
+            {
+                var ssaOpt = new SSA(newCode);
+                newCode = ssaOpt.Apply();
             }
 
 

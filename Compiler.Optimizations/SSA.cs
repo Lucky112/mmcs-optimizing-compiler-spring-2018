@@ -12,32 +12,43 @@ namespace Compiler.Optimizations
 {
     public class SSA
     {
-        public static void Apply(ControlFlowGraph cfg)
+        private ThreeAddrCode.TACode Code { get; set; }
+        private ControlFlowGraph CFG { get; set; }
+
+        public SSA(ThreeAddrCode.TACode code)
         {
-            var reachingDefs = Analyze(cfg);
-            InjectPhi(cfg, reachingDefs);
-
-            cfg = new ControlFlowGraph(cfg.Code);
-            reachingDefs = Analyze(cfg);
-            RelaxPhi(cfg, reachingDefs);
-
-            cfg = new ControlFlowGraph(cfg.Code);
-            RenamePhiOccasions(cfg);
-
-            cfg = new ControlFlowGraph(cfg.Code);
-            ReducePhi(cfg);
+            Code = code;
+            CFG = new ControlFlowGraph(code);
         }
 
-        private static void RenamePhiOccasions(ControlFlowGraph cfg)
+        public ThreeAddrCode.TACode Apply()
         {
-            var counter = cfg.Code.CodeList.Where(node => node is Phi).Cast<Phi>().GroupBy(phi => phi.Result).ToDictionary(gr => gr.Key, gr => 1);
+            var reachingDefs = Analyze();
+            InjectPhi(reachingDefs);
+
+            CFG = new ControlFlowGraph(CFG.Code);
+            reachingDefs = Analyze();
+            RelaxPhi(reachingDefs);
+
+            CFG = new ControlFlowGraph(CFG.Code);
+            RenamePhiOccasions();
+
+            CFG = new ControlFlowGraph(CFG.Code);
+            ReducePhi();
+
+            return CFG.Code;
+        }
+
+        private void RenamePhiOccasions()
+        {
+            var counter = CFG.Code.CodeList.Where(node => node is Phi).Cast<Phi>().GroupBy(phi => phi.Result).ToDictionary(gr => gr.Key, gr => 1);
 
             List<Guid> UsedDefs = new List<Guid>();
             
-            dfs_visit(cfg.GetRoot(), new List<Guid>(), new Dictionary<Var, Var>(), counter);
+            dfs_visit(CFG.GetRoot(), new List<Guid>(), new Dictionary<Var, Var>(), counter);
         }
 
-        private static void RelaxPhi(ControlFlowGraph cfg, InOutData<HashSet<Guid>> reachingDefs)
+        private void RelaxPhi(InOutData<HashSet<Guid>> reachingDefs)
         {
             foreach (var block in reachingDefs.Keys)
             {
@@ -48,7 +59,7 @@ namespace Compiler.Optimizations
                 if (innerDefs.Count == 0)
                     continue;
 
-                var groupedDefs = innerDefs.Select(def => cfg.Code.LabeledCode[def] as Assign).GroupBy(ass => ass.Result);
+                var groupedDefs = innerDefs.Select(def => CFG.Code.LabeledCode[def] as Assign).GroupBy(ass => ass.Result);
 
                 foreach (var gr in groupedDefs)
                 {
@@ -66,9 +77,9 @@ namespace Compiler.Optimizations
             }
         }
 
-        private static void ReducePhi(ControlFlowGraph cfg)
+        private void ReducePhi()
         {
-            foreach (var block in cfg.CFGNodes)
+            foreach (var block in CFG.CFGNodes)
             {
                 foreach (var node in block.CodeList)
                 {
@@ -82,14 +93,14 @@ namespace Compiler.Optimizations
                             Operation = ThreeAddrCode.OpCode.Copy
                         };
 
-                        cfg.Code.ReplaceNode(ass, phiNode);
+                        CFG.Code.ReplaceNode(ass, phiNode);
                     }
                 }
             }
         }
     
 
-        private static void dfs_visit(BasicBlock curBlock, List<Guid> usedBlocks, Dictionary<Var, Var> varSubstitution, Dictionary<Var, int> counter)
+        private void dfs_visit(BasicBlock curBlock, List<Guid> usedBlocks, Dictionary<Var, Var> varSubstitution, Dictionary<Var, int> counter)
         {
             usedBlocks.Add(curBlock.BlockId);
 
@@ -134,10 +145,10 @@ namespace Compiler.Optimizations
                     dfs_visit(block, usedBlocks, varSubstitution.ToDictionary(pair => pair.Key, pair => pair.Value), counter);
         }
 
-        private static InOutData<HashSet<Guid>> Analyze(ControlFlowGraph cfg)
+        private InOutData<HashSet<Guid>> Analyze()
         {
-            var op = new ThreeAddrCode.DFA.ReachingDefinitions.Operations(cfg.Code);
-            var tf = new ThreeAddrCode.DFA.ReachingDefinitions.TransferFunction(cfg.Code);
+            var op = new ThreeAddrCode.DFA.ReachingDefinitions.Operations(CFG.Code);
+            var tf = new ThreeAddrCode.DFA.ReachingDefinitions.TransferFunction(CFG.Code);
             var reachingDefs = new GenericIterativeAlgorithm<HashSet<Guid>>()
             {
                 Finish = (a, b) =>
@@ -150,20 +161,20 @@ namespace Compiler.Optimizations
                 Comparer = (x, y) => !x.Except(y).Any(),
                 Fill = () => (op.Lower, op.Lower)
             };
-            var data = reachingDefs.Analyze(cfg,
-                new ThreeAddrCode.DFA.ReachingDefinitions.Operations(cfg.Code),
-                new ThreeAddrCode.DFA.ReachingDefinitions.TransferFunction(cfg.Code));
+            var data = reachingDefs.Analyze(CFG,
+                new ThreeAddrCode.DFA.ReachingDefinitions.Operations(CFG.Code),
+                new ThreeAddrCode.DFA.ReachingDefinitions.TransferFunction(CFG.Code));
 
-            return Verify(cfg, data);
+            return Verify(data);
         }
 
-        private static InOutData<HashSet<Guid>> Verify(ControlFlowGraph cfg, InOutData<HashSet<Guid>> reachingDefs)
+        private InOutData<HashSet<Guid>> Verify(InOutData<HashSet<Guid>> reachingDefs)
         {
             var result = new Dictionary<BasicBlock, IEnumerable<Guid>>();
             var defToRemove = new List<Guid>();
-            foreach (var block in cfg.CFGNodes)
+            foreach (var block in CFG.CFGNodes)
             {
-                var parentOwnedDefs = block.Parents.Select(p => reachingDefs[p].Item2.Except(reachingDefs[p].Item1).GroupBy(id => (cfg.Code.LabeledCode[id] as Assign).Result));
+                var parentOwnedDefs = block.Parents.Select(p => reachingDefs[p].Item2.Except(reachingDefs[p].Item1).GroupBy(id => (CFG.Code.LabeledCode[id] as Assign).Result));
 
                 var correctDefs = parentOwnedDefs.SelectMany(p => p.Select(gr => gr.LastOrDefault()));
                 defToRemove.AddRange(parentOwnedDefs.SelectMany(p => p.SelectMany(gr => gr)).Except(correctDefs));
@@ -175,7 +186,7 @@ namespace Compiler.Optimizations
             //return reachingDefs.ToDictionary(pair => pair.Key, pair => pair.Value.Item1.Select(x => x));
         }
 
-        private static void InjectPhi(ControlFlowGraph cfg, InOutData<HashSet<Guid>> reachingDefs)
+        private void InjectPhi(InOutData<HashSet<Guid>> reachingDefs)
         {
             foreach (var block in reachingDefs.Keys)
             {
@@ -187,7 +198,7 @@ namespace Compiler.Optimizations
                     continue;
 
                 //var test = innerDefs.Except(innerDefs.Where(def => cfg.Code.LabeledCode[def] is Assign)).Select(g => cfg.Code.LabeledCode[g]);
-                var groupedDefs = innerDefs.Select(def => cfg.Code.LabeledCode[def] as Assign).GroupBy(ass => ass.Result);
+                var groupedDefs = innerDefs.Select(def => CFG.Code.LabeledCode[def] as Assign).GroupBy(ass => ass.Result);
 
                 foreach (var gr in groupedDefs)
                 {
@@ -204,16 +215,16 @@ namespace Compiler.Optimizations
                         var firstOp = block.CodeList.FirstOrDefault();
                         if (firstOp != null)
                         {
-                            cfg.Code.InsertNode(phi, firstOp.Label);
+                            CFG.Code.InsertNode(phi, firstOp.Label);
                             if (firstOp.IsLabeled)
-                                cfg.Code.MoveLabel(firstOp, phi);                            
+                                CFG.Code.MoveLabel(firstOp, phi);                            
                         }
                     }
                 }
             }
         }
 
-        private static bool IsInjectionNecessary(BasicBlock block, Var v)
+        private bool IsInjectionNecessary(BasicBlock block, Var v)
         {
             foreach (var node in block.CodeList)
                 switch (node)
@@ -242,9 +253,9 @@ namespace Compiler.Optimizations
         }
 
 
-        private static void InjectPhi(ControlFlowGraph cfg)
+        private void InjectPhi()
         {
-            foreach (var block in cfg.CFGNodes)
+            foreach (var block in CFG.CFGNodes)
             {
                 if (block.Parents.Count() < 2)
                     continue;
@@ -285,9 +296,9 @@ namespace Compiler.Optimizations
                     var firstOp = block.CodeList.FirstOrDefault();
                     if (firstOp != null)
                     {
-                        cfg.Code.InsertNode(phi, firstOp.Label);
+                        CFG.Code.InsertNode(phi, firstOp.Label);
                         if (firstOp.IsLabeled)
-                            cfg.Code.MoveLabel(firstOp, phi);
+                            CFG.Code.MoveLabel(firstOp, phi);
                     }
                 }
             }

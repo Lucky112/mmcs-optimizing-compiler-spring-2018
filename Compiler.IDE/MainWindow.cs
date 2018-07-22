@@ -65,6 +65,12 @@ namespace Compiler.IDE
             {
                 _threeCodeHandler.RemoveDeadVariables = removeDeadVarsCheckBox.Checked;
             };
+
+            // ssa
+            checkBox_SSA.CheckedChanged += (o, e) =>
+            {
+                _threeCodeHandler.SSA = removeDeadVarsCheckBox.Checked;
+            };
         }
 
         private void InitIterativeAlgorithms()
