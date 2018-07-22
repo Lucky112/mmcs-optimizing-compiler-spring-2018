@@ -69,7 +69,7 @@ namespace Compiler.IDE
             // ssa
             checkBox_SSA.CheckedChanged += (o, e) =>
             {
-                _threeCodeHandler.SSA = removeDeadVarsCheckBox.Checked;
+                _threeCodeHandler.SSA = checkBox_SSA.Checked;
             };
         }
 

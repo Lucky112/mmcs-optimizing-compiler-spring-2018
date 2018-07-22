@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Compiler.ThreeAddrCode.Nodes
 {
+    /// <summary>
+    /// Оператор Phi для построения  SSA-формы
+    /// Является определением, поэтому наследуется от оператора присваивания
+    /// </summary>
     public class Phi : Assign
     {
         public Phi()
@@ -19,7 +23,9 @@ namespace Compiler.ThreeAddrCode.Nodes
 
         public override string ToString()
         {
-            return DefenitionList.Aggregate($"{TACodeNameManager.Instance[Label]} : {Result} = Ф(", (s, d) => s = s + $"{d.Result}, ") + ")";            
+            return DefenitionList.Aggregate($"{TACodeNameManager.Instance[Label]} : {Result} = Я(", (s, d) => s = s + $"{d.Result}, ") + ")";
         }
     }
 }
+
+//u03C6
