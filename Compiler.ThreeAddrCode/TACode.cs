@@ -164,5 +164,17 @@ namespace Compiler.ThreeAddrCode
         {
             return CodeList.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
         }
+
+        public void MoveLabel(Node from, Node to)
+        {
+            LabeledCode[from.Label] = to;
+            to.Label = from.Label;
+            to.IsLabeled = true;
+
+            from.Label = Guid.NewGuid();
+            from.IsLabeled = false;
+            ThreeAddrCode.TACodeNameManager.Instance.Label(from.Label);
+            LabeledCode.Add(from.Label, from);
+        }
     }
 }
