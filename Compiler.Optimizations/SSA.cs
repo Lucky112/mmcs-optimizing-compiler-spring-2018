@@ -164,5 +164,57 @@ namespace Compiler.Optimizations
                 }
             }
         }
+
+
+        private static void InjectPhi(ControlFlowGraph cfg)
+        {
+            foreach (var block in cfg.CFGNodes)
+            {
+                if (block.Parents.Count() < 2)
+                    continue;
+
+                var varList = new Dictionary<Guid, Var>();
+                foreach (var node in block.CodeList)
+                    switch (node)
+                    {
+                        case Assign ass:
+                            if (ass.Left is Var vL && !varList.ContainsKey(vL.Id))
+                                varList.Add(vL.Id, vL);
+                            if (ass.Right is Var vR && !varList.ContainsKey(vR.Id))
+                                varList.Add(vR.Id, vR);
+                            if (ass.Result is Var res && !varList.ContainsKey(res.Id))
+                                varList.Add(res.Id, res);
+                            break;
+
+                        case IfGoto ifgoto:
+                            if (ifgoto.Condition is Var vC && !varList.ContainsKey(vC.Id))
+                                varList.Add(vC.Id, vC);
+                            break;
+
+                        case Print print:
+                            if (print.Data is Var v && !varList.ContainsKey(v.Id))
+                                varList.Add(v.Id, v);
+                            break;
+                    }
+
+                foreach (var v in varList.Values)
+                {
+                    var phi = new Phi()
+                    {
+                        Result = v,
+                        Left = null,
+                        Right = v,
+                        Operation = ThreeAddrCode.OpCode.Phi
+                    };
+                    var firstOp = block.CodeList.FirstOrDefault();
+                    if (firstOp != null)
+                    {
+                        cfg.Code.InsertNode(phi, firstOp.Label);
+                        if (firstOp.IsLabeled)
+                            cfg.Code.MoveLabel(firstOp, phi);
+                    }
+                }
+            }
+        }
     }
 }
