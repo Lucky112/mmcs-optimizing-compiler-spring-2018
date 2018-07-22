@@ -23,6 +23,9 @@ namespace Compiler.Optimizations
 
             cfg = new ControlFlowGraph(cfg.Code);
             RenamePhiOccasions(cfg);
+
+            cfg = new ControlFlowGraph(cfg.Code);
+            ReducePhi(cfg);
         }
 
         private static void RenamePhiOccasions(ControlFlowGraph cfg)
@@ -30,7 +33,7 @@ namespace Compiler.Optimizations
             var counter = cfg.Code.CodeList.Where(node => node is Phi).Cast<Phi>().GroupBy(phi => phi.Result).ToDictionary(gr => gr.Key, gr => 0);
 
             List<Guid> UsedDefs = new List<Guid>();
-            
+
             foreach (var node in cfg.Code.CodeList)
                 if (node is Phi phi)
                 {
@@ -61,11 +64,34 @@ namespace Compiler.Optimizations
                 foreach (var gr in groupedDefs)
                 {
                     var phiNode = block.CodeList.ToList().Find(node => (node is Phi phi) && (phi.Result == gr.Key)) as Phi;
-                    if (phiNode != null)
-                        phiNode.DefenitionList = gr.ToList();
+                    if (phiNode != null)                    
+                        phiNode.DefenitionList = gr.ToList();                    
                 }
             }
         }
+
+        private static void ReducePhi(ControlFlowGraph cfg)
+        {
+            foreach (var block in cfg.CFGNodes)
+            {
+                foreach (var node in block.CodeList)
+                {
+                    if ((node is Phi phiNode) && (phiNode.DefenitionList.Count == 1))
+                    {
+                        var ass = new Assign()
+                        {
+                            Result = phiNode.Result,
+                            Left = null,
+                            Right = (phiNode.DefenitionList[0] as Assign).Result,
+                            Operation = ThreeAddrCode.OpCode.Copy
+                        };
+
+                        cfg.Code.ReplaceNode(ass, phiNode);
+                    }
+                }
+            }
+        }
+    
 
         private static void dfs_visit(BasicBlock curBlock, List<Guid> usedBlocks, Dictionary<Var, Var> varSubstitution, Dictionary<Var, int> counter)
         {

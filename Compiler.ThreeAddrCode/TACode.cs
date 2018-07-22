@@ -176,5 +176,13 @@ namespace Compiler.ThreeAddrCode
             ThreeAddrCode.TACodeNameManager.Instance.Label(from.Label);
             LabeledCode.Add(from.Label, from);
         }
+
+        public void ReplaceNode(Node newNode, Node oldNode)
+        {
+            InsertNode(newNode, oldNode.Label);
+            if (oldNode.IsLabeled)
+                MoveLabel(oldNode, newNode);
+            RemoveNode(oldNode);
+        }
     }
 }
