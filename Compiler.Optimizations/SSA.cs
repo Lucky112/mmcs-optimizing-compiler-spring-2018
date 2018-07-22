@@ -37,14 +37,14 @@ namespace Compiler.Optimizations
             dfs_visit(cfg.GetRoot(), new List<Guid>(), new Dictionary<Var, Var>(), counter);
         }
 
-        private static void RelaxPhi(ControlFlowGraph cfg, Dictionary<BasicBlock, IEnumerable<Guid>> reachingDefs)
+        private static void RelaxPhi(ControlFlowGraph cfg, InOutData<HashSet<Guid>> reachingDefs)
         {
             foreach (var block in reachingDefs.Keys)
             {
                 if (block.Parents.Count() < 2)
                     continue;
 
-                var innerDefs = reachingDefs[block].ToList();
+                var innerDefs = reachingDefs[block].Item1.ToList();
                 if (innerDefs.Count == 0)
                     continue;
 
@@ -53,8 +53,15 @@ namespace Compiler.Optimizations
                 foreach (var gr in groupedDefs)
                 {
                     var phiNode = block.CodeList.ToList().Find(node => (node is Phi phi) && (phi.Result == gr.Key)) as Phi;
-                    if (phiNode != null)                    
-                        phiNode.DefenitionList = gr.ToList();                    
+                    if (phiNode != null)
+                    {
+                        phiNode.DefenitionList = gr.ToList();
+                        foreach (var ass in phiNode.DefenitionList)
+                        {
+                            var bb = block.Parents.ToList().Find(p => reachingDefs[p].Item2.Contains(ass.Label));
+                            phiNode.DefinitionPathes.Add(ass, bb);
+                        }                                
+                    }
                 }
             }
         }
@@ -127,7 +134,7 @@ namespace Compiler.Optimizations
                     dfs_visit(block, usedBlocks, varSubstitution.ToDictionary(pair => pair.Key, pair => pair.Value), counter);
         }
 
-        private static Dictionary<BasicBlock, IEnumerable<Guid>> Analyze(ControlFlowGraph cfg)
+        private static InOutData<HashSet<Guid>> Analyze(ControlFlowGraph cfg)
         {
             var op = new ThreeAddrCode.DFA.ReachingDefinitions.Operations(cfg.Code);
             var tf = new ThreeAddrCode.DFA.ReachingDefinitions.TransferFunction(cfg.Code);
@@ -150,7 +157,7 @@ namespace Compiler.Optimizations
             return Verify(cfg, data);
         }
 
-        private static Dictionary<BasicBlock, IEnumerable<Guid>> Verify(ControlFlowGraph cfg, InOutData<HashSet<Guid>> reachingDefs)
+        private static InOutData<HashSet<Guid>> Verify(ControlFlowGraph cfg, InOutData<HashSet<Guid>> reachingDefs)
         {
             var result = new Dictionary<BasicBlock, IEnumerable<Guid>>();
             var defToRemove = new List<Guid>();
@@ -161,21 +168,21 @@ namespace Compiler.Optimizations
                 var correctDefs = parentOwnedDefs.SelectMany(p => p.Select(gr => gr.LastOrDefault()));
                 defToRemove.AddRange(parentOwnedDefs.SelectMany(p => p.SelectMany(gr => gr)).Except(correctDefs));
 
-                result.Add(block, reachingDefs[block].Item1.Where(id => !defToRemove.Contains(id)).ToList());
+                reachingDefs[block].Item1.RemoveWhere(id => defToRemove.Contains(id));
             }
 
-            return result;
+            return reachingDefs;
             //return reachingDefs.ToDictionary(pair => pair.Key, pair => pair.Value.Item1.Select(x => x));
         }
 
-        private static void InjectPhi(ControlFlowGraph cfg, Dictionary<BasicBlock, IEnumerable<Guid>> reachingDefs)
+        private static void InjectPhi(ControlFlowGraph cfg, InOutData<HashSet<Guid>> reachingDefs)
         {
             foreach (var block in reachingDefs.Keys)
             {
                 if (block.Parents.Count() < 2)
                     continue;
 
-                var innerDefs = reachingDefs[block].ToList();
+                var innerDefs = reachingDefs[block].Item1.ToList();
                 if (innerDefs.Count == 0)
                     continue;
 

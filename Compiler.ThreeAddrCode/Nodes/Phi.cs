@@ -11,9 +11,11 @@ namespace Compiler.ThreeAddrCode.Nodes
         public Phi()
         {
             DefenitionList = new List<Assign>();
+            DefinitionPathes = new Dictionary<Assign, CFG.BasicBlock>();
         }
 
         public List<Assign> DefenitionList { get; set; }
+        public Dictionary<Assign, CFG.BasicBlock> DefinitionPathes { get; set;}
 
         public override string ToString()
         {
